@@ -2,6 +2,8 @@ import { Stack, SvgIcon } from '@mui/material';
 import { ModReduxAPI } from 'afnm-types';
 import { QuickSaves } from './quicksaves';
 
+const t = window.modAPI.utils.t;
+
 function LoadIcon() {
   return (
     <SvgIcon>
@@ -42,7 +44,7 @@ export function QuickSaveButtons(
       spacing={spacing}
     >
       <api.components.GameIconButton
-        title="Quick-save"
+        title={t('Quick-save')}
         onClick={() => {
           if (api.hasSave) QuickSaves.makeQuickSave();
         }}
@@ -50,7 +52,7 @@ export function QuickSaveButtons(
         <SaveIcon />
       </api.components.GameIconButton>
       <api.components.GameIconButton
-        title="Load Last Quick-save"
+        title={t('Load Last Quick-save')}
         onClick={() => {
           if (api.hasSave) QuickSaves.loadLastQuickSave();
         }}

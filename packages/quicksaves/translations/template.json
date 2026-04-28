@@ -48,5 +48,11 @@
       "[requirement] Requires: No {buff}": "",
       "[requirement] Requires: No more than {amount} of {buff}": ""
     }
+  },
+  "ui": {
+    "src/modContent/ui": {
+      "[string] Load Last Quick-save": "",
+      "[string] Quick-save": ""
+    }
   }
 }
