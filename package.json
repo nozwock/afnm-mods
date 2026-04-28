@@ -3,7 +3,10 @@
     "packages/*"
   ],
   "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "afnm-types": "0.6.52-v2",
+    "dotenv": "^17.4.2",
     "file-loader": "^6.2.0",
     "prettier": "^3.7.4",
     "ts-loader": "^9.5.4",
@@ -11,8 +14,7 @@
     "typescript": "^6.0.2",
     "webpack": "^5.103.0",
     "webpack-cli": "^6.0.1",
-    "zip-a-folder": "^4.0.4",
-    "dotenv": "^17.4.2"
+    "zip-a-folder": "^4.0.4"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
