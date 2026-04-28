@@ -42,7 +42,7 @@ export function QuickSaveButtons(
       spacing={spacing}
     >
       <api.components.GameIconButton
-        title="Quicksasve"
+        title="Quick-save"
         onClick={() => {
           if (api.hasSave) QuickSaves.makeQuickSave();
         }}
@@ -50,7 +50,7 @@ export function QuickSaveButtons(
         <SaveIcon />
       </api.components.GameIconButton>
       <api.components.GameIconButton
-        title="Load Last Quicksasve"
+        title="Load Last Quick-save"
         onClick={() => {
           if (api.hasSave) QuickSaves.loadLastQuickSave();
         }}
