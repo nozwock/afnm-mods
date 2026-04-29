@@ -1,5 +1,6 @@
-import { Box, Stack, SvgIcon, Typography } from '@mui/material';
+import { Box, Stack, StackProps, SvgIcon, Typography } from '@mui/material';
 import { ModReduxAPI } from 'afnm-types';
+import React from 'react';
 import { QuickSaves } from './quicksaves';
 import { stripEnd } from './utils';
 
@@ -7,34 +8,47 @@ const t = window.modAPI.utils.t;
 
 export function injectUIs() {
   window.modAPI.injectUI('combat', (api, element, inject) => {
-    return inject('#topBarLeftButtons', makeQuickSaveButton(api));
+    return inject('#topBarLeftButtons', <QuickSaveButton {...api} />);
   });
   window.modAPI.injectUI('combat', (api, element, inject) => {
     // Couldn't inject it into #topBarRightButtons since there's no way to set the injected element as the first sibling
     return inject(
       '#topBarRoundInfo',
+      // `combat` screen seems to block pointer-events by default, #topBar*Buttons already has the property set
       <Box paddingTop="4px" marginLeft="8px" sx={{ pointerEvents: 'all' }}>
-        {loadQuickSaveButton(api)}
+        <QuickLoadButton {...api} />
       </Box>,
       'inline',
     );
   });
 
-  window.modAPI.injectUI('crafting', (api) => {
-    return quickSaveButtons(api, '138px', '0px', '5px');
-  });
+  window.modAPI.injectUI('crafting', (api) => (
+    <QuickSaveLoadButtons
+      api={api}
+      stackProps={{ left: '138px', bottom: '0px', spacing: '5px' }}
+    />
+  ));
 
-  window.modAPI.injectUI('dualCultivation', (api) => {
-    return quickSaveButtons(api, '50px', '3px', '5px');
-  });
+  window.modAPI.injectUI('dualCultivation', (api) => (
+    <QuickSaveLoadButtons
+      api={api}
+      stackProps={{ left: '50px', bottom: '3px', spacing: '5px' }}
+    />
+  ));
 
-  window.modAPI.injectUI('event-player-ui', (api) => {
-    return quickSaveButtons(api, '3px', '140px', '5px');
-  });
+  window.modAPI.injectUI('event-player-ui', (api) => (
+    <QuickSaveLoadButtons
+      api={api}
+      stackProps={{ left: '3px', bottom: '140px', spacing: '5px' }}
+    />
+  ));
 
-  window.modAPI.injectUI('player-ui', (api) => {
-    return quickSaveButtons(api);
-  });
+  window.modAPI.injectUI('player-ui', (api) => (
+    <QuickSaveLoadButtons
+      api={api}
+      stackProps={{ left: '62px', bottom: '0px', spacing: '0px' }}
+    />
+  ));
 }
 
 export async function makeQuickSave(api?: ModReduxAPI) {
@@ -77,27 +91,25 @@ export async function loadLastQuickSave(api?: ModReduxAPI) {
   }
 }
 
-function LoadIcon() {
+const QuickSaveLoadButtons: React.FC<{
+  api: ModReduxAPI;
+  stackProps?: StackProps;
+}> = ({ api, stackProps }) => {
   return (
-    <SvgIcon>
-      <svg fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
-        <path d="M18 15v3H6v-3H4v3c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-3zM7 9l1.41 1.41L11 7.83V16h2V7.83l2.59 2.58L17 9l-5-5z"></path>
-      </svg>
-    </SvgIcon>
+    <Stack
+      id="quicksaveButtons"
+      direction="row"
+      zIndex={100}
+      position="absolute"
+      {...stackProps}
+    >
+      <QuickSaveButton {...api} />
+      <QuickLoadButton {...api} />
+    </Stack>
   );
-}
+};
 
-function SaveIcon() {
-  return (
-    <SvgIcon>
-      <svg fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
-        <path d="M18 15v3H6v-3H4v3c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-3zm-1-4-1.41-1.41L13 12.17V4h-2v8.17L8.41 9.59 7 11l5 5z"></path>
-      </svg>
-    </SvgIcon>
-  );
-}
-
-function makeQuickSaveButton(api: ModReduxAPI) {
+const QuickSaveButton: React.FC<ModReduxAPI> = (api) => {
   return (
     // TODO: Add keybind key in tooltip `(${key})`
     <api.components.GameTooltip
@@ -112,9 +124,9 @@ function makeQuickSaveButton(api: ModReduxAPI) {
       </api.components.GameIconButton>
     </api.components.GameTooltip>
   );
-}
+};
 
-function loadQuickSaveButton(api: ModReduxAPI) {
+const QuickLoadButton: React.FC<ModReduxAPI> = (api) => {
   return (
     <api.components.GameTooltip
       provider={() => (
@@ -128,29 +140,20 @@ function loadQuickSaveButton(api: ModReduxAPI) {
       </api.components.GameIconButton>
     </api.components.GameTooltip>
   );
-}
+};
 
-function quickSaveButtons(
-  api: ModReduxAPI,
-  left?: string,
-  bottom?: string,
-  spacing?: string,
-) {
-  left = left ?? '62px';
-  bottom = bottom ?? '0px';
-  spacing = spacing ?? '0px';
-  return (
-    <Stack
-      id="quicksaveButtons"
-      position="absolute"
-      zIndex={100}
-      left={left}
-      bottom={bottom}
-      direction="row"
-      spacing={spacing}
-    >
-      {makeQuickSaveButton(api)}
-      {loadQuickSaveButton(api)}
-    </Stack>
-  );
-}
+const SaveIcon: React.FC = () => (
+  <SvgIcon>
+    <svg fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
+      <path d="M18 15v3H6v-3H4v3c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-3zm-1-4-1.41-1.41L13 12.17V4h-2v8.17L8.41 9.59 7 11l5 5z"></path>
+    </svg>
+  </SvgIcon>
+);
+
+const LoadIcon: React.FC = () => (
+  <SvgIcon>
+    <svg fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
+      <path d="M18 15v3H6v-3H4v3c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-3zM7 9l1.41 1.41L11 7.83V16h2V7.83l2.59 2.58L17 9l-5-5z"></path>
+    </svg>
+  </SvgIcon>
+);
