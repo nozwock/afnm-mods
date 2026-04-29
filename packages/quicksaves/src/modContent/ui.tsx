@@ -65,7 +65,7 @@ function SaveIcon() {
   );
 }
 
-export function QuickSaveButtons(
+export function quickSaveButtons(
   api: ModReduxAPI,
   left?: string,
   bottom?: string,
