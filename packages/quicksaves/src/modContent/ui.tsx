@@ -20,20 +20,12 @@ export function injectUIs() {
     );
   });
 
-  window.modAPI.injectUI('crafting', (api, element, inject) => {
-    return inject(
-      '#backgroundImage',
-      quickSaveButtons(api, '138px', '0px', '5px'),
-      'inline',
-    );
+  window.modAPI.injectUI('crafting', (api) => {
+    return quickSaveButtons(api, '138px', '0px', '5px');
   });
 
-  window.modAPI.injectUI('dualCultivation', (api, element, inject) => {
-    return inject(
-      '#backgroundImage',
-      quickSaveButtons(api, '50px', '3px', '5px'),
-      'inline',
-    );
+  window.modAPI.injectUI('dualCultivation', (api) => {
+    return quickSaveButtons(api, '50px', '3px', '5px');
   });
 
   window.modAPI.injectUI('event-player-ui', (api) => {
