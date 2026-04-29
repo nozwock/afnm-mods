@@ -119,7 +119,7 @@ function loadQuickSaveButton(api: ModReduxAPI) {
     <api.components.GameTooltip
       provider={() => (
         <api.components.GameTooltipBox>
-          <Typography fontSize="120%">{t('Load Last Quick-save')}</Typography>
+          <Typography fontSize="120%">{t('Load last quick-save')}</Typography>
         </api.components.GameTooltipBox>
       )}
     >

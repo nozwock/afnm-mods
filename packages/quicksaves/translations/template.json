@@ -3,7 +3,7 @@
     "src/modContent/ui": {
       "[string] Failed creating quick-save: {err}": "",
       "[string] Failed loading quick-save: {err}": "",
-      "[string] Load Last Quick-save": "",
+      "[string] Load last quick-save": "",
       "[string] Loaded {filename}": "",
       "[string] Quick-save": "",
       "[string] Saved {filename}": ""
