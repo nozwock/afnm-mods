@@ -71,7 +71,7 @@ export function QuickSaveButtons(
   bottom?: string,
   spacing?: string,
 ) {
-  left = left ?? '65px';
+  left = left ?? '62px';
   bottom = bottom ?? '0px';
   spacing = spacing ?? '0px';
   return (

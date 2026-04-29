@@ -18,41 +18,12 @@ window.modAPI.injectUI('dualCultivation', (api, element, inject) => {
   );
 });
 
-window.modAPI.injectUI('event', (api, element, inject) => {
-  return inject(
-    '#backgroundImage',
-    QuickSaveButtons(api, '3px', '140px', '5px'),
-    'inline',
-  );
+window.modAPI.injectUI('event-player-ui', (api) => {
+  return QuickSaveButtons(api, '3px', '140px', '5px');
 });
 
-// TODO: Waiting for player UI components to have an `id` to target instead of every screen they appear in.
-window.modAPI.injectUI('map', (api, element, inject) => {
-  return inject('#backgroundImage', QuickSaveButtons(api), 'inline');
-});
-window.modAPI.injectUI('location', (api, element, inject) => {
-  return inject('#backgroundImage', QuickSaveButtons(api), 'inline');
-});
-window.modAPI.injectUI('market', (api, element, inject) => {
-  return inject('#backgroundImage', QuickSaveButtons(api), 'inline');
-});
-window.modAPI.injectUI('herbField', (api, element, inject) => {
-  return inject('#backgroundImage', QuickSaveButtons(api), 'inline');
-});
-window.modAPI.injectUI('recipe', (api, element, inject) => {
-  return inject('#backgroundImage', QuickSaveButtons(api), 'inline');
-});
-window.modAPI.injectUI('auction', (api, element, inject) => {
-  return inject('#backgroundImage', QuickSaveButtons(api), 'inline');
-});
-window.modAPI.injectUI('mysticalRegion', (api, element, inject) => {
-  return inject('#backgroundImage', QuickSaveButtons(api), 'inline');
-});
-window.modAPI.injectUI('house', (api, element, inject) => {
-  return inject('#backgroundImage', QuickSaveButtons(api), 'inline');
-});
-window.modAPI.injectUI('guild', (api, element, inject) => {
-  return inject('#backgroundImage', QuickSaveButtons(api), 'inline');
+window.modAPI.injectUI('player-ui', (api) => {
+  return QuickSaveButtons(api);
 });
 
 window.addEventListener('keyup', (e) => {
