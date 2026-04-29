@@ -23,7 +23,7 @@ export function injectUIs() {
   window.modAPI.injectUI('crafting', (api, element, inject) => {
     return inject(
       '#backgroundImage',
-      quickSaveButtons(api, '138px', '3px', '5px'),
+      quickSaveButtons(api, '138px', '0px', '5px'),
       'inline',
     );
   });
