@@ -63,7 +63,7 @@ export async function makeQuickSave(api?: ModReduxAPI) {
     } catch (err) {
       console.error(err);
       window.modAPI.utils.showToast(
-        t('Failed creating quick-save: {err}', { err: String(err) }),
+        t('Failed creating quicksave: {err}', { err: String(err) }),
         undefined,
         'error',
       );
@@ -83,7 +83,7 @@ export async function loadLastQuickSave(api?: ModReduxAPI) {
     } catch (err) {
       console.error(err);
       window.modAPI.utils.showToast(
-        t('Failed loading quick-save: {err}', { err: String(err) }),
+        t('Failed loading quicksave: {err}', { err: String(err) }),
         undefined,
         'error',
       );
@@ -115,7 +115,7 @@ const QuickSaveButton: React.FC<ModReduxAPI> = (api) => {
     <api.components.GameTooltip
       provider={() => (
         <api.components.GameTooltipBox>
-          <Typography fontSize="120%">{t('Quick-save')}</Typography>
+          <Typography fontSize="120%">{t('Create quicksave')}</Typography>
         </api.components.GameTooltipBox>
       )}
     >
@@ -131,7 +131,7 @@ const QuickLoadButton: React.FC<ModReduxAPI> = (api) => {
     <api.components.GameTooltip
       provider={() => (
         <api.components.GameTooltipBox>
-          <Typography fontSize="120%">{t('Load last quick-save')}</Typography>
+          <Typography fontSize="120%">{t('Load last quicksave')}</Typography>
         </api.components.GameTooltipBox>
       )}
     >

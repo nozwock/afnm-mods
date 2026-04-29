@@ -5,11 +5,11 @@
       "[string] Quickload uses only the most recent quicksave. The others serve as backups.": ""
     },
     "src/modContent/ui": {
-      "[string] Failed creating quick-save: {err}": "",
-      "[string] Failed loading quick-save: {err}": "",
-      "[string] Load last quick-save": "",
+      "[string] Create quicksave": "",
+      "[string] Failed creating quicksave: {err}": "",
+      "[string] Failed loading quicksave: {err}": "",
+      "[string] Load last quicksave": "",
       "[string] Loaded {filename}": "",
-      "[string] Quick-save": "",
       "[string] Saved {filename}": ""
     }
   }
