@@ -1,4 +1,4 @@
-import { Stack, SvgIcon } from '@mui/material';
+import { Box, Stack, SvgIcon } from '@mui/material';
 import { ModReduxAPI } from 'afnm-types';
 import { QuickSaves } from './quicksaves';
 import { stripEnd } from './utils';
@@ -6,6 +6,20 @@ import { stripEnd } from './utils';
 const t = window.modAPI.utils.t;
 
 export function injectUIs() {
+  window.modAPI.injectUI('combat', (api, element, inject) => {
+    return inject('#topBarLeftButtons', makeQuickSaveButton(api));
+  });
+  window.modAPI.injectUI('combat', (api, element, inject) => {
+    // Couldn't inject it into #topBarRightButtons since there's no way to set the injected element as the first sibling
+    return inject(
+      '#topBarRoundInfo',
+      <Box paddingTop="4px" marginLeft="8px" sx={{ pointerEvents: 'all' }}>
+        {loadQuickSaveButton(api)}
+      </Box>,
+      'inline',
+    );
+  });
+
   window.modAPI.injectUI('crafting', (api, element, inject) => {
     return inject(
       '#backgroundImage',
@@ -91,6 +105,28 @@ function SaveIcon() {
   );
 }
 
+function makeQuickSaveButton(api: ModReduxAPI) {
+  return (
+    <api.components.GameIconButton
+      title={t('Quick-save')}
+      onClick={() => makeQuickSave(api)}
+    >
+      <SaveIcon />
+    </api.components.GameIconButton>
+  );
+}
+
+function loadQuickSaveButton(api: ModReduxAPI) {
+  return (
+    <api.components.GameIconButton
+      title={t('Load Last Quick-save')}
+      onClick={() => loadLastQuickSave(api)}
+    >
+      <LoadIcon />
+    </api.components.GameIconButton>
+  );
+}
+
 function quickSaveButtons(
   api: ModReduxAPI,
   left?: string,
@@ -110,18 +146,8 @@ function quickSaveButtons(
       direction="row"
       spacing={spacing}
     >
-      <api.components.GameIconButton
-        title={t('Quick-save')}
-        onClick={() => makeQuickSave(api)}
-      >
-        <SaveIcon />
-      </api.components.GameIconButton>
-      <api.components.GameIconButton
-        title={t('Load Last Quick-save')}
-        onClick={() => loadLastQuickSave(api)}
-      >
-        <LoadIcon />
-      </api.components.GameIconButton>
+      {makeQuickSaveButton(api)}
+      {loadQuickSaveButton(api)}
     </Stack>
   );
 }

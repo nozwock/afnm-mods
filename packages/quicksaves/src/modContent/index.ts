@@ -1,7 +1,5 @@
 import { injectUIs, loadLastQuickSave, makeQuickSave } from './ui';
 
-// TODO: `combat` screen, awaiting on the top bar flex container getting an `id`
-
 injectUIs();
 
 window.addEventListener('keyup', (e) => {
