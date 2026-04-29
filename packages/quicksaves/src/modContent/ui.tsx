@@ -1,4 +1,4 @@
-import { Box, Stack, SvgIcon } from '@mui/material';
+import { Box, Stack, SvgIcon, Typography } from '@mui/material';
 import { ModReduxAPI } from 'afnm-types';
 import { QuickSaves } from './quicksaves';
 import { stripEnd } from './utils';
@@ -99,23 +99,34 @@ function SaveIcon() {
 
 function makeQuickSaveButton(api: ModReduxAPI) {
   return (
-    <api.components.GameIconButton
-      title={t('Quick-save')}
-      onClick={() => makeQuickSave(api)}
+    // TODO: Add keybind key in tooltip `(${key})`
+    <api.components.GameTooltip
+      provider={() => (
+        <api.components.GameTooltipBox>
+          <Typography fontSize="120%">{t('Quick-save')}</Typography>
+        </api.components.GameTooltipBox>
+      )}
     >
-      <SaveIcon />
-    </api.components.GameIconButton>
+      <api.components.GameIconButton onClick={() => makeQuickSave(api)}>
+        <SaveIcon />
+      </api.components.GameIconButton>
+    </api.components.GameTooltip>
   );
 }
 
 function loadQuickSaveButton(api: ModReduxAPI) {
   return (
-    <api.components.GameIconButton
-      title={t('Load Last Quick-save')}
-      onClick={() => loadLastQuickSave(api)}
+    <api.components.GameTooltip
+      provider={() => (
+        <api.components.GameTooltipBox>
+          <Typography fontSize="120%">{t('Load Last Quick-save')}</Typography>
+        </api.components.GameTooltipBox>
+      )}
     >
-      <LoadIcon />
-    </api.components.GameIconButton>
+      <api.components.GameIconButton onClick={() => loadLastQuickSave(api)}>
+        <LoadIcon />
+      </api.components.GameIconButton>
+    </api.components.GameTooltip>
   );
 }
 
