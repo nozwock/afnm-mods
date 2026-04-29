@@ -1,8 +1,49 @@
 import { Stack, SvgIcon } from '@mui/material';
 import { ModReduxAPI } from 'afnm-types';
 import { QuickSaves } from './quicksaves';
+import { stripEnd } from './utils';
 
 const t = window.modAPI.utils.t;
+
+export async function makeQuickSave(api?: ModReduxAPI) {
+  if (!api || api.hasSave) {
+    try {
+      const filename = await QuickSaves.makeQuickSave();
+      window.modAPI.utils.showToast(
+        t('Saved {filename}', { filename: stripEnd(filename, '.json') }),
+        undefined,
+        'success',
+      );
+    } catch (err) {
+      console.error(err);
+      window.modAPI.utils.showToast(
+        t('Failed creating quick-save: {err}', { err: String(err) }),
+        undefined,
+        'error',
+      );
+    }
+  }
+}
+
+export async function loadLastQuickSave(api?: ModReduxAPI) {
+  if (!api || api.hasSave) {
+    try {
+      const filename = await QuickSaves.loadLastQuickSave();
+      window.modAPI.utils.showToast(
+        t('Loaded {filename}', { filename: stripEnd(filename ?? '', '.json') }),
+        undefined,
+        'success',
+      );
+    } catch (err) {
+      console.error(err);
+      window.modAPI.utils.showToast(
+        t('Failed loading quick-save: {err}', { err: String(err) }),
+        undefined,
+        'error',
+      );
+    }
+  }
+}
 
 function LoadIcon() {
   return (
@@ -45,17 +86,13 @@ export function QuickSaveButtons(
     >
       <api.components.GameIconButton
         title={t('Quick-save')}
-        onClick={() => {
-          if (api.hasSave) QuickSaves.makeQuickSave();
-        }}
+        onClick={() => makeQuickSave(api)}
       >
         <SaveIcon />
       </api.components.GameIconButton>
       <api.components.GameIconButton
         title={t('Load Last Quick-save')}
-        onClick={() => {
-          if (api.hasSave) QuickSaves.loadLastQuickSave();
-        }}
+        onClick={() => loadLastQuickSave(api)}
       >
         <LoadIcon />
       </api.components.GameIconButton>

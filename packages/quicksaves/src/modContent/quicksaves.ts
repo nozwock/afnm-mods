@@ -17,7 +17,7 @@ export class QuickSaves {
     }
   }
 
-  public static async makeQuickSave(): Promise<void> {
+  public static async makeQuickSave(): Promise<string> {
     const saves = await this.getQuickSaves();
     let nextSlot = 1;
     if (saves.length > 0) {
@@ -31,14 +31,16 @@ export class QuickSaves {
     const filename = `quicksave${nextSlot}.json`;
     console.log(`Writing savefile ${filename}`);
     await window.modAPI.utils.makeSave(filename);
+    return filename;
   }
 
-  public static async loadLastQuickSave(): Promise<void> {
+  public static async loadLastQuickSave(): Promise<string | undefined> {
     const saves = await this.getQuickSaves();
     if (saves.length === 0) return;
     const lastSave = saves[saves.length - 1];
     console.log(`Loading savefile ${lastSave}`);
     await window.modAPI.utils.loadSave(lastSave);
+    return lastSave;
   }
 
   private static async getQuickSaves(): Promise<string[]> {

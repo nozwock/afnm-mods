@@ -1,5 +1,4 @@
-import { QuickSaves } from './quicksaves';
-import { QuickSaveButtons } from './ui';
+import { loadLastQuickSave, makeQuickSave, QuickSaveButtons } from './ui';
 
 // TODO: `combat` screen, awaiting on the top bar flex container getting an `id`
 
@@ -56,12 +55,11 @@ window.modAPI.injectUI('guild', (api, element, inject) => {
   return inject('#backgroundImage', QuickSaveButtons(api), 'inline');
 });
 
-// TODO: Add toasts for quick save/load, awaiting on a toast API or component in 0.6.53,
 window.addEventListener('keyup', (e) => {
   if (e.key === 'F5') {
     // TODO: Prevent from being called in main menu as these only work when in game-world
-    QuickSaves.makeQuickSave();
+    makeQuickSave();
   } else if (e.key === 'F9') {
-    QuickSaves.loadLastQuickSave();
+    loadLastQuickSave();
   }
 });
