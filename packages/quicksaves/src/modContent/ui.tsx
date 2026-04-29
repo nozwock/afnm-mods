@@ -5,6 +5,32 @@ import { stripEnd } from './utils';
 
 const t = window.modAPI.utils.t;
 
+export function injectUIs() {
+  window.modAPI.injectUI('crafting', (api, element, inject) => {
+    return inject(
+      '#backgroundImage',
+      quickSaveButtons(api, '138px', '3px', '5px'),
+      'inline',
+    );
+  });
+
+  window.modAPI.injectUI('dualCultivation', (api, element, inject) => {
+    return inject(
+      '#backgroundImage',
+      quickSaveButtons(api, '50px', '3px', '5px'),
+      'inline',
+    );
+  });
+
+  window.modAPI.injectUI('event-player-ui', (api) => {
+    return quickSaveButtons(api, '3px', '140px', '5px');
+  });
+
+  window.modAPI.injectUI('player-ui', (api) => {
+    return quickSaveButtons(api);
+  });
+}
+
 export async function makeQuickSave(api?: ModReduxAPI) {
   if (!api || api.hasSave) {
     try {
@@ -65,7 +91,7 @@ function SaveIcon() {
   );
 }
 
-export function quickSaveButtons(
+function quickSaveButtons(
   api: ModReduxAPI,
   left?: string,
   bottom?: string,
