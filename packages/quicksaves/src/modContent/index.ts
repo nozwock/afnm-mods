@@ -1,3 +1,4 @@
+import './settings';
 import { injectUIs, loadLastQuickSave, makeQuickSave } from './ui';
 
 injectUIs();
