@@ -1,45 +1,89 @@
-import { Box, Slider, Typography } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Slider,
+  Typography,
+} from '@mui/material';
 import { useState } from 'react';
 import { MOD_ID } from './const';
 import { QuickSaves } from './quicksaves';
 
 const t = window.modAPI.utils.t;
 const keyMaxQuicksaves = `${MOD_ID}.maxQuicksaves`;
+const keyShowQuicksaveButtons = `${MOD_ID}.showQuicksaveButtons`;
+
+export function getSettings() {
+  const gameFlags = window.modAPI.actions.getGlobalFlags();
+  return {
+    maxQuicksaves: gameFlags[keyMaxQuicksaves] ?? 3,
+    showQuicksaveButtons: Boolean(
+      gameFlags[keyShowQuicksaveButtons] ?? 1,
+    ),
+  };
+}
 
 window.modAPI.actions.registerOptionsUI(({ api }) => {
   // NOTE: Use localstorage for complex persistent data not tied to save files
-  QuickSaves.slotCapacity =
-    window.modAPI.actions.getGlobalFlags()[keyMaxQuicksaves] ?? 3;
+  const settings = getSettings();
+  QuickSaves.slotCapacity = settings.maxQuicksaves;
 
-  const [quicksaveSlots, setQuicksaveSlots] = useState({
-    value: QuickSaves.slotCapacity,
-  });
+  // useState doesn't mutate `settings` so can't keep a single instance of it that we pass around throughout the mod,
+  // hence getSettings() that makes a copy on every call
+  const [getSettingsState, setSettingsState] = useState(settings);
 
   return (
-    <Box marginTop="40px">
-      <Typography fontSize="120%">
-        {t('Max Quicksaves: {slots}', { slots: quicksaveSlots.value })}
-      </Typography>
-      <Typography fontSize="90%" sx={{ opacity: 0.7 }}>
-        {t(
-          'Quickload uses only the most recent quicksave. The others serve as backups.',
-        )}
-      </Typography>
-      <Slider
-        value={quicksaveSlots.value}
-        onChange={(_, value) => {
-          QuickSaves.slotCapacity = value;
-          window.modAPI.actions.setGlobalFlag(keyMaxQuicksaves, value);
-          setQuicksaveSlots((it) => ({
-            ...it,
-            value: value,
-          }));
-        }}
-        step={1}
-        marks
-        min={1}
-        max={20}
-      ></Slider>
+    <Box marginTop="40px" display="flex" flexDirection="column" gap="16px">
+      <Box>
+        <FormGroup>
+          <FormControlLabel
+            label={t('Show Quicksave Buttons')}
+            control={
+              <Checkbox
+                checked={getSettingsState.showQuicksaveButtons}
+                onChange={(_, value) => {
+                  window.modAPI.actions.setGlobalFlag(
+                    keyShowQuicksaveButtons,
+                    Number(value),
+                  );
+                  setSettingsState((it) => ({
+                    ...it,
+                    showQuicksaveButtons: value,
+                  }));
+                }}
+              />
+            }
+          ></FormControlLabel>
+        </FormGroup>
+      </Box>
+      <Box>
+        <Typography fontSize="120%">
+          {t('Max Quicksaves: {slots}', {
+            slots: getSettingsState.maxQuicksaves,
+          })}
+        </Typography>
+        <Typography fontSize="90%" sx={{ opacity: 0.7 }}>
+          {t(
+            'Quickload uses only the most recent quicksave. The others serve as backups.',
+          )}
+        </Typography>
+        <Slider
+          value={getSettingsState.maxQuicksaves}
+          onChange={(_, value) => {
+            QuickSaves.slotCapacity = value;
+            window.modAPI.actions.setGlobalFlag(keyMaxQuicksaves, value);
+            setSettingsState((it) => ({
+              ...it,
+              maxQuicksaves: value,
+            }));
+          }}
+          step={1}
+          marks
+          min={1}
+          max={20}
+        ></Slider>
+      </Box>
     </Box>
   );
 });

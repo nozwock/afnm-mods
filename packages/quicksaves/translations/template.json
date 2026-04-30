@@ -2,7 +2,8 @@
   "ui": {
     "src/modContent/settings": {
       "[string] Max Quicksaves: {slots}": "",
-      "[string] Quickload uses only the most recent quicksave. The others serve as backups.": ""
+      "[string] Quickload uses only the most recent quicksave. The others serve as backups.": "",
+      "[string] Show Quicksave Buttons": ""
     },
     "src/modContent/ui": {
       "[string] Create quicksave": "",
