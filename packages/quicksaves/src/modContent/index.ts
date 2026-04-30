@@ -1,6 +1,7 @@
-import './settings';
+import { ModSettings } from './settings';
 import { injectUIs, loadLastQuickSave, makeQuickSave } from './ui';
 
+window.modAPI.actions.registerOptionsUI(ModSettings);
 injectUIs();
 
 window.addEventListener('keyup', (e) => {

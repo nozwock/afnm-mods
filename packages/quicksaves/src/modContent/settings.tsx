@@ -6,6 +6,7 @@ import {
   Slider,
   Typography,
 } from '@mui/material';
+import { ModOptionsFC } from 'afnm-types';
 import { useState } from 'react';
 import { MOD_ID } from './const';
 import { QuickSaves } from './quicksaves';
@@ -18,13 +19,11 @@ export function getSettings() {
   const gameFlags = window.modAPI.actions.getGlobalFlags();
   return {
     maxQuicksaves: gameFlags[keyMaxQuicksaves] ?? 3,
-    showQuicksaveButtons: Boolean(
-      gameFlags[keyShowQuicksaveButtons] ?? 1,
-    ),
+    showQuicksaveButtons: Boolean(gameFlags[keyShowQuicksaveButtons] ?? 1),
   };
 }
 
-window.modAPI.actions.registerOptionsUI(({ api }) => {
+export const ModSettings: ModOptionsFC = ({ api }) => {
   // NOTE: Use localstorage for complex persistent data not tied to save files
   const settings = getSettings();
   QuickSaves.slotCapacity = settings.maxQuicksaves;
@@ -86,4 +85,4 @@ window.modAPI.actions.registerOptionsUI(({ api }) => {
       </Box>
     </Box>
   );
-});
+};
