@@ -50,9 +50,21 @@ export class QuickSaves {
         return this.QUICK_SAVE_REGEX.test(save.name as string);
       })
       .sort((aSave, bSave) => {
-        const a = aSave.metadata.lastPlayed as number;
-        const b = bSave.metadata.lastPlayed as number;
-        return a < b ? -1 : a > b ? 1 : 0;
+        const aTime = aSave.metadata.lastPlayed as number;
+        const bTime = bSave.metadata.lastPlayed as number;
+
+        if (aTime !== bTime) {
+          return aTime < bTime ? -1 : 1;
+        }
+
+        const aSlot = this.getSlotNumber(aSave.name as string);
+        const bSlot = this.getSlotNumber(bSave.name as string);
+
+        if (aSlot !== null && bSlot !== null) {
+          return aSlot < bSlot ? -1 : 1;
+        }
+
+        return 0;
       })
       .map((save) => save.name as string);
   }
