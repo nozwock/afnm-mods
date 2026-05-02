@@ -92,6 +92,11 @@ export async function loadLastQuickSave(api?: ModReduxAPI) {
   if (!api || api.hasSave) {
     try {
       const filename = await QuickSaves.loadLastQuickSave();
+
+      // Some screens are independent of the game state due to performance reasons, for e.g. the `combat` screen, and so
+      // the screen needs to be manually reset.
+      window.modAPI.actions.triggerUIReset();
+
       window.modAPI.utils.showToast(
         t('Loaded {filename}', { filename: stripEnd(filename ?? '', '.json') }),
         undefined,
