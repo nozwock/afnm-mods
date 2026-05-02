@@ -1,5 +1,5 @@
 import { FileDownloadOutlined, FileUploadOutlined } from '@mui/icons-material';
-import { Box, Stack, StackProps, Typography } from '@mui/material';
+import { Stack, StackProps, Typography } from '@mui/material';
 import { ModReduxAPI } from 'afnm-types';
 import React from 'react';
 import { QuickSaves } from './quicksaves';
@@ -16,14 +16,11 @@ export function injectUIs() {
   });
   window.modAPI.injectUI('combat', (api, element, inject) => {
     if (!getSettings().showQuicksaveButtons) return;
-    // Couldn't inject it into #topBarRightButtons since there's no way to set the injected element as the first sibling
     return inject(
-      '#topBarRoundInfo',
-      // `combat` screen seems to block pointer-events by default, #topBar*Buttons already has the property set
-      <Box paddingTop="4px" marginLeft="8px" sx={{ pointerEvents: 'all' }}>
-        <QuickLoadButton {...api} />
-      </Box>,
+      '#topBarRightButtons > *',
+      <QuickLoadButton {...api} />,
       'inline',
+      'before',
     );
   });
 
