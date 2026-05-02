@@ -3,7 +3,7 @@ import { Stack, StackProps, Typography } from '@mui/material';
 import { ModReduxAPI } from 'afnm-types';
 import React from 'react';
 import { QuickSaves } from './quicksaves';
-import { getSettings } from './settings';
+import { actionQuickLoad, actionQuickSave, getSettings } from './settings';
 import { stripEnd } from './utils';
 
 const t = window.modAPI.utils.t;
@@ -130,11 +130,15 @@ const QuickSaveLoadButtons: React.FC<{
 
 const QuickSaveButton: React.FC<ModReduxAPI> = (api) => {
   return (
-    // TODO: Add keybind key in tooltip `(${key})`
     <api.components.GameTooltip
       provider={() => (
         <api.components.GameTooltipBox>
-          <Typography fontSize="120%">{t('Create quicksave')}</Typography>
+          <Typography fontSize="120%">
+            {t('Create quicksave')}{' '}
+            <span style={{ opacity: 0.7 }}>
+              ({window.modAPI.utils.getRegisteredKeybindValue(actionQuickSave)})
+            </span>
+          </Typography>
         </api.components.GameTooltipBox>
       )}
     >
@@ -150,7 +154,12 @@ const QuickLoadButton: React.FC<ModReduxAPI> = (api) => {
     <api.components.GameTooltip
       provider={() => (
         <api.components.GameTooltipBox>
-          <Typography fontSize="120%">{t('Load last quicksave')}</Typography>
+          <Typography fontSize="120%">
+            {t('Load last quicksave')}{' '}
+            <span style={{ opacity: 0.7 }}>
+              ({window.modAPI.utils.getRegisteredKeybindValue(actionQuickLoad)})
+            </span>
+          </Typography>
         </api.components.GameTooltipBox>
       )}
     >
