@@ -1,4 +1,5 @@
-import { Box, Stack, StackProps, SvgIcon, Typography } from '@mui/material';
+import { FileDownloadOutlined, FileUploadOutlined } from '@mui/icons-material';
+import { Box, Stack, StackProps, Typography } from '@mui/material';
 import { ModReduxAPI } from 'afnm-types';
 import React from 'react';
 import { QuickSaves } from './quicksaves';
@@ -136,7 +137,7 @@ const QuickSaveButton: React.FC<ModReduxAPI> = (api) => {
       )}
     >
       <api.components.GameIconButton onClick={() => makeQuickSave(api)}>
-        <SaveIcon />
+        <FileDownloadOutlined />
       </api.components.GameIconButton>
     </api.components.GameTooltip>
   );
@@ -152,24 +153,8 @@ const QuickLoadButton: React.FC<ModReduxAPI> = (api) => {
       )}
     >
       <api.components.GameIconButton onClick={() => loadLastQuickSave(api)}>
-        <LoadIcon />
+        <FileUploadOutlined />
       </api.components.GameIconButton>
     </api.components.GameTooltip>
   );
 };
-
-const SaveIcon: React.FC = () => (
-  <SvgIcon>
-    <svg fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
-      <path d="M18 15v3H6v-3H4v3c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-3zm-1-4-1.41-1.41L13 12.17V4h-2v8.17L8.41 9.59 7 11l5 5z"></path>
-    </svg>
-  </SvgIcon>
-);
-
-const LoadIcon: React.FC = () => (
-  <SvgIcon>
-    <svg fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
-      <path d="M18 15v3H6v-3H4v3c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-3zM7 9l1.41 1.41L11 7.83V16h2V7.83l2.59 2.58L17 9l-5-5z"></path>
-    </svg>
-  </SvgIcon>
-);
