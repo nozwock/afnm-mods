@@ -33,7 +33,14 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
   const [getSettingsState, setSettingsState] = useState(settings);
 
   return (
-    <Box marginTop="40px" display="flex" flexDirection="column" gap="16px">
+    <Box
+      marginTop="40px"
+      display="flex"
+      flexDirection="column"
+      gap="16px"
+      // With 0.6.54, game sets overflow on ModOption component's container but we don't want horizontal scrolling
+      sx={{ overflowX: 'hidden' }}
+    >
       <Box>
         <FormGroup>
           <FormControlLabel
