@@ -1,15 +1,28 @@
-import { ModSettings } from './settings';
+import {
+  actionQuickLoad,
+  actionQuickSave,
+  ModSettings,
+  registerKeybindings,
+} from './settings';
 import { injectUIs, loadLastQuickSave, makeQuickSave } from './ui';
 
 window.modAPI.actions.registerOptionsUI(ModSettings);
+registerKeybindings();
+
 injectUIs();
 
 window.addEventListener('keyup', (e) => {
   // XXX Would need to check for .showQuicksaveButtons here if .useKeybindings is to be used in the future
-  if (e.key === 'F5') {
+  if (
+    // Probably not going to use .useKeybindings for a long time, since it's kinda messy with the whole priority system
+    // disabling lower priority non-conflicting keybinds, at least as of 0.6.54
+    e.key === window.modAPI.utils.getRegisteredKeybindValue(actionQuickSave)
+  ) {
     // TODO: Prevent from being called in main menu as these only work when in game-world
     makeQuickSave();
-  } else if (e.key === 'F9') {
+  } else if (
+    e.key === window.modAPI.utils.getRegisteredKeybindValue(actionQuickLoad)
+  ) {
     loadLastQuickSave();
   }
 });

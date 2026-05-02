@@ -15,12 +15,35 @@ const t = window.modAPI.utils.t;
 const keyMaxQuicksaves = `${MOD_ID}.maxQuicksaves`;
 const keyShowQuicksaveButtons = `${MOD_ID}.showQuicksaveButtons`;
 
+export const actionQuickSave = `${MOD_ID}.quickSave`;
+export const actionQuickLoad = `${MOD_ID}.quickLoad`;
+
 export function getSettings() {
   const gameFlags = window.modAPI.actions.getGlobalFlags();
   return {
     maxQuicksaves: gameFlags[keyMaxQuicksaves] ?? 3,
     showQuicksaveButtons: Boolean(gameFlags[keyShowQuicksaveButtons] ?? 1),
   };
+}
+
+export function registerKeybindings() {
+  window.modAPI.actions.registerKeybinding({
+    action: actionQuickSave,
+    category: 'ui',
+    displayName: 'Quick Save',
+    description: 'Create quicksave',
+    defaultKey: 'F5',
+    allowRebind: true,
+  });
+
+  window.modAPI.actions.registerKeybinding({
+    action: actionQuickLoad,
+    category: 'ui',
+    displayName: 'Quick Load',
+    description: 'Load last quicksave',
+    defaultKey: 'F9',
+    allowRebind: true,
+  });
 }
 
 export const ModSettings: ModOptionsFC = ({ api }) => {

@@ -1,4 +1,12 @@
 {
+  "data": {
+    "src/modContent:settings": {
+      "[description] Create quicksave": "",
+      "[description] Load last quicksave": "",
+      "[displayName] Quick Load": "",
+      "[displayName] Quick Save": ""
+    }
+  },
   "ui": {
     "src/modContent/settings": {
       "[string] Max Quicksaves: {slots}": "",
