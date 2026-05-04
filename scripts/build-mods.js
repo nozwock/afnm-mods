@@ -95,7 +95,7 @@ async function build(packageDirs) {
       const package = require(`${packageDir}/package.json`);
       const target = path.join(
         process.env.AFNM_MODS_PATH,
-        `${package.name}.zip`,
+        `${getFilenameFromPackageName(package.name)}.zip`,
       );
 
       console.log(`Copying mod "${path.basename(zipPath)}" to "${target}"`);
@@ -173,7 +173,7 @@ async function zipDist(packageDir) {
   const buildsDir = path.resolve(packageDir, 'builds');
   const zipPath = path.resolve(
     buildsDir,
-    `${package.name}-${package.version}.zip`,
+    `${getFilenameFromPackageName(package.name)}-${package.version}.zip`,
   );
 
   try {
@@ -188,4 +188,12 @@ async function zipDist(packageDir) {
   } catch (err) {
     console.error('Error: Failed zipping dist/ folder:', err);
   }
+}
+
+/**
+ * Supports namespaced packages by organization name.
+ * @param {string} name
+ */
+function getFilenameFromPackageName(name) {
+  return name.replace(/^@/, '').replace(/[/\\]/, '-');
 }
