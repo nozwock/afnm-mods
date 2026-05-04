@@ -136,7 +136,12 @@ const QuickSaveButton: React.FC<ModReduxAPI> = (api) => {
           <Typography fontSize="120%">
             {t('Create quicksave')}{' '}
             <span style={{ opacity: 0.7 }}>
-              ({window.modAPI.utils.getRegisteredKeybindValue(actionQuickSave)})
+              (
+              {
+                window.modAPI.utils.getRegisteredKeybindValue(actionQuickSave)
+                  ?.displayText
+              }
+              )
             </span>
           </Typography>
         </api.components.GameTooltipBox>
@@ -157,7 +162,12 @@ const QuickLoadButton: React.FC<ModReduxAPI> = (api) => {
           <Typography fontSize="120%">
             {t('Load last quicksave')}{' '}
             <span style={{ opacity: 0.7 }}>
-              ({window.modAPI.utils.getRegisteredKeybindValue(actionQuickLoad)})
+              (
+              {
+                window.modAPI.utils.getRegisteredKeybindValue(actionQuickLoad)
+                  ?.displayText
+              }
+              )
             </span>
           </Typography>
         </api.components.GameTooltipBox>

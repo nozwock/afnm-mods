@@ -5,6 +5,7 @@ import {
   registerKeybindings,
 } from './settings';
 import { injectUIs, loadLastQuickSave, makeQuickSave } from './ui';
+import { matchRegisteredKeybind } from './utils';
 
 window.modAPI.actions.registerOptionsUI(ModSettings);
 registerKeybindings();
@@ -16,13 +17,11 @@ window.addEventListener('keyup', (e) => {
   if (
     // Probably not going to use .useKeybindings for a long time, since it's kinda messy with the whole priority system
     // disabling lower priority non-conflicting keybinds, at least as of 0.6.54
-    e.key === window.modAPI.utils.getRegisteredKeybindValue(actionQuickSave)
+    matchRegisteredKeybind(actionQuickSave, e)
   ) {
     // TODO: Prevent from being called in main menu as these only work when in game-world
     makeQuickSave();
-  } else if (
-    e.key === window.modAPI.utils.getRegisteredKeybindValue(actionQuickLoad)
-  ) {
+  } else if (matchRegisteredKeybind(actionQuickLoad, e)) {
     loadLastQuickSave();
   }
 });
