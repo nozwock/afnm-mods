@@ -129,10 +129,13 @@ const QuickSaveLoadButtons: React.FC<{
 };
 
 const QuickSaveButton: React.FC<ModReduxAPI> = (api) => {
+  const GameTooltip = api.components.GameTooltip;
+  const GameTooltipBox = api.components.GameTooltipBox;
+  const GameIconButton = api.components.GameIconButton;
   return (
-    <api.components.GameTooltip
+    <GameTooltip
       provider={() => (
-        <api.components.GameTooltipBox>
+        <GameTooltipBox>
           <Typography fontSize="120%">
             {t('Create quicksave')}{' '}
             <span style={{ opacity: 0.7 }}>
@@ -144,21 +147,24 @@ const QuickSaveButton: React.FC<ModReduxAPI> = (api) => {
               )
             </span>
           </Typography>
-        </api.components.GameTooltipBox>
+        </GameTooltipBox>
       )}
     >
-      <api.components.GameIconButton onClick={() => makeQuickSave(api)}>
+      <GameIconButton onClick={() => makeQuickSave(api)}>
         <FileDownloadOutlined />
-      </api.components.GameIconButton>
-    </api.components.GameTooltip>
+      </GameIconButton>
+    </GameTooltip>
   );
 };
 
 const QuickLoadButton: React.FC<ModReduxAPI> = (api) => {
+  const GameTooltip = api.components.GameTooltip;
+  const GameTooltipBox = api.components.GameTooltipBox;
+  const GameIconButton = api.components.GameIconButton;
   return (
-    <api.components.GameTooltip
+    <GameTooltip
       provider={() => (
-        <api.components.GameTooltipBox>
+        <GameTooltipBox>
           <Typography fontSize="120%">
             {t('Load last quicksave')}{' '}
             <span style={{ opacity: 0.7 }}>
@@ -170,12 +176,12 @@ const QuickLoadButton: React.FC<ModReduxAPI> = (api) => {
               )
             </span>
           </Typography>
-        </api.components.GameTooltipBox>
+        </GameTooltipBox>
       )}
     >
-      <api.components.GameIconButton onClick={() => loadLastQuickSave(api)}>
+      <GameIconButton onClick={() => loadLastQuickSave(api)}>
         <FileUploadOutlined />
-      </api.components.GameIconButton>
-    </api.components.GameTooltip>
+      </GameIconButton>
+    </GameTooltip>
   );
 };
