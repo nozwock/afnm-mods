@@ -8,5 +8,12 @@
       "[string] Resplendent": "",
       "[string] Transcendent": ""
     }
+  },
+  "ui": {
+    "src/modContent/settings": {
+      "[string] Jade Visage Pill": "",
+      "[string] Only Affects {pill}, blueprint, and transport_seal": "",
+      "[string] Prevent Item Consumption": ""
+    }
   }
 }
