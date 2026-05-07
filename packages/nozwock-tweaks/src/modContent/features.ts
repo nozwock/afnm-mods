@@ -90,6 +90,7 @@ export namespace Feature {
       if (this._isEnabled) return;
       this._isEnabled = true;
       this.config = { ...this.config, enabled: true };
+      console.info(`Enabled ${this.configKey}`);
       this.onEnable();
     }
 
@@ -97,6 +98,7 @@ export namespace Feature {
       if (!this._isEnabled) return;
       this._isEnabled = false;
       this.config = { ...this.config, enabled: false };
+      console.info(`Disabled ${this.configKey}`);
       this.onDisable();
     }
 
