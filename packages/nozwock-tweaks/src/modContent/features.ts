@@ -32,7 +32,7 @@ export class FeatureManager {
   }
 
   public static get<T extends Feature | ConfigurableFeature>(
-    ctor: Constructor<Feature | ConfigurableFeature>,
+    ctor: Constructor<T>,
   ): T | undefined {
     return FeatureManager.features.get(ctor) as T | undefined;
   }
