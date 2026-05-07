@@ -25,17 +25,20 @@ export class FeatureManager {
   >();
 
   public static register(ctor: Constructor<Feature | ConfigurableFeature>) {
-    if (this.get(ctor) === undefined) this.features.set(ctor, new ctor());
+    // Don't access members via `this` since this function is being used as a decorator, and the function bound object
+    // seems to no longer be the class then for some reason.
+    if (FeatureManager.get(ctor) === undefined)
+      FeatureManager.features.set(ctor, new ctor());
   }
 
   public static get<T extends Feature | ConfigurableFeature>(
     ctor: Constructor<Feature | ConfigurableFeature>,
   ): T | undefined {
-    return this.features.get(ctor) as T | undefined;
+    return FeatureManager.features.get(ctor) as T | undefined;
   }
 
   public static getAll(): (Feature | ConfigurableFeature)[] {
-    return [...this.features.values()];
+    return [...FeatureManager.features.values()];
   }
 }
 
