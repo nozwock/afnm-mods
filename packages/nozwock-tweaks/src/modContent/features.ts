@@ -103,8 +103,10 @@ export namespace Feature {
     protected abstract onDisable(): void;
   }
 
-  @singleton
+  // IMPORTANT: singleton needs to be the last otherwise the constructor that is exported and one that'll be stored via
+  // register will be different
   @FeatureManager.register
+  @singleton
   export class PreventItemConsumption extends BaseConfigurableFeature<{
     enabled: boolean;
   }> {
