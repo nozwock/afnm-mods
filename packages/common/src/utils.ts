@@ -11,11 +11,11 @@ export const enchantmentNameRarities = [
 ];
 
 const realmsIndex = realms.reduce(
-  (acc, it, i) => {
-    acc[it] = i;
+  (acc, realm, i) => {
+    acc[realm] = i;
     return acc;
   },
-  {} as Record<string, number>,
+  {} as Record<Realm, number>,
 );
 
 export function stripEnd(str: string, suffix: string) {
