@@ -18,6 +18,15 @@ const realmsIndex = realms.reduce(
   {} as Record<string, number>,
 );
 
+export function stripEnd(str: string, suffix: string) {
+  return str.endsWith(suffix) ? str.slice(0, -suffix.length) : str;
+}
+
+export function stripFirstPrefix(str: string, prefixes: string[]): string {
+  const match = prefixes.find((p) => str.startsWith(p));
+  return match ? str.slice(match.length) : str;
+}
+
 export function isRealmReached(charRealm: Realm, realm: Realm): boolean {
   const charRealmIndex = realmsIndex[charRealm];
   const realmIndex = realmsIndex[realm];
@@ -25,9 +34,21 @@ export function isRealmReached(charRealm: Realm, realm: Realm): boolean {
   return charRealmIndex >= realmIndex;
 }
 
-export function stripFirstPrefix(str: string, prefixes: string[]): string {
-  const match = prefixes.find((p) => str.startsWith(p));
-  return match ? str.slice(match.length) : str;
+export function matchRegisteredKeybind(action: string, event: KeyboardEvent) {
+  const key = window.modAPI.utils.getRegisteredKeybindValue(action);
+  return (
+    key !== undefined &&
+    // FIXME: `RegisteredKeybind.code` was supposed to be equivalent to `KeyboardEvent.code` but it isn't. It's instead like
+    // `KeyboardEvent.key` but without modifiers (and possibly keyboard layout) affecting it etc, so it can't be matched
+    // against `KeyboardEvent.key` reliably either.
+    //
+    // `code === code` match is so keybinds still keep working when in the future the API gets updated to have proper
+    // value for `code`
+    (event.key === key.code || event.code === key.code) &&
+    event.ctrlKey === key.ctrlKey &&
+    event.altKey === key.altKey &&
+    event.shiftKey === key.shiftKey
+  );
 }
 
 export function getFullyRemovedItems(

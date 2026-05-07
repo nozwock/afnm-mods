@@ -1,10 +1,10 @@
 import { FileDownloadOutlined, FileUploadOutlined } from '@mui/icons-material';
 import { Stack, StackProps, Typography } from '@mui/material';
 import { ModReduxAPI } from 'afnm-types';
+import { stripEnd } from 'common/utils';
 import React from 'react';
 import { QuickSaves } from './quicksaves';
 import { actionQuickLoad, actionQuickSave, getSettings } from './settings';
-import { stripEnd } from './utils';
 
 const t = window.modAPI.utils.t;
 

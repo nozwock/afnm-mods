@@ -1,6 +1,6 @@
+import { singleton } from 'common/decorators';
+import { revertChangedItems } from 'common/utils';
 import { MOD_ID } from './const';
-import { singleton } from './decorators';
-import { revertChangedItems } from './utils';
 
 type Constructor<T> = new (...args: any[]) => T;
 

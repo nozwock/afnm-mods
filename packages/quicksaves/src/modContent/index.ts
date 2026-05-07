@@ -1,3 +1,4 @@
+import { matchRegisteredKeybind } from 'common/utils';
 import {
   actionQuickLoad,
   actionQuickSave,
@@ -5,7 +6,6 @@ import {
   registerKeybindings,
 } from './settings';
 import { injectUIs, loadLastQuickSave, makeQuickSave } from './ui';
-import { matchRegisteredKeybind } from './utils';
 
 window.modAPI.actions.registerOptionsUI(ModSettings);
 registerKeybindings();
