@@ -50,7 +50,7 @@ export namespace Feature {
     protected abstract defaultConfig: Config;
 
     private _cachedConfig?: Config = undefined;
-    private _isInitialized = false;
+    private _isEnabled = false;
 
     // XXX Could also have a separate Config/Setting class that'd act as a proxy to localStorage, only updating
     // properties that are changed on write/set similar to redux store.
@@ -80,24 +80,22 @@ export namespace Feature {
     }
 
     initialize(): void {
-      if (this._isInitialized) return;
-      this._isInitialized = true;
-
       if (this.config.enabled) {
-        this.onEnable();
+        this.enable();
       }
     }
 
     enable(): void {
-      if (this.config.enabled) return;
+      if (this._isEnabled) return;
+      this._isEnabled = true;
       this.config = { ...this.config, enabled: true };
-      this.initialize();
+      this.onEnable();
     }
 
     disable(): void {
-      if (!this.config.enabled) return;
+      if (!this._isEnabled) return;
+      this._isEnabled = false;
       this.config = { ...this.config, enabled: false };
-      this._isInitialized = false;
       this.onDisable();
     }
 
