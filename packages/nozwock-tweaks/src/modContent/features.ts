@@ -72,6 +72,7 @@ export namespace Feature {
       // https://github.com/microsoft/TypeScript/issues/14909
       this._cachedConfig = structuredClone(data);
       localStorage.setItem(this.configKey, JSON.stringify(this._cachedConfig));
+      this.onConfigChange();
     }
 
     resetConfig(): void {
@@ -99,6 +100,7 @@ export namespace Feature {
       this.onDisable();
     }
 
+    protected abstract onConfigChange(): void;
     protected abstract onEnable(): void;
     protected abstract onDisable(): void;
   }
@@ -116,6 +118,8 @@ export namespace Feature {
     protected defaultConfig = {
       enabled: true,
     };
+
+    protected onConfigChange(): void {}
 
     protected onEnable(): void {
       if (!this.hooksRegistered) {
