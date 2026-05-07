@@ -45,7 +45,11 @@ Hint: Define AFNM_MODS_PATH in an .env file in the project root.`,
     : fs
         .readdirSync(packagesPath)
         .map((name) => path.join(packagesPath, name))
-        .filter((pkgDir) => fs.existsSync(path.join(pkgDir, 'package.json')));
+        .filter(
+          (pkgDir) =>
+            fs.existsSync(path.join(pkgDir, 'package.json')) &&
+            fs.existsSync(path.join(pkgDir, 'src', 'mod.ts')),
+        );
 
   if (buildMods.length) {
     const invalidPackageDirs = packageDirs.filter(
