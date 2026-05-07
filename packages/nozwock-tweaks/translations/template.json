@@ -1,0 +1,12 @@
+{
+  "arrays": {
+    "toName-array-enchantmentNameRarities": {
+      "[string] Empowered": "",
+      "[string] Incandescent": "",
+      "[string] Mundane": "",
+      "[string] Qi Touched": "",
+      "[string] Resplendent": "",
+      "[string] Transcendent": ""
+    }
+  }
+}
