@@ -7,14 +7,13 @@ import {
 } from '@mui/material';
 import { ModOptionsFC } from 'afnm-types';
 import { useState } from 'react';
-import { Feature } from './features';
+import { Feature, FeatureManager } from './features';
 
 const t = window.modAPI.utils.t;
 
 export const ModSettings: ModOptionsFC = ({ api }) => {
-  const preventItemConsumption = new Feature.PreventItemConsumption();
   const [configPreventItemConsumption, setConfigPreventItemConsumption] =
-    useState(preventItemConsumption.config);
+    useState(() => FeatureManager.get(Feature.PreventItemConsumption)!.config);
 
   return (
     <Box marginTop="40px" display="flex" flexDirection="column" gap="16px">
@@ -26,15 +25,18 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
               <Checkbox
                 checked={configPreventItemConsumption.enabled}
                 onChange={(_, value) => {
+                  const feature = FeatureManager.get(
+                    Feature.PreventItemConsumption,
+                  )!;
                   if (value) {
-                    preventItemConsumption.enable();
+                    feature.enable();
                   } else {
-                    preventItemConsumption.disable();
+                    feature.disable();
                   }
 
                   setConfigPreventItemConsumption((it) => ({
                     ...it,
-                    enabled: preventItemConsumption.config.enabled,
+                    enabled: feature.config.enabled,
                   }));
                 }}
               />
