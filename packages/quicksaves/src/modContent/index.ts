@@ -1,11 +1,16 @@
 import { matchRegisteredKeybind } from 'common/utils';
+import { QuickSaves } from './quicksaves';
 import {
   actionQuickLoad,
   actionQuickSave,
+  getSettings,
   ModSettings,
   registerKeybindings,
 } from './settings';
 import { injectUIs, loadLastQuickSave, makeQuickSave } from './ui';
+
+const settings = getSettings();
+QuickSaves.slotCapacity = settings.maxQuicksaves;
 
 window.modAPI.actions.registerOptionsUI(ModSettings);
 registerKeybindings();

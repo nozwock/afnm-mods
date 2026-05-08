@@ -19,6 +19,7 @@ export const actionQuickSave = `${MOD_ID}.quickSave`;
 export const actionQuickLoad = `${MOD_ID}.quickLoad`;
 
 export function getSettings() {
+  // NOTE: Use localstorage for complex persistent data not tied to save files
   const gameFlags = window.modAPI.actions.getGlobalFlags();
   return {
     maxQuicksaves: gameFlags[keyMaxQuicksaves] ?? 3,
@@ -47,13 +48,7 @@ export function registerKeybindings() {
 }
 
 export const ModSettings: ModOptionsFC = ({ api }) => {
-  // NOTE: Use localstorage for complex persistent data not tied to save files
-  const settings = getSettings();
-  QuickSaves.slotCapacity = settings.maxQuicksaves;
-
-  // useState doesn't mutate `settings` so can't keep a single instance of it that we pass around throughout the mod,
-  // hence getSettings() that makes a copy on every call
-  const [getSettingsState, setSettingsState] = useState(settings);
+  const [getSettingsState, setSettingsState] = useState(getSettings);
 
   return (
     <Box
