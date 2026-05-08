@@ -48,7 +48,7 @@ export function registerKeybindings() {
 }
 
 export const ModSettings: ModOptionsFC = ({ api }) => {
-  const [getSettingsState, setSettingsState] = useState(getSettings);
+  const [settings, setSettings] = useState(getSettings);
 
   return (
     <Box
@@ -65,13 +65,13 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
             label={t('Show Quicksave Buttons')}
             control={
               <Checkbox
-                checked={getSettingsState.showQuicksaveButtons}
+                checked={settings.showQuicksaveButtons}
                 onChange={(_, value) => {
                   window.modAPI.actions.setGlobalFlag(
                     keyShowQuicksaveButtons,
                     Number(value),
                   );
-                  setSettingsState((it) => ({
+                  setSettings((it) => ({
                     ...it,
                     showQuicksaveButtons: value,
                   }));
@@ -84,7 +84,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
       <Box>
         <Typography fontSize="120%">
           {t('Max Quicksaves: {slots}', {
-            slots: getSettingsState.maxQuicksaves,
+            slots: settings.maxQuicksaves,
           })}
         </Typography>
         <Typography fontSize="90%" sx={{ opacity: 0.7 }}>
@@ -93,11 +93,11 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
           )}
         </Typography>
         <Slider
-          value={getSettingsState.maxQuicksaves}
+          value={settings.maxQuicksaves}
           onChange={(_, value) => {
             QuickSaves.slotCapacity = value;
             window.modAPI.actions.setGlobalFlag(keyMaxQuicksaves, value);
-            setSettingsState((it) => ({
+            setSettings((it) => ({
               ...it,
               maxQuicksaves: value,
             }));
