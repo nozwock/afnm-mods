@@ -10,17 +10,20 @@ const t = window.modAPI.utils.t;
 
 export function injectUIs() {
   // NOTE: Changing settings causing a page re-render, so the changes will be reflected instantly
-  window.modAPI.injectUI('combat', (api, element, inject) => {
-    if (!getSettings().showQuicksaveButtons) return;
-    return inject('#topBarLeftButtons', <QuickSaveButton {...api} />);
-  });
-  window.modAPI.injectUI('combat', (api, element, inject) => {
+  window.modAPI.injectUI('combat', (api, inject) => {
     if (!getSettings().showQuicksaveButtons) return;
     return inject(
-      '#topBarRightButtons > *',
+      '#topBarLeftButtons',
+      <QuickSaveButton {...api} />,
+      'appendChild',
+    );
+  });
+  window.modAPI.injectUI('combat', (api, inject) => {
+    if (!getSettings().showQuicksaveButtons) return;
+    return inject(
+      '#topBarRightButtons',
       <QuickLoadButton {...api} />,
-      'inline',
-      'before',
+      'prependChild',
     );
   });
 
