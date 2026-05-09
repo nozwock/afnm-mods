@@ -1,6 +1,7 @@
 import {
   Box,
   Checkbox,
+  FormControl,
   FormControlLabel,
   FormGroup,
   Slider,
@@ -14,6 +15,7 @@ import { QuickSaves } from './quicksaves';
 const t = window.modAPI.utils.t;
 const keyMaxQuicksaves = `${MOD_ID}.maxQuicksaves`;
 const keyShowQuicksaveButtons = `${MOD_ID}.showQuicksaveButtons`;
+const keyExcludeQuicksavesBeyondCapacity = `${MOD_ID}.excludeQuicksavesBeyondCapacity`;
 
 export const actionQuickSave = `${MOD_ID}.quickSave`;
 export const actionQuickLoad = `${MOD_ID}.quickLoad`;
@@ -24,6 +26,9 @@ export function getSettings() {
   return {
     maxQuicksaves: gameFlags[keyMaxQuicksaves] ?? 3,
     showQuicksaveButtons: Boolean(gameFlags[keyShowQuicksaveButtons] ?? 1),
+    excludeQuicksavesBeyondCapacity: Boolean(
+      gameFlags[keyExcludeQuicksavesBeyondCapacity] ?? 0,
+    ),
   };
 }
 
@@ -72,6 +77,33 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
               />
             }
           ></FormControlLabel>
+          <FormControl>
+            <FormControlLabel
+              label={t('Exclude quicksaves beyond Max Quicksaves')}
+              control={
+                <Checkbox
+                  checked={settings.excludeQuicksavesBeyondCapacity}
+                  onChange={(_, value) => {
+                    QuickSaves.excludeQuicksavesBeyondCapacity = value;
+                    window.modAPI.actions.setGlobalFlag(
+                      keyExcludeQuicksavesBeyondCapacity,
+                      Number(value),
+                    );
+                    setSettings((it) => ({
+                      ...it,
+                      excludeQuicksavesBeyondCapacity: value,
+                    }));
+                  }}
+                />
+              }
+            ></FormControlLabel>
+            <Typography fontSize="90%" sx={{ opacity: 0.7 }}>
+              {t(
+                `If enabled, quicksaves exceeding the Max Quicksaves limit are ignored when loading the most recent \
+quicksave or determining the next quicksave slot.`,
+              )}
+            </Typography>
+          </FormControl>
         </FormGroup>
       </Box>
       <Box>

@@ -11,6 +11,8 @@ import { injectUIs, loadLastQuickSave, makeQuickSave } from './ui';
 
 const settings = getSettings();
 QuickSaves.slotCapacity = settings.maxQuicksaves;
+QuickSaves.excludeQuicksavesBeyondCapacity =
+  settings.excludeQuicksavesBeyondCapacity;
 
 window.modAPI.actions.registerOptionsUI(ModSettings);
 registerKeybindings();

@@ -5,6 +5,11 @@ export class QuickSaves {
 
   static #slotCapacity = 3;
 
+  /**
+   * Affects `getQuickSaves()`.
+   */
+  public static excludeQuicksavesBeyondCapacity = false;
+
   public static get slotCapacity(): number {
     return this.#slotCapacity;
   }
@@ -51,7 +56,15 @@ export class QuickSaves {
     const saves = await window.modAPI.utils.listSaves();
     return saves
       .filter((save) => {
-        return this.QUICK_SAVE_REGEX.test(save.name as string);
+        const isQuicksave = this.QUICK_SAVE_REGEX.test(save.name as string);
+        if (!isQuicksave) return false;
+
+        if (this.excludeQuicksavesBeyondCapacity) {
+          const slot = this.getSlotNumber(save.name as string)!;
+          return slot >= 1 && slot <= this.slotCapacity;
+        }
+
+        return true;
       })
       .sort((aSave, bSave) => {
         const aTime = aSave.metadata.lastPlayed as number;

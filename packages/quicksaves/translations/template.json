@@ -9,6 +9,8 @@
   },
   "ui": {
     "src/modContent/settings": {
+      "[string] Exclude quicksaves beyond Max Quicksaves": "",
+      "[string] If enabled, quicksaves exceeding the Max Quicksaves limit are ignored when loading the most recent quicksave or determining the next quicksave slot.": "",
       "[string] Max Quicksaves: {slots}": "",
       "[string] Quickload uses only the most recent quicksave. The others serve as backups.": "",
       "[string] Show Quicksave Buttons": ""
