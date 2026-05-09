@@ -25,7 +25,11 @@ export class QuickSaves {
       const lastSlot = this.getSlotNumber(lastSave);
 
       if (lastSlot !== null) {
-        nextSlot = (lastSlot % this.slotCapacity) + 1;
+        // If lastSlot > slotCapacity, have nextSlot be 1.
+        // This can happen if slotCapacity was recently changed to a lower value while the last save slot is beyond
+        // that. Makes it easy to think what the next slot would be in such a case.
+        nextSlot =
+          (Math.min(lastSlot, this.slotCapacity) % this.slotCapacity) + 1;
       }
     }
     const filename = `quicksave${nextSlot}.json`;
