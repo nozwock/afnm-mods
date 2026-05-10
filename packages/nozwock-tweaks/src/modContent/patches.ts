@@ -1,10 +1,6 @@
-import { Item, RootState } from 'afnm-types';
+import { Item, rarityToNameOnly, RootState } from 'afnm-types';
 import { Patch, PatchManager } from 'common/patch';
-import {
-  enchantmentNameRarities,
-  isRealmReached,
-  stripFirstPrefix,
-} from 'common/utils';
+import { isRealmReached, stripFirstPrefix } from 'common/utils';
 import { ModConfig, modConfig } from './config';
 
 export const patchManager = new PatchManager();
@@ -91,7 +87,7 @@ export const patches = {
           if (items[it.name].kind === 'enchantment') {
             return {
               ...it,
-              name: `${rarityName}${stripFirstPrefix(it.name, enchantmentNameRarities)}`,
+              name: `${rarityName}${stripFirstPrefix(it.name, Object.values(rarityToNameOnly))}`,
             };
           }
           return it;

@@ -2,16 +2,6 @@ import { InventoryItemState, InventoryState, Realm, realms } from 'afnm-types';
 
 const t = window.modAPI.utils.t;
 
-// from `rarities`
-export const enchantmentNameRarities = [
-  'Mundane',
-  'Qi Touched',
-  'Empowered',
-  'Resplendent',
-  'Incandescent',
-  'Transcendent',
-];
-
 const realmsIndex = realms.reduce(
   (acc, realm, i) => {
     acc[realm] = i;
