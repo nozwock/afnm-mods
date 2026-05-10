@@ -8,6 +8,7 @@
     "src/modContent/settings": {
       "[string] Item Kinds": "",
       "[string] Item Names": "",
+      "[string] Max Out Added Enchantments' Rarity": "",
       "[string] Prevent Item Consumption": "",
       "[string] Select item kinds": "",
       "[string] Select or type item names": ""

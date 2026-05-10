@@ -11,6 +11,9 @@ export const defaultModConfig = {
       'transport_seal',
     ]) satisfies Set<ItemKind> as Set<ItemKind>,
   },
+  maxRarityAddedEnchantments: {
+    enabled: false,
+  },
 };
 
 export type ModConfig = typeof defaultModConfig;

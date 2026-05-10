@@ -1,4 +1,10 @@
+import { Item, RootState } from 'afnm-types';
 import { Patch, PatchManager } from 'common/patch';
+import {
+  enchantmentNameRarities,
+  isRealmReached,
+  stripFirstPrefix,
+} from 'common/utils';
 import { ModConfig, modConfig } from './config';
 
 export const patchManager = new PatchManager();
@@ -50,6 +56,66 @@ export const patches = {
         ...modConfig.value,
         preventItemConsumption: {
           ...modConfig.value.preventItemConsumption,
+          enabled: false,
+        },
+      };
+    },
+  },
+  maxRarityAddedEnchantments: {
+    name: 'maxRarityAddedEnchantments',
+    unsubscribers: [],
+    isEnabled(config) {
+      return config.maxRarityAddedEnchantments.enabled;
+    },
+    onEnable: function (): void {
+      modConfig.value = {
+        ...modConfig.value,
+        maxRarityAddedEnchantments: {
+          ...modConfig.value.maxRarityAddedEnchantments,
+          enabled: true,
+        },
+      };
+
+      function updateEnchantmentRarity(
+        payload: Item[],
+        state: RootState,
+      ): Item[] {
+        const rarityName = isRealmReached(
+          state.player.player.realm,
+          'pillarCreation',
+        )
+          ? 'Transcendent'
+          : 'Incandescent';
+        const items = window.modAPI.gameData.items;
+        return payload.map((it) => {
+          if (items[it.name].kind === 'enchantment') {
+            return {
+              ...it,
+              name: `${rarityName}${stripFirstPrefix(it.name, enchantmentNameRarities)}`,
+            };
+          }
+          return it;
+        });
+      }
+
+      this.unsubscribers!.push(
+        ...[
+          window.modAPI.hooks.onReduxActionPayload((action, payload, state) => {
+            if (action === 'inventory/addItem') {
+              return updateEnchantmentRarity([payload as Item], state)[0];
+            } else if (action === 'inventory/addItemBatch') {
+              return updateEnchantmentRarity(payload as Item[], state);
+            }
+            return payload;
+          }),
+        ],
+      );
+    },
+    onDisable() {
+      modConfig.value = {
+        ...modConfig.value,
+        maxRarityAddedEnchantments: {
+          ...modConfig.value.maxRarityAddedEnchantments,
           enabled: false,
         },
       };

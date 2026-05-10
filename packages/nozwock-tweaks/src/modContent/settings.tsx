@@ -2,8 +2,10 @@ import {
   Autocomplete,
   Box,
   Card,
+  Checkbox,
   Chip,
   FormControlLabel,
+  FormGroup,
   Switch,
   TextField,
 } from '@mui/material';
@@ -26,6 +28,25 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
 
   return (
     <Box marginTop="40px" display="flex" flexDirection="column" gap={2}>
+      <FormGroup>
+        <FormControlLabel
+          label={t("Max Out Added Enchantments' Rarity")}
+          control={
+            <Checkbox
+              checked={config.maxRarityAddedEnchantments.enabled}
+              onChange={(_, value) => {
+                setModConfig((it) => ({
+                  ...it,
+                  maxRarityAddedEnchantments: {
+                    ...it.maxRarityAddedEnchantments,
+                    enabled: value,
+                  },
+                }));
+              }}
+            />
+          }
+        ></FormControlLabel>
+      </FormGroup>
       <Card
         elevation={2}
         variant="outlined"
