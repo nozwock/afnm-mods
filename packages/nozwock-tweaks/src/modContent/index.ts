@@ -1,8 +1,8 @@
-import { FeatureManager } from './features';
+import { patchManager, patches } from './patches';
 import { ModSettings } from './settings';
 
 window.modAPI.actions.registerOptionsUI(ModSettings);
 
-FeatureManager.getAll().forEach((feature) => {
-  feature.initialize();
+Object.values(patches).forEach((patch) => {
+  patchManager.tryEnable(patch);
 });
