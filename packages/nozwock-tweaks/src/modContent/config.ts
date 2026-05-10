@@ -1,9 +1,11 @@
 import { GlobalConfig } from 'common/config';
 import { MOD_ID } from './const';
 
-export type ModConfig = typeof modConfig.value;
-export const modConfig = new GlobalConfig(`${MOD_ID}.config`, {
+const defaultConfig = {
   preventItemConsumption: {
     enabled: true,
   },
-});
+};
+
+export type ModConfig = typeof defaultConfig;
+export const modConfig = new GlobalConfig(`${MOD_ID}.config`, defaultConfig);
