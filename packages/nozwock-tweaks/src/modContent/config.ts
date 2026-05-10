@@ -1,11 +1,17 @@
+import { ItemKind } from 'afnm-types';
 import { GlobalConfig } from 'common/config';
 import { MOD_ID } from './const';
 
-const defaultConfig = {
+export const defaultModConfig = {
   preventItemConsumption: {
     enabled: true,
+    names: new Set(['Jade Visage Pill']),
+    kinds: new Set([
+      'blueprint',
+      'transport_seal',
+    ]) satisfies Set<ItemKind> as Set<ItemKind>,
   },
 };
 
-export type ModConfig = typeof defaultConfig;
-export const modConfig = new GlobalConfig(`${MOD_ID}.config`, defaultConfig);
+export type ModConfig = typeof defaultModConfig;
+export const modConfig = new GlobalConfig(`${MOD_ID}.config`, defaultModConfig);

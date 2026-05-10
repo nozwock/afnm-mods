@@ -36,9 +36,12 @@ export const patches = {
                     state.inventory,
                     prevState.inventory,
                     (item) =>
-                      item.name === 'Jade Visage Pill' ||
-                      items[item.name].kind === 'blueprint' ||
-                      items[item.name].kind === 'transport_seal',
+                      modConfig.value.preventItemConsumption.names.has(
+                        item.name,
+                      ) ||
+                      modConfig.value.preventItemConsumption.kinds.has(
+                        items[item.name].kind,
+                      ),
                   ),
                 },
               };
