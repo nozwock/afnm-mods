@@ -9,7 +9,7 @@ import {
   Switch,
   TextField,
 } from '@mui/material';
-import { itemKinds, ModOptionsFC } from 'afnm-types';
+import { itemKinds, itemKindToName, ModOptionsFC } from 'afnm-types';
 import { getItemDisplayNames } from 'common/utils';
 import { useMemo, useState } from 'react';
 import { ModConfig, modConfig } from './config';
@@ -121,6 +121,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
         <Autocomplete
           multiple
           options={itemKinds}
+          getOptionLabel={(kind) => t(itemKindToName[kind] ?? kind)}
           value={Array.from(config.preventItemConsumption.kinds)}
           onChange={(_, values) => {
             setModConfig((it) => ({
@@ -131,6 +132,15 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
               },
             }));
           }}
+          renderValue={(values, getTagProps) =>
+            values.map((kind, index) => (
+              <Chip
+                {...getTagProps({ index })}
+                key={kind}
+                label={t(itemKindToName[kind] ?? kind)}
+              />
+            ))
+          }
           renderInput={(params) => (
             <TextField
               {...params}
