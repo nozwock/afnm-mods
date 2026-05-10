@@ -1,5 +1,7 @@
 import { InventoryItemState, InventoryState, Realm, realms } from 'afnm-types';
 
+const t = window.modAPI.utils.t;
+
 // from `rarities`
 export const enchantmentNameRarities = [
   'Mundane',
@@ -42,6 +44,20 @@ export function matchRegisteredKeybind(action: string, event: KeyboardEvent) {
     event.ctrlKey === key.ctrlKey &&
     event.altKey === key.altKey &&
     event.shiftKey === key.shiftKey
+  );
+}
+
+/**
+ * @returns Mapping of item name (id) to display name.
+ */
+export function getItemDisplayNames(): Record<string, string> {
+  return Object.entries(window.modAPI.gameData.items).reduce(
+    (acc, [name, item]) => {
+      // `.displayName` is an optional override over `.name`
+      acc[name] = t(item.displayName ?? name);
+      return acc;
+    },
+    {} as Record<string, string>,
   );
 }
 
