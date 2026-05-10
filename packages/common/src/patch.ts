@@ -4,6 +4,8 @@ export interface Patch<Config = unknown> {
   isEnabled?(config: Readonly<Config>): boolean;
   onEnable(): void;
   onDisable?(): void;
+
+  [key: string]: unknown; // For patch state and helpers
 }
 
 export class PatchManager {
