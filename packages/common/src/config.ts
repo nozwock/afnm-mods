@@ -1,3 +1,5 @@
+import merge from 'lodash.merge';
+
 export class GlobalConfig<Config> {
   private configKey: string;
   private defaultConfig: Config;
@@ -14,8 +16,9 @@ export class GlobalConfig<Config> {
     }
 
     const item = localStorage.getItem(this.configKey);
+
     this._cachedConfig = item
-      ? { ...this.defaultConfig, ...(JSON.parse(item) as Config) }
+      ? merge({}, this.defaultConfig, JSON.parse(item) as Config)
       : { ...this.defaultConfig };
     return this._cachedConfig;
   }

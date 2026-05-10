@@ -3,6 +3,7 @@
     "packages/*"
   ],
   "devDependencies": {
+    "@types/lodash.merge": "^4.6.9",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "afnm-types": "0.6.56",
@@ -22,8 +23,9 @@
     "@mui/icons-material": "^7.3.9",
     "@mui/material": "^7.3.9",
     "@reduxjs/toolkit": "^2.11.1",
-    "react": "^19.2.4",
-    "common": "workspace:*"
+    "common": "workspace:*",
+    "lodash.merge": "^4.6.2",
+    "react": "^19.2.4"
   },
   "scripts": {
     "build": "node scripts/build-mods.js",
