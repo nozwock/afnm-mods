@@ -18,7 +18,23 @@ export class GlobalConfig<Config> {
     const item = localStorage.getItem(this.configKey);
 
     this._cachedConfig = item
-      ? merge({}, this.defaultConfig, JSON.parse(item) as Config)
+      ? merge(
+          {},
+          this.defaultConfig,
+          JSON.parse(item, (key, value) => {
+            if (
+              typeof value === 'object' &&
+              Object.keys(value).length === 2 &&
+              value.__type__ === 'Set' &&
+              value.value !== undefined
+            ) {
+              return Array.isArray(value.value)
+                ? new Set(value.value)
+                : new Set();
+            }
+            return value;
+          }) as Config,
+        )
       : { ...this.defaultConfig };
     return this._cachedConfig;
   }
@@ -28,7 +44,15 @@ export class GlobalConfig<Config> {
     // after the value has been passed to the function, but this is not a thing currently.
     // https://github.com/microsoft/TypeScript/issues/14909
     this._cachedConfig = structuredClone(data);
-    localStorage.setItem(this.configKey, JSON.stringify(this._cachedConfig));
+    localStorage.setItem(
+      this.configKey,
+      JSON.stringify(this._cachedConfig, (key, value) => {
+        if (value instanceof Set) {
+          return { __type__: 'Set', value: Array.from(value) };
+        }
+        return value;
+      }),
+    );
   }
 
   public reset(): void {
