@@ -2,7 +2,7 @@ import { Patch, PatchManager } from 'common/patch';
 import { revertChangedItems } from 'common/utils';
 import { ModConfig, modConfig } from './config';
 
-export const patchManager = new PatchManager(() => modConfig.value);
+export const patchManager = new PatchManager();
 export const patches = {
   preventItemConsumption: {
     name: 'preventItemConsumption',

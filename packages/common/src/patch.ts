@@ -6,20 +6,17 @@ export interface Patch<Config = unknown> {
   onDisable?(): void;
 }
 
-export class PatchManager<Config> {
-  constructor(getConfig: () => Config) {
-    this.getConfig = getConfig;
-  }
+export class PatchManager {
+  constructor() {}
 
-  private getConfig;
   private patches = new Map<
-    Patch<Config>,
+    Patch,
     {
       isInitialized: boolean;
     }
   >();
 
-  private addIfNotPresent(patch: Patch<Config>): void {
+  private addIfNotPresent(patch: Patch): void {
     if (!this.patches.has(patch)) {
       this.patches.set(patch, {
         isInitialized: false,
@@ -30,13 +27,13 @@ export class PatchManager<Config> {
   /**
    * `Patch` is enabled unconditionally if `isEnabled` is not defined.
    */
-  public tryEnable(patch: Patch<Config>): void {
-    if (!patch.isEnabled || patch.isEnabled(this.getConfig())) {
+  public tryEnable<Config>(patch: Patch<Config>, config?: Config): void {
+    if (!patch.isEnabled || (config !== undefined && patch.isEnabled(config))) {
       this.enable(patch);
     }
   }
 
-  public enable(patch: Patch<Config>): void {
+  public enable(patch: Patch): void {
     this.addIfNotPresent(patch);
 
     const state = this.patches.get(patch)!;
@@ -47,7 +44,7 @@ export class PatchManager<Config> {
     patch.onEnable();
   }
 
-  public disable(patch: Patch<Config>): void {
+  public disable(patch: Patch): void {
     if (!patch.onDisable && !patch.unsubscribers) return;
 
     const state = this.patches.get(patch);
