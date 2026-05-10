@@ -1,5 +1,4 @@
 import { Patch, PatchManager } from 'common/patch';
-import { revertChangedItems } from 'common/utils';
 import { ModConfig, modConfig } from './config';
 
 export const patchManager = new PatchManager();
@@ -21,33 +20,27 @@ export const patches = {
 
       this.unsubscribers!.push(
         ...[
-          window.modAPI.hooks.onReduxAction((action, prevState, state) => {
+          window.modAPI.hooks.onReduxActionPayload((action, payload) => {
             if (action == 'inventory/removeItem') {
               // Prevent certain items from being consumed.
               //
               // This'd not prevent item from being sold since selling items in market uses "inventory/removeItemBatch"
               // instead, which is great since we don't want to prevent selling.
+              const payloadItem = payload as { name: string; stacks: number };
               const items = window.modAPI.gameData.items;
-              return {
-                ...state,
-                inventory: {
-                  ...state.inventory,
-                  items: revertChangedItems(
-                    state.inventory,
-                    prevState.inventory,
-                    (item) =>
-                      modConfig.value.preventItemConsumption.names.has(
-                        item.name,
-                      ) ||
-                      modConfig.value.preventItemConsumption.kinds.has(
-                        items[item.name].kind,
-                      ),
-                  ),
-                },
-              };
+              if (
+                modConfig.value.preventItemConsumption.names.has(
+                  payloadItem.name,
+                ) ||
+                modConfig.value.preventItemConsumption.kinds.has(
+                  items[payloadItem.name].kind,
+                )
+              ) {
+                // Drop payload
+                return null;
+              }
             }
-
-            return state;
+            return payload;
           }),
         ],
       );
