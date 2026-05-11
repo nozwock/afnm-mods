@@ -29,6 +29,8 @@ export class PatchManager {
   /**
    * `Patch` is enabled unconditionally if `isEnabled` is not defined.
    */
+  public tryEnable(patch: Patch<undefined>): void;
+  public tryEnable<Config>(patch: Patch<Config>, config: Config): void;
   public tryEnable<Config>(patch: Patch<Config>, config?: Config): void {
     if (!patch.isEnabled || (config !== undefined && patch.isEnabled(config))) {
       this.enable(patch);
