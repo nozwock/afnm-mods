@@ -72,35 +72,13 @@ export const patches = {
         },
       };
 
-      function updateEnchantmentRarity(
-        payload: Item[],
-        state: RootState,
-      ): Item[] {
-        const rarityName = isRealmReached(
-          state.player.player.realm,
-          'pillarCreation',
-        )
-          ? 'Transcendent'
-          : 'Incandescent';
-        const items = window.modAPI.gameData.items;
-        return payload.map((it) => {
-          if (items[it.name].kind === 'enchantment') {
-            return {
-              ...it,
-              name: `${rarityName}${stripFirstPrefix(it.name, Object.values(rarityToNameOnly))}`,
-            };
-          }
-          return it;
-        });
-      }
-
       this.unsubscribers.push(
         ...[
           window.modAPI.hooks.onReduxActionPayload((action, payload, state) => {
             if (action === 'inventory/addItem') {
-              return updateEnchantmentRarity([payload as Item], state)[0];
+              return this._updateEnchantmentRarity([payload as Item], state)[0];
             } else if (action === 'inventory/addItemBatch') {
-              return updateEnchantmentRarity(payload as Item[], state);
+              return this._updateEnchantmentRarity(payload as Item[], state);
             }
             return payload;
           }),
@@ -115,6 +93,24 @@ export const patches = {
           enabled: false,
         },
       };
+    },
+    _updateEnchantmentRarity(payload: Item[], state: RootState): Item[] {
+      const rarityName = isRealmReached(
+        state.player.player.realm,
+        'pillarCreation',
+      )
+        ? 'Transcendent'
+        : 'Incandescent';
+      const items = window.modAPI.gameData.items;
+      return payload.map((it) => {
+        if (items[it.name].kind === 'enchantment') {
+          return {
+            ...it,
+            name: `${rarityName}${stripFirstPrefix(it.name, Object.values(rarityToNameOnly))}`,
+          };
+        }
+        return it;
+      });
     },
   }),
 };
