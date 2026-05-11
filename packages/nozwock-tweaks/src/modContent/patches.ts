@@ -23,7 +23,7 @@ export const patches = {
       this.unsubscribers.push(
         ...[
           window.modAPI.hooks.onReduxActionPayload((action, payload) => {
-            if (action == 'inventory/removeItem') {
+            if (action === 'inventory/removeItem') {
               // Prevent certain items from being consumed.
               //
               // This'd not prevent item from being sold since selling items in market uses "inventory/removeItemBatch"
