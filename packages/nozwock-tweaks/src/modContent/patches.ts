@@ -1,15 +1,15 @@
 import { Item, rarityToNameOnly, RootState } from 'afnm-types';
 import { definePatch, PatchManager } from 'common/patch';
 import { isRealmReached, stripFirstPrefix } from 'common/utils';
-import { ModConfig, modConfig } from './config';
+import { modConfig } from './config';
 
 export const patchManager = new PatchManager();
 export const patches = {
   preventItemConsumption: definePatch({
     name: 'preventItemConsumption',
     unsubscribers: [],
-    isEnabled(config: ModConfig) {
-      return config.preventItemConsumption.enabled;
+    isEnabled() {
+      return modConfig.value.preventItemConsumption.enabled;
     },
     onEnable() {
       modConfig.value = {
@@ -60,8 +60,8 @@ export const patches = {
   maxRarityAddedEnchantments: definePatch({
     name: 'maxRarityAddedEnchantments',
     unsubscribers: [],
-    isEnabled(config: ModConfig) {
-      return config.maxRarityAddedEnchantments.enabled;
+    isEnabled() {
+      return modConfig.value.maxRarityAddedEnchantments.enabled;
     },
     onEnable() {
       modConfig.value = {

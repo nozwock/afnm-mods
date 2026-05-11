@@ -1,26 +1,25 @@
-export interface Patch<Config = unknown> {
+export interface Patch {
   name: string;
   unsubscribers?: (() => void)[];
-  isEnabled?(config: Readonly<Config>): boolean;
+  isEnabled?(): boolean;
   onEnable(): void;
   onDisable?(): void;
 }
 
 /**
  * Helper function to define a `Patch` object with type checking while allowing for additional properties, since a plain
- * `satisfies Patch<...>` won't work that.
+ * `satisfies Patch` won't work.
  *
  * @example
- * // Specify type of `config` in `Patch` object to allow generic type parameters' inference.
  * definePatch({
  *  // ...
  *  unsubscribers: [] as (() => void)[],
- *  isEnabled(config: MyConfig) {
- *    return true;
+ *  isEnabled() {
+ *    return modConfig.value.myPatch.enabled;
  *  },
  * })
  */
-export const definePatch = <C, T>(patch: T & Patch<C>) => patch;
+export const definePatch = <T>(patch: T & Patch) => patch;
 
 export class PatchManager {
   constructor() {}
@@ -43,10 +42,8 @@ export class PatchManager {
   /**
    * `Patch` is enabled unconditionally if `isEnabled` is not defined.
    */
-  public tryEnable(patch: Patch<undefined>): void;
-  public tryEnable<Config>(patch: Patch<Config>, config: Config): void;
-  public tryEnable<Config>(patch: Patch<Config>, config?: Config): void {
-    if (!patch.isEnabled || (config !== undefined && patch.isEnabled(config))) {
+  public tryEnable(patch: Patch): void {
+    if (!patch.isEnabled || patch.isEnabled()) {
       this.enable(patch);
     }
   }
