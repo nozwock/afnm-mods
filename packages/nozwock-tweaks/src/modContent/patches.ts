@@ -1,4 +1,11 @@
-import { Item, rarityToNameOnly, RootState } from 'afnm-types';
+import {
+  Item,
+  KnownCraftingTechniqueMastery,
+  KnownTechnique,
+  Rarity,
+  rarityToNameOnly,
+  RootState,
+} from 'afnm-types';
 import { definePatch, PatchManager } from 'common/patch';
 import { isRealmReached, stripFirstPrefix } from 'common/utils';
 import { modConfig } from './config';
@@ -111,6 +118,59 @@ export const patches = {
         }
         return it;
       });
+    },
+  }),
+  maxRarityTechniqueMastery: definePatch({
+    name: 'maxRarityTechniqueMastery',
+    unsubscribers: [],
+    isEnabled() {
+      return modConfig.value.maxRarityTechniqueMastery.enabled;
+    },
+    onEnable() {
+      modConfig.value = {
+        ...modConfig.value,
+        maxRarityTechniqueMastery: {
+          ...modConfig.value.maxRarityTechniqueMastery,
+          enabled: true,
+        },
+      };
+
+      this.unsubscribers.push(
+        ...[
+          window.modAPI.hooks.onReduxActionPayload((action, payload, state) => {
+            if (action === 'player/updateTechnique') {
+              const tier: Rarity = isRealmReached(
+                state.player.player.realm,
+                'pillarCreation',
+              )
+                ? 'transcendent'
+                : 'incandescent';
+              const techniquePayload = payload as KnownTechnique;
+              return {
+                ...techniquePayload,
+                mastery: techniquePayload.mastery
+                  ? techniquePayload.mastery.map((mastery) => {
+                      return {
+                        ...mastery,
+                        tier: tier,
+                      } as KnownCraftingTechniqueMastery;
+                    })
+                  : undefined,
+              } satisfies KnownTechnique;
+            }
+            return payload;
+          }),
+        ],
+      );
+    },
+    onDisable() {
+      modConfig.value = {
+        ...modConfig.value,
+        maxRarityTechniqueMastery: {
+          ...modConfig.value.maxRarityTechniqueMastery,
+          enabled: true,
+        },
+      };
     },
   }),
 };

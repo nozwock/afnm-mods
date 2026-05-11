@@ -14,6 +14,9 @@ export const defaultModConfig = {
   maxRarityAddedEnchantments: {
     enabled: false,
   },
+  maxRarityTechniqueMastery: {
+    enabled: false,
+  },
 };
 
 export type ModConfig = typeof defaultModConfig;

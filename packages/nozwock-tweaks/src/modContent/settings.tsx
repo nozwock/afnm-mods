@@ -30,6 +30,27 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
     <Box marginTop="40px" display="flex" flexDirection="column" gap={2}>
       <FormGroup>
         <FormControlLabel
+          label={t('Max Out Technique Masteries on Attempt')}
+          control={
+            <Checkbox
+              checked={config.maxRarityTechniqueMastery.enabled}
+              onChange={(_, value) => {
+                patchManager.setEnabled(
+                  patches.maxRarityTechniqueMastery,
+                  value,
+                );
+                setConfig((it) => ({
+                  ...it,
+                  maxRarityTechniqueMastery: {
+                    ...it.maxRarityTechniqueMastery,
+                    enabled: value,
+                  },
+                }));
+              }}
+            />
+          }
+        ></FormControlLabel>
+        <FormControlLabel
           label={t("Max Out Added Enchantments' Rarity")}
           control={
             <Checkbox
