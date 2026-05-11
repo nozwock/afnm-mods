@@ -35,11 +35,10 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
             <Checkbox
               checked={config.maxRarityAddedEnchantments.enabled}
               onChange={(_, value) => {
-                if (value) {
-                  patchManager.enable(patches.maxRarityAddedEnchantments);
-                } else {
-                  patchManager.disable(patches.maxRarityAddedEnchantments);
-                }
+                patchManager.setEnabled(
+                  patches.maxRarityAddedEnchantments,
+                  value,
+                );
                 setConfig((it) => ({
                   ...it,
                   maxRarityAddedEnchantments: {
@@ -70,11 +69,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
             <Switch
               checked={config.preventItemConsumption.enabled}
               onChange={(_, value) => {
-                if (value) {
-                  patchManager.enable(patches.preventItemConsumption);
-                } else {
-                  patchManager.disable(patches.preventItemConsumption);
-                }
+                patchManager.setEnabled(patches.preventItemConsumption, value);
                 setConfig((it) => ({
                   ...it,
                   preventItemConsumption: {

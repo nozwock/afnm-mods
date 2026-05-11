@@ -48,6 +48,14 @@ export class PatchManager {
     }
   }
 
+  public setEnabled(patch: Patch, enabled: boolean): void {
+    if (enabled) {
+      this.enable(patch);
+    } else {
+      this.disable(patch);
+    }
+  }
+
   public enable(patch: Patch): void {
     this.addIfNotPresent(patch);
 
