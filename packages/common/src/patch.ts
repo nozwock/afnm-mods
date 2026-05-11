@@ -4,9 +4,23 @@ export interface Patch<Config = unknown> {
   isEnabled?(config: Readonly<Config>): boolean;
   onEnable(): void;
   onDisable?(): void;
-
-  [key: string]: unknown; // For patch state and helpers
 }
+
+/**
+ * Helper function to define a `Patch` object with type checking while allowing for additional properties, since a plain
+ * `satisfies Patch<...>` won't work that.
+ *
+ * @example
+ * // Specify type of `config` in `Patch` object to allow generic type parameters' inference.
+ * definePatch({
+ *  // ...
+ *  unsubscribers: [] as (() => void)[],
+ *  isEnabled(config: MyConfig) {
+ *    return true;
+ *  },
+ * })
+ */
+export const definePatch = <C, T>(patch: T & Patch<C>) => patch;
 
 export class PatchManager {
   constructor() {}

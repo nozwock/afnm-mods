@@ -1,17 +1,17 @@
 import { Item, rarityToNameOnly, RootState } from 'afnm-types';
-import { Patch, PatchManager } from 'common/patch';
+import { definePatch, PatchManager } from 'common/patch';
 import { isRealmReached, stripFirstPrefix } from 'common/utils';
 import { ModConfig, modConfig } from './config';
 
 export const patchManager = new PatchManager();
 export const patches = {
-  preventItemConsumption: {
+  preventItemConsumption: definePatch({
     name: 'preventItemConsumption',
     unsubscribers: [],
-    isEnabled(config) {
+    isEnabled(config: ModConfig) {
       return config.preventItemConsumption.enabled;
     },
-    onEnable: function (): void {
+    onEnable() {
       modConfig.value = {
         ...modConfig.value,
         preventItemConsumption: {
@@ -20,7 +20,7 @@ export const patches = {
         },
       };
 
-      this.unsubscribers!.push(
+      this.unsubscribers.push(
         ...[
           window.modAPI.hooks.onReduxActionPayload((action, payload) => {
             if (action == 'inventory/removeItem') {
@@ -56,14 +56,14 @@ export const patches = {
         },
       };
     },
-  },
-  maxRarityAddedEnchantments: {
+  }),
+  maxRarityAddedEnchantments: definePatch({
     name: 'maxRarityAddedEnchantments',
     unsubscribers: [],
-    isEnabled(config) {
+    isEnabled(config: ModConfig) {
       return config.maxRarityAddedEnchantments.enabled;
     },
-    onEnable: function (): void {
+    onEnable() {
       modConfig.value = {
         ...modConfig.value,
         maxRarityAddedEnchantments: {
@@ -94,7 +94,7 @@ export const patches = {
         });
       }
 
-      this.unsubscribers!.push(
+      this.unsubscribers.push(
         ...[
           window.modAPI.hooks.onReduxActionPayload((action, payload, state) => {
             if (action === 'inventory/addItem') {
@@ -116,5 +116,5 @@ export const patches = {
         },
       };
     },
-  },
-} satisfies Record<string, Patch<ModConfig>>;
+  }),
+};
