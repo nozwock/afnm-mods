@@ -168,7 +168,7 @@ export const patches = {
         ...modConfig.value,
         maxRarityTechniqueMastery: {
           ...modConfig.value.maxRarityTechniqueMastery,
-          enabled: true,
+          enabled: false,
         },
       };
     },
