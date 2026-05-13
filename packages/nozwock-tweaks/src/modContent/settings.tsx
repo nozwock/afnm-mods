@@ -39,13 +39,8 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
                   patches.maxRarityTechniqueMastery,
                   value,
                 );
-                setConfig((it) => ({
-                  ...it,
-                  maxRarityTechniqueMastery: {
-                    ...it.maxRarityTechniqueMastery,
-                    enabled: value,
-                  },
-                }));
+                // The patch is expected to update modConfig's enabled value
+                setConfig(modConfig.value);
               }}
             />
           }
@@ -60,13 +55,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
                   patches.maxRarityAddedEnchantments,
                   value,
                 );
-                setConfig((it) => ({
-                  ...it,
-                  maxRarityAddedEnchantments: {
-                    ...it.maxRarityAddedEnchantments,
-                    enabled: value,
-                  },
-                }));
+                setConfig(modConfig.value);
               }}
             />
           }
@@ -91,13 +80,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
               checked={config.preventItemConsumption.enabled}
               onChange={(_, value) => {
                 patchManager.setEnabled(patches.preventItemConsumption, value);
-                setConfig((it) => ({
-                  ...it,
-                  preventItemConsumption: {
-                    ...it.preventItemConsumption,
-                    enabled: value,
-                  },
-                }));
+                setConfig(modConfig.value);
               }}
             />
           }
