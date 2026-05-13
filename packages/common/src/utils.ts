@@ -10,6 +10,21 @@ const realmsIndex = realms.reduce(
   {} as Record<Realm, number>,
 );
 
+export function deepFreeze<T extends object>(obj: T): Readonly<T> {
+  // Freeze properties before freezing self
+  for (const key of Reflect.ownKeys(obj) as (keyof T)[]) {
+    const value = obj[key];
+    if (
+      ((value && typeof value === 'object') || typeof value === 'function') &&
+      !Object.isFrozen(value) // Assume nested properties to be frozen if current property is frozen
+    ) {
+      deepFreeze(value);
+    }
+  }
+
+  return Object.freeze(obj);
+}
+
 export function stripEnd(str: string, suffix: string) {
   return str.endsWith(suffix) ? str.slice(0, -suffix.length) : str;
 }

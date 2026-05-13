@@ -1,9 +1,11 @@
+import { Draft, produce } from 'immer';
 import merge from 'lodash.merge';
+import { deepFreeze } from './utils';
 
-export class GlobalConfig<Config> {
+export class GlobalConfig<Config extends object> {
   private configKey: string;
-  private defaultConfig: Config;
-  private _cachedConfig?: Config = undefined;
+  private defaultConfig: Readonly<Config>;
+  private _cachedConfig?: Readonly<Config> = undefined;
 
   constructor(key: string, defaultValue: Config) {
     this.configKey = key;
@@ -39,11 +41,11 @@ export class GlobalConfig<Config> {
     return this._cachedConfig;
   }
 
-  public set value(data: Config) {
-    // Would've liked to have TS enforce the passed data as immutable (to avoid runtime clone), so it can't be mutated
-    // after the value has been passed to the function, but this is not a thing currently.
+  public set value(data: Readonly<Config>) {
+    // Would've liked to have TS enforce the passed data as immutable (to avoid runtime clone/freeze), so it can't be
+    // mutated after the value has been passed to the function, but this is not a thing currently.
     // https://github.com/microsoft/TypeScript/issues/14909
-    this._cachedConfig = structuredClone(data);
+    this._cachedConfig = deepFreeze(data);
     localStorage.setItem(
       this.configKey,
       JSON.stringify(this._cachedConfig, (key, value) => {
@@ -53,6 +55,16 @@ export class GlobalConfig<Config> {
         return value;
       }),
     );
+  }
+
+  public setValue(config: Readonly<Config>): void;
+  public setValue(mutator: (config: Draft<Config>) => void): void;
+  public setValue(value: Readonly<Config> | ((config: Draft<Config>) => void)) {
+    if (typeof value === 'function') {
+      this.value = produce(this.value, value);
+    } else {
+      this.value = value;
+    }
   }
 
   public reset(): void {
