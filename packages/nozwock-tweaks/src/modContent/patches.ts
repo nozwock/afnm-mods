@@ -19,13 +19,9 @@ export const patches = {
       return modConfig.value.preventItemConsumption.enabled;
     },
     onEnable() {
-      modConfig.value = {
-        ...modConfig.value,
-        preventItemConsumption: {
-          ...modConfig.value.preventItemConsumption,
-          enabled: true,
-        },
-      };
+      modConfig.setValue((it) => {
+        it.preventItemConsumption.enabled = true;
+      });
 
       this.unsubscribers.push(
         ...[
@@ -55,13 +51,9 @@ export const patches = {
       );
     },
     onDisable() {
-      modConfig.value = {
-        ...modConfig.value,
-        preventItemConsumption: {
-          ...modConfig.value.preventItemConsumption,
-          enabled: false,
-        },
-      };
+      modConfig.setValue((it) => {
+        it.preventItemConsumption.enabled = false;
+      });
     },
   }),
   maxRarityAddedEnchantments: definePatch({
@@ -71,13 +63,9 @@ export const patches = {
       return modConfig.value.maxRarityAddedEnchantments.enabled;
     },
     onEnable() {
-      modConfig.value = {
-        ...modConfig.value,
-        maxRarityAddedEnchantments: {
-          ...modConfig.value.maxRarityAddedEnchantments,
-          enabled: true,
-        },
-      };
+      modConfig.setValue((it) => {
+        it.maxRarityAddedEnchantments.enabled = true;
+      });
 
       this.unsubscribers.push(
         ...[
@@ -93,13 +81,9 @@ export const patches = {
       );
     },
     onDisable() {
-      modConfig.value = {
-        ...modConfig.value,
-        maxRarityAddedEnchantments: {
-          ...modConfig.value.maxRarityAddedEnchantments,
-          enabled: false,
-        },
-      };
+      modConfig.setValue((it) => {
+        it.maxRarityAddedEnchantments.enabled = false;
+      });
     },
     _updateEnchantmentRarity(payload: Item[], state: RootState): Item[] {
       const rarityName = isRealmReached(
@@ -127,13 +111,9 @@ export const patches = {
       return modConfig.value.maxRarityTechniqueMastery.enabled;
     },
     onEnable() {
-      modConfig.value = {
-        ...modConfig.value,
-        maxRarityTechniqueMastery: {
-          ...modConfig.value.maxRarityTechniqueMastery,
-          enabled: true,
-        },
-      };
+      modConfig.setValue((it) => {
+        it.maxRarityTechniqueMastery.enabled = true;
+      });
 
       this.unsubscribers.push(
         ...[
@@ -164,13 +144,9 @@ export const patches = {
       );
     },
     onDisable() {
-      modConfig.value = {
-        ...modConfig.value,
-        maxRarityTechniqueMastery: {
-          ...modConfig.value.maxRarityTechniqueMastery,
-          enabled: false,
-        },
-      };
+      modConfig.setValue((it) => {
+        it.maxRarityTechniqueMastery.enabled = false;
+      });
     },
   }),
 };
