@@ -189,6 +189,20 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
           )}
         />
       </Card>
+
+      <Typography fontSize="200%">{t('Crafting')}</Typography>
+      <FormControlLabel
+        label={t('Auto Complete Crafting')}
+        control={
+          <Checkbox
+            checked={config.autoCompleteCrafting.enabled}
+            onChange={(_, value) => {
+              patchManager.setEnabled(patches.autoCompleteCrafting, value);
+              setConfig(modConfig.value);
+            }}
+          />
+        }
+      ></FormControlLabel>
     </Box>
   );
 };

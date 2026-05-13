@@ -11,6 +11,7 @@ import {
 } from 'afnm-types';
 import { definePatch, PatchManager } from 'common/patch';
 import { isRealmReached, stripFirstPrefix } from 'common/utils';
+import { produce } from 'immer';
 import cloneDeep from 'lodash.clonedeep';
 import { modConfig } from './config';
 
@@ -216,6 +217,57 @@ export const patches = {
     onDisable() {
       modConfig.setValue((it) => {
         it.maxRarityTechniqueMastery.enabled = false;
+      });
+    },
+  }),
+  autoCompleteCrafting: definePatch({
+    name: 'autoCompleteCrafting',
+    unsubscribers: [],
+    isEnabled() {
+      return modConfig.value.autoCompleteCrafting.enabled;
+    },
+    onEnable() {
+      modConfig.setValue((it) => {
+        it.autoCompleteCrafting.enabled = true;
+      });
+
+      this.unsubscribers.push(
+        ...[
+          window.modAPI.hooks.onReduxAction((action, prevState, state) => {
+            if (action == 'crafting/initCrafting') {
+              return produce(state, (state) => {
+                if (
+                  !state.crafting.progressState ||
+                  !state.crafting.recipe ||
+                  !state.crafting.recipeStats
+                ) {
+                  console.warn('Cannot auto-complete crafting');
+                  return;
+                }
+
+                state.crafting.progressState.completion =
+                  window.modAPI.utils.getMaxCompletion(
+                    state.crafting.recipe,
+                    state.crafting.recipeStats,
+                    state.player.player.realm,
+                  ).flat;
+                state.crafting.progressState.perfection =
+                  window.modAPI.utils.getMaxPerfection(
+                    state.crafting.recipe,
+                    state.crafting.recipeStats,
+                    state.player.player.realm,
+                  ).flat;
+              });
+            }
+
+            return state;
+          }),
+        ],
+      );
+    },
+    onDisable() {
+      modConfig.setValue((it) => {
+        it.autoCompleteCrafting.enabled = false;
       });
     },
   }),

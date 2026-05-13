@@ -20,6 +20,9 @@ export const defaultModConfig = {
   maxRarityTechniqueMastery: {
     enabled: false,
   },
+  autoCompleteCrafting: {
+    enabled: false,
+  },
 };
 
 export type ModConfig = typeof defaultModConfig;

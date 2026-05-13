@@ -6,6 +6,8 @@
   },
   "ui": {
     "src/modContent/settings": {
+      "[string] Auto Complete Crafting": "",
+      "[string] Crafting": "",
       "[string] General": "",
       "[string] Herb Field Growth Days Multiplier": "",
       "[string] Item Kinds": "",
