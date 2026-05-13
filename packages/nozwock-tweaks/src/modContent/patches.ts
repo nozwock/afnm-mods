@@ -22,18 +22,20 @@ const initialGameData = {
           acc[crop.item] = cloneDeep(crop);
           return acc;
         },
-        {} as Record<string, Crop>,
+        {} as Record<string, Crop | undefined>,
       );
       return acc;
     },
-    {} as Record<Realm, Record<string, Crop>>,
+    // The record is not guaranteed to have an entry for every crop in `ModAPI.gameData.crops` at any given moment since
+    // there may be new entries added by mods later in the load order.
+    {} as Record<Realm, Record<string, Crop | undefined> | undefined>,
   ),
   rooms: window.modAPI.gameData.rooms.reduce(
     (acc, it) => {
       acc[it.name] = cloneDeep(it);
       return acc;
     },
-    {} as Record<string, Room>,
+    {} as Record<string, Room | undefined>,
   ),
 };
 
@@ -52,9 +54,11 @@ export const patches = {
     _applyMultiplier(multiplier: number) {
       Object.entries(window.modAPI.gameData.crops).forEach(([realm, crops]) => {
         crops.forEach((crop) => {
-          const initialGrowthDays =
-            initialGameData.crops[realm as Realm][crop.item].growthDays;
-          crop.growthDays = Math.floor(multiplier * initialGrowthDays);
+          const initialCrop =
+            initialGameData.crops[realm as Realm]?.[crop.item];
+          if (initialCrop) {
+            crop.growthDays = Math.floor(multiplier * initialCrop.growthDays);
+          }
         });
       });
     },
@@ -71,8 +75,10 @@ export const patches = {
     },
     _applyMultiplier(multiplier: number) {
       window.modAPI.gameData.rooms.forEach((room) => {
-        const initialBuildMonths = initialGameData.rooms[room.name].buildMonths;
-        room.buildMonths = Math.floor(multiplier * initialBuildMonths);
+        const initialRoom = initialGameData.rooms[room.name];
+        if (initialRoom) {
+          room.buildMonths = Math.floor(multiplier * initialRoom.buildMonths);
+        }
       });
     },
   }),
