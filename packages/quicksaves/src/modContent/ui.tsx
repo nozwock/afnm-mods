@@ -12,58 +12,58 @@ export function injectUIs() {
   // NOTE: Changing settings causing a page re-render, so the changes will be reflected instantly
   window.modAPI.injectUI('combat', (api, inject) => {
     if (!getSettings().showQuicksaveButtons) return;
-    return inject(
-      '#topBarLeftButtons',
-      <QuickSaveButton {...api} />,
-      'appendChild',
-    );
+    inject('#topBarLeftButtons', <QuickSaveButton {...api} />, 'appendChild');
   });
   window.modAPI.injectUI('combat', (api, inject) => {
     if (!getSettings().showQuicksaveButtons) return;
-    return inject(
-      '#topBarRightButtons',
-      <QuickLoadButton {...api} />,
-      'prependChild',
-    );
+    inject('#topBarRightButtons', <QuickLoadButton {...api} />, 'prependChild');
   });
 
-  window.modAPI.injectUI('crafting', (api) => {
+  window.modAPI.injectUI('crafting', (api, inject) => {
     if (!getSettings().showQuicksaveButtons) return;
-    return (
+    inject(
+      '',
       <QuickSaveLoadButtons
         api={api}
         stackProps={{ left: '138px', bottom: '0px', spacing: '5px' }}
-      />
+      />,
+      'after',
     );
   });
 
-  window.modAPI.injectUI('dualCultivation', (api) => {
+  window.modAPI.injectUI('dualCultivation', (api, inject) => {
     if (!getSettings().showQuicksaveButtons) return;
-    return (
+    inject(
+      '',
       <QuickSaveLoadButtons
         api={api}
         stackProps={{ left: '50px', bottom: '3px', spacing: '5px' }}
-      />
+      />,
+      'after',
     );
   });
 
-  window.modAPI.injectUI('event-player-ui', (api) => {
+  window.modAPI.injectUI('event-player-ui', (api, inject) => {
     if (!getSettings().showQuicksaveButtons) return;
-    return (
+    inject(
+      '',
       <QuickSaveLoadButtons
         api={api}
         stackProps={{ left: '3px', bottom: '140px', spacing: '5px' }}
-      />
+      />,
+      'after',
     );
   });
 
-  window.modAPI.injectUI('player-ui', (api) => {
+  window.modAPI.injectUI('player-ui', (api, inject) => {
     if (!getSettings().showQuicksaveButtons) return;
-    return (
+    inject(
+      '',
       <QuickSaveLoadButtons
         api={api}
         stackProps={{ left: '62px', bottom: '0px', spacing: '0px' }}
-      />
+      />,
+      'after',
     );
   });
 }
