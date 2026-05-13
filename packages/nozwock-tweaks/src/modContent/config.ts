@@ -4,7 +4,6 @@ import { MOD_ID } from './const';
 
 export const defaultModConfig = {
   roomBlueprintBuildTimeMultiplier: {
-    enabled: true,
     multiplier: 0,
   },
   preventItemConsumption: {

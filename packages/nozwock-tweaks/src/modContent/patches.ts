@@ -27,26 +27,12 @@ export const patches = {
   roomBlueprintBuildTimeMultiplier: definePatch({
     name: 'roomBlueprintBuildTimeMultiplier',
     isEnabled() {
-      return modConfig.value.roomBlueprintBuildTimeMultiplier.enabled;
+      return modConfig.value.roomBlueprintBuildTimeMultiplier.multiplier !== 1;
     },
     onEnable: function (): void {
-      modConfig.setValue((it) => {
-        it.roomBlueprintBuildTimeMultiplier.enabled = true;
-      });
-
       this._applyMultiplier(
         modConfig.value.roomBlueprintBuildTimeMultiplier.multiplier,
       );
-    },
-    onDisable() {
-      modConfig.setValue((it) => {
-        it.roomBlueprintBuildTimeMultiplier.enabled = false;
-      });
-
-      window.modAPI.gameData.rooms.forEach((room) => {
-        const initialBuildMonths = initialGameData.rooms[room.name].buildMonths;
-        room.buildMonths = initialBuildMonths;
-      });
     },
     _applyMultiplier(multiplier: number) {
       window.modAPI.gameData.rooms.forEach((room) => {
