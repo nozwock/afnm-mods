@@ -3,6 +3,10 @@ import { GlobalConfig } from 'common/config';
 import { MOD_ID } from './const';
 
 export const defaultModConfig = {
+  roomBlueprintBuildTimeMultiplier: {
+    enabled: true,
+    multiplier: 0,
+  },
   preventItemConsumption: {
     enabled: true,
     names: new Set(['Jade Visage Pill']),

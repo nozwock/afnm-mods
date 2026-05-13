@@ -4,14 +4,57 @@ import {
   KnownTechnique,
   Rarity,
   rarityToNameOnly,
+  Room,
   RootState,
 } from 'afnm-types';
 import { definePatch, PatchManager } from 'common/patch';
 import { isRealmReached, stripFirstPrefix } from 'common/utils';
+import cloneDeep from 'lodash.clonedeep';
 import { modConfig } from './config';
+
+const initialGameData = {
+  rooms: window.modAPI.gameData.rooms.reduce(
+    (acc, it) => {
+      acc[it.name] = cloneDeep(it);
+      return acc;
+    },
+    {} as Record<string, Room>,
+  ),
+};
 
 export const patchManager = new PatchManager();
 export const patches = {
+  roomBlueprintBuildTimeMultiplier: definePatch({
+    name: 'roomBlueprintBuildTimeMultiplier',
+    isEnabled() {
+      return modConfig.value.roomBlueprintBuildTimeMultiplier.enabled;
+    },
+    onEnable: function (): void {
+      modConfig.setValue((it) => {
+        it.roomBlueprintBuildTimeMultiplier.enabled = true;
+      });
+
+      this._applyMultiplier(
+        modConfig.value.roomBlueprintBuildTimeMultiplier.multiplier,
+      );
+    },
+    onDisable() {
+      modConfig.setValue((it) => {
+        it.roomBlueprintBuildTimeMultiplier.enabled = false;
+      });
+
+      window.modAPI.gameData.rooms.forEach((room) => {
+        const initialBuildMonths = initialGameData.rooms[room.name].buildMonths;
+        room.buildMonths = initialBuildMonths;
+      });
+    },
+    _applyMultiplier(multiplier: number) {
+      window.modAPI.gameData.rooms.forEach((room) => {
+        const initialBuildMonths = initialGameData.rooms[room.name].buildMonths;
+        room.buildMonths = Math.floor(multiplier * initialBuildMonths);
+      });
+    },
+  }),
   preventItemConsumption: definePatch({
     name: 'preventItemConsumption',
     unsubscribers: [],

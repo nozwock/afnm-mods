@@ -6,8 +6,11 @@ import {
   Chip,
   FormControlLabel,
   FormGroup,
+  InputAdornment,
+  Stack,
   Switch,
   TextField,
+  Typography,
 } from '@mui/material';
 import { itemKinds, itemKindToName, ModOptionsFC } from 'afnm-types';
 import { getItemDisplayNames } from 'common/utils';
@@ -61,6 +64,35 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
           }
         ></FormControlLabel>
       </FormGroup>
+
+      <Stack direction="row" spacing={2} alignItems="center">
+        <Typography>{t('Room Blueprint Build Time Multiplier')}</Typography>
+        <TextField
+          type="number"
+          size="small"
+          value={config.roomBlueprintBuildTimeMultiplier.multiplier}
+          slotProps={{
+            htmlInput: { min: 0, step: 0.1 },
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">X</InputAdornment>
+              ),
+            },
+          }}
+          onChange={(e) => {
+            const value = e.target.value ? parseFloat(e.target.value) : 0;
+            setModConfig((it) => ({
+              ...it,
+              roomBlueprintBuildTimeMultiplier: {
+                ...it.roomBlueprintBuildTimeMultiplier,
+                multiplier: value,
+              },
+            }));
+            patches.roomBlueprintBuildTimeMultiplier._applyMultiplier(value);
+          }}
+        ></TextField>
+      </Stack>
+
       <Card
         elevation={2}
         variant="outlined"
