@@ -29,7 +29,13 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
   }
 
   return (
-    <Box marginTop="40px" display="flex" flexDirection="column" gap={2}>
+    <Box
+      display="flex"
+      flexDirection="column"
+      gap={2}
+      marginTop="40px"
+      marginBottom="40px"
+    >
       <Typography fontSize="200%">{t('General')}</Typography>
       <FormGroup>
         <FormControlLabel

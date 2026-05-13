@@ -56,7 +56,13 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
   const [settings, setSettings] = useState(getSettings);
 
   return (
-    <Box marginTop="40px" display="flex" flexDirection="column" gap="16px">
+    <Box
+      display="flex"
+      flexDirection="column"
+      gap="16px"
+      marginTop="40px"
+      marginBottom="40px"
+    >
       <Box>
         <FormGroup>
           <FormControlLabel
