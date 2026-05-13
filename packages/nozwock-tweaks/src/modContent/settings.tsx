@@ -8,6 +8,7 @@ import {
   FormGroup,
   Switch,
   TextField,
+  Typography,
 } from '@mui/material';
 import { itemKinds, itemKindToName, ModOptionsFC } from 'afnm-types';
 import { getItemDisplayNames } from 'common/utils';
@@ -29,6 +30,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
 
   return (
     <Box marginTop="40px" display="flex" flexDirection="column" gap={2}>
+      <Typography fontSize="200%">{t('General')}</Typography>
       <FormGroup>
         <FormControlLabel
           label={t('Max Out Technique Masteries on Attempt')}
@@ -93,6 +95,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
         }}
       ></NumericMultiplierField>
 
+      <Typography fontSize="200%">{t('Items')}</Typography>
       <Card
         elevation={2}
         variant="outlined"

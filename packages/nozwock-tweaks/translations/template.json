@@ -6,9 +6,11 @@
   },
   "ui": {
     "src/modContent/settings": {
+      "[string] General": "",
       "[string] Herb Field Growth Days Multiplier": "",
       "[string] Item Kinds": "",
       "[string] Item Names": "",
+      "[string] Items": "",
       "[string] Max Out Added Enchantments' Rarity": "",
       "[string] Max Out Technique Masteries on Attempt": "",
       "[string] Prevent Item Consumption": "",
