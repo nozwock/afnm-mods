@@ -123,6 +123,10 @@ const QuickSaveLoadButtons: React.FC<{
       direction="row"
       zIndex={100}
       position="absolute"
+      sx={{
+        ...stackProps?.sx,
+        pointerEvents: 'all',
+      }}
       {...stackProps}
     >
       <QuickSaveButton {...api} />
