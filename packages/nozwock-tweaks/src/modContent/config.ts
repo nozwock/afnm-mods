@@ -9,10 +9,7 @@ export const defaultModConfig = {
   preventItemConsumption: {
     enabled: true,
     names: new Set(['Jade Visage Pill']),
-    kinds: new Set([
-      'blueprint',
-      'transport_seal',
-    ]) satisfies Set<ItemKind> as Set<ItemKind>,
+    kinds: new Set<ItemKind>(['blueprint', 'transport_seal']),
   },
   maxRarityAddedEnchantments: {
     enabled: false,
