@@ -1,9 +1,11 @@
 import {
+  Crop,
   Item,
   KnownCraftingTechniqueMastery,
   KnownTechnique,
   Rarity,
   rarityToNameOnly,
+  Realm,
   Room,
   RootState,
 } from 'afnm-types';
@@ -13,6 +15,19 @@ import cloneDeep from 'lodash.clonedeep';
 import { modConfig } from './config';
 
 const initialGameData = {
+  crops: Object.entries(window.modAPI.gameData.crops).reduce(
+    (acc, [realm, crops]) => {
+      acc[realm as Realm] = crops.reduce(
+        (acc, crop) => {
+          acc[crop.item] = cloneDeep(crop);
+          return acc;
+        },
+        {} as Record<string, Crop>,
+      );
+      return acc;
+    },
+    {} as Record<Realm, Record<string, Crop>>,
+  ),
   rooms: window.modAPI.gameData.rooms.reduce(
     (acc, it) => {
       acc[it.name] = cloneDeep(it);
@@ -24,6 +39,26 @@ const initialGameData = {
 
 export const patchManager = new PatchManager();
 export const patches = {
+  herbFieldGrowthDaysMultiplier: definePatch({
+    name: 'herbFieldGrowthDaysMultiplier',
+    isEnabled() {
+      return modConfig.value.herbFieldGrowthDaysMultiplier.multiplier !== 1;
+    },
+    onEnable: function (): void {
+      this._applyMultiplier(
+        modConfig.value.herbFieldGrowthDaysMultiplier.multiplier,
+      );
+    },
+    _applyMultiplier(multiplier: number) {
+      Object.entries(window.modAPI.gameData.crops).forEach(([realm, crops]) => {
+        crops.forEach((crop) => {
+          const initialGrowthDays =
+            initialGameData.crops[realm as Realm][crop.item].growthDays;
+          crop.growthDays = Math.floor(multiplier * initialGrowthDays);
+        });
+      });
+    },
+  }),
   roomBlueprintBuildTimeMultiplier: definePatch({
     name: 'roomBlueprintBuildTimeMultiplier',
     isEnabled() {

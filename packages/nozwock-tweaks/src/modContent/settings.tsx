@@ -7,7 +7,7 @@ import {
   FormControlLabel,
   FormGroup,
   Switch,
-  TextField
+  TextField,
 } from '@mui/material';
 import { itemKinds, itemKindToName, ModOptionsFC } from 'afnm-types';
 import { getItemDisplayNames } from 'common/utils';
@@ -62,6 +62,21 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
           }
         ></FormControlLabel>
       </FormGroup>
+
+      <NumericMultiplierField
+        label={t('Herb Field Growth Days Multiplier')}
+        value={config.herbFieldGrowthDaysMultiplier.multiplier}
+        onChange={(value) => {
+          setModConfig((it) => ({
+            ...it,
+            herbFieldGrowthDaysMultiplier: {
+              ...it.herbFieldGrowthDaysMultiplier,
+              multiplier: value,
+            },
+          }));
+          patches.herbFieldGrowthDaysMultiplier._applyMultiplier(value);
+        }}
+      ></NumericMultiplierField>
 
       <NumericMultiplierField
         label={t('Room Blueprint Build Time Multiplier')}

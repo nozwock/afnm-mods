@@ -6,6 +6,7 @@
   },
   "ui": {
     "src/modContent/settings": {
+      "[string] Herb Field Growth Days Multiplier": "",
       "[string] Item Kinds": "",
       "[string] Item Names": "",
       "[string] Max Out Added Enchantments' Rarity": "",

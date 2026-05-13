@@ -3,6 +3,9 @@ import { GlobalConfig } from 'common/config';
 import { MOD_ID } from './const';
 
 export const defaultModConfig = {
+  herbFieldGrowthDaysMultiplier: {
+    multiplier: 1,
+  },
   roomBlueprintBuildTimeMultiplier: {
     multiplier: 0,
   },
