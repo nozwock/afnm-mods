@@ -6,15 +6,13 @@ import {
   Chip,
   FormControlLabel,
   FormGroup,
-  InputAdornment,
-  Stack,
   Switch,
-  TextField,
-  Typography,
+  TextField
 } from '@mui/material';
 import { itemKinds, itemKindToName, ModOptionsFC } from 'afnm-types';
 import { getItemDisplayNames } from 'common/utils';
 import { useMemo, useState } from 'react';
+import { NumericMultiplierField } from '../../../common/src/components';
 import { ModConfig, modConfig } from './config';
 import { patches, patchManager } from './patches';
 
@@ -65,33 +63,20 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
         ></FormControlLabel>
       </FormGroup>
 
-      <Stack direction="row" spacing={2} alignItems="center">
-        <Typography>{t('Room Blueprint Build Time Multiplier')}</Typography>
-        <TextField
-          type="number"
-          size="small"
-          value={config.roomBlueprintBuildTimeMultiplier.multiplier}
-          slotProps={{
-            htmlInput: { min: 0, step: 0.1 },
-            input: {
-              startAdornment: (
-                <InputAdornment position="start">X</InputAdornment>
-              ),
+      <NumericMultiplierField
+        label={t('Room Blueprint Build Time Multiplier')}
+        value={config.roomBlueprintBuildTimeMultiplier.multiplier}
+        onChange={(value) => {
+          setModConfig((it) => ({
+            ...it,
+            roomBlueprintBuildTimeMultiplier: {
+              ...it.roomBlueprintBuildTimeMultiplier,
+              multiplier: value,
             },
-          }}
-          onChange={(e) => {
-            const value = e.target.value ? parseFloat(e.target.value) : 0;
-            setModConfig((it) => ({
-              ...it,
-              roomBlueprintBuildTimeMultiplier: {
-                ...it.roomBlueprintBuildTimeMultiplier,
-                multiplier: value,
-              },
-            }));
-            patches.roomBlueprintBuildTimeMultiplier._applyMultiplier(value);
-          }}
-        ></TextField>
-      </Stack>
+          }));
+          patches.roomBlueprintBuildTimeMultiplier._applyMultiplier(value);
+        }}
+      ></NumericMultiplierField>
 
       <Card
         elevation={2}
