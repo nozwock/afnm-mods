@@ -11,9 +11,9 @@ import {
   Typography,
 } from '@mui/material';
 import { itemKinds, itemKindToName, ModOptionsFC } from 'afnm-types';
+import { NumericMultiplierField } from 'common/ui/components';
 import { getItemDisplayNames } from 'common/utils';
 import { useMemo, useState } from 'react';
-import { NumericMultiplierField } from '../../../common/src/components';
 import { ModConfig, modConfig } from './config';
 import { patches, patchManager } from './patches';
 
