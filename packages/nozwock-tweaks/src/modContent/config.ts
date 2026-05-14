@@ -2,6 +2,13 @@ import { ItemKind } from 'afnm-types';
 import { GlobalConfig } from 'common/config';
 import { MOD_ID } from './const';
 
+export enum CraftingConditionModifier {
+  None,
+  AlwaysHarmonious,
+  InvertNegative,
+  AtleastNeutral,
+}
+
 export const defaultModConfig = {
   herbFieldGrowthDaysMultiplier: {
     multiplier: 1,
@@ -22,6 +29,9 @@ export const defaultModConfig = {
   },
   autoCompleteCrafting: {
     enabled: false,
+  },
+  craftingConditionModifier: {
+    current: CraftingConditionModifier.None,
   },
 };
 

@@ -6,6 +6,9 @@ import {
   Chip,
   FormControlLabel,
   FormGroup,
+  MenuItem,
+  Select,
+  Stack,
   Switch,
   TextField,
   Typography,
@@ -14,7 +17,7 @@ import { itemKinds, itemKindToName, ModOptionsFC } from 'afnm-types';
 import { NumericMultiplierField } from 'common/ui/components';
 import { getItemDisplayNames } from 'common/utils';
 import { useMemo, useState } from 'react';
-import { ModConfig, modConfig } from './config';
+import { CraftingConditionModifier, ModConfig, modConfig } from './config';
 import { patches, patchManager } from './patches';
 
 const t = window.modAPI.utils.t;
@@ -22,6 +25,18 @@ const t = window.modAPI.utils.t;
 export const ModSettings: ModOptionsFC = ({ api }) => {
   const [config, setConfig] = useState(() => modConfig.value);
   const itemDisplayNames = useMemo(getItemDisplayNames, []);
+  const displayCraftingConditionModifier: Record<
+    CraftingConditionModifier,
+    string
+  > = useMemo(
+    () => ({
+      [CraftingConditionModifier.AlwaysHarmonious]: t('Always Harmonious'),
+      [CraftingConditionModifier.AtleastNeutral]: t('At least Neutral'),
+      [CraftingConditionModifier.InvertNegative]: t('Invert Negative'),
+      [CraftingConditionModifier.None]: t('None'),
+    }),
+    [],
+  );
 
   function setModConfig(updater: (config: ModConfig) => ModConfig) {
     modConfig.value = updater(modConfig.value);
@@ -209,6 +224,32 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
           />
         }
       ></FormControlLabel>
+
+      <Stack direction="row" spacing={2} alignItems="center">
+        <Typography>{t('Crafting Condition Modifier')}</Typography>
+        <Select
+          value={config.craftingConditionModifier.current}
+          onChange={(e) => {
+            patchManager.setEnabled(
+              patches.craftingConditionModifier,
+              e.target.value !== CraftingConditionModifier.None,
+            );
+            setModConfig((it) => ({
+              ...it,
+              craftingConditionModifier: {
+                ...it.craftingConditionModifier,
+                current: e.target.value,
+              },
+            }));
+          }}
+        >
+          {Object.entries(displayCraftingConditionModifier).map(
+            ([key, value]) => (
+              <MenuItem value={Number(key)}>{value}</MenuItem>
+            ),
+          )}
+        </Select>
+      </Stack>
     </Box>
   );
 };

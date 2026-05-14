@@ -1,4 +1,5 @@
 import {
+  CraftingCondition,
   Crop,
   Item,
   KnownCraftingTechniqueMastery,
@@ -13,7 +14,7 @@ import { definePatch, PatchManager } from 'common/patch';
 import { isRealmReached, stripFirstPrefix } from 'common/utils';
 import { produce } from 'immer';
 import cloneDeep from 'lodash.clonedeep';
-import { modConfig } from './config';
+import { CraftingConditionModifier, modConfig } from './config';
 
 const initialGameData = {
   crops: Object.entries(window.modAPI.gameData.crops).reduce(
@@ -269,6 +270,95 @@ export const patches = {
       modConfig.setValue((it) => {
         it.autoCompleteCrafting.enabled = false;
       });
+    },
+  }),
+  craftingConditionModifier: definePatch({
+    name: 'craftingConditionModifier',
+    unsubscribers: [],
+    isEnabled() {
+      return (
+        modConfig.value.craftingConditionModifier.current !==
+        CraftingConditionModifier.None
+      );
+    },
+    onEnable() {
+      this.unsubscribers.push(
+        ...[
+          window.modAPI.hooks.onReduxAction((action, prevState, state) => {
+            if (
+              action == 'crafting/initCrafting' ||
+              action == 'crafting/executeTechnique'
+            ) {
+              return produce(state, (state) => {
+                if (!state.crafting.progressState) return;
+
+                const modifier =
+                  modConfig.value.craftingConditionModifier.current;
+                switch (modifier) {
+                  case CraftingConditionModifier.AlwaysHarmonious:
+                    state.crafting.progressState.condition = 'positive';
+                    state.crafting.progressState.nextConditions.fill(
+                      'positive',
+                    );
+                    break;
+                  case CraftingConditionModifier.InvertNegative:
+                    state.crafting.progressState.condition =
+                      this._invertNegativeCraftingCondition(
+                        state.crafting.progressState.condition,
+                      );
+                    state.crafting.progressState.nextConditions =
+                      state.crafting.progressState.nextConditions.map(
+                        this._invertNegativeCraftingCondition,
+                      );
+                    break;
+                  case CraftingConditionModifier.AtleastNeutral:
+                    state.crafting.progressState.condition =
+                      this._atleastNeutralCraftingCondition(
+                        state.crafting.progressState.condition,
+                      );
+                    state.crafting.progressState.nextConditions =
+                      state.crafting.progressState.nextConditions.map(
+                        this._atleastNeutralCraftingCondition,
+                      );
+                    break;
+                  case CraftingConditionModifier.None:
+                    console.warn(
+                      `Patch ${this.name} is enabled while CraftingConditionModifier.None is set`,
+                    );
+                    break;
+                  default:
+                    modifier satisfies never;
+                }
+              });
+            }
+
+            return state;
+          }),
+        ],
+      );
+    },
+    _atleastNeutralCraftingCondition(
+      condition: CraftingCondition,
+    ): CraftingCondition {
+      switch (condition) {
+        case 'negative':
+        case 'veryNegative':
+          return 'neutral';
+        default:
+          return condition;
+      }
+    },
+    _invertNegativeCraftingCondition(
+      condition: CraftingCondition,
+    ): CraftingCondition {
+      switch (condition) {
+        case 'negative':
+          return 'positive';
+        case 'veryNegative':
+          return 'veryPositive';
+        default:
+          return condition;
+      }
     },
   }),
 };
