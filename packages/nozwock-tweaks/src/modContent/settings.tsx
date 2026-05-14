@@ -246,6 +246,10 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
       <Stack direction="row" spacing={2} alignItems="center">
         <Typography>{t('Crafting Condition Modifier')}</Typography>
         <Select
+          size="small"
+          sx={{
+            minWidth: '120px',
+          }}
           value={config.craftingConditionModifier.current}
           onChange={(e) => {
             patchManager.setEnabled(
