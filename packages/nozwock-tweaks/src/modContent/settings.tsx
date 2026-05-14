@@ -14,9 +14,10 @@ import {
   Typography,
 } from '@mui/material';
 import { itemKinds, itemKindToName, ModOptionsFC } from 'afnm-types';
+import { removeSettingsDialogPadding } from 'common/hacks';
 import { NumericMultiplierField } from 'common/ui/components';
 import { getItemDisplayNames } from 'common/utils';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { CraftingConditionModifier, ModConfig, modConfig } from './config';
 import { patches, patchManager } from './patches';
 
@@ -54,13 +55,19 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
     setConfig(modConfig.value);
   }
 
+  const thisRef = useRef<Node>(null);
+  useEffect(() => {
+    removeSettingsDialogPadding(thisRef);
+  }, []);
+
   return (
     <Box
+      ref={thisRef}
       display="flex"
       flexDirection="column"
       gap={2}
-      marginTop="40px"
-      marginBottom="40px"
+      marginX={3}
+      marginY={5}
     >
       <Typography fontSize="200%">{t('General')}</Typography>
       <FormGroup>
