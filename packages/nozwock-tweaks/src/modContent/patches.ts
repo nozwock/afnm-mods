@@ -1,6 +1,7 @@
 import {
   CraftingCondition,
   Crop,
+  IntimateTechnique,
   Item,
   KnownCraftingTechniqueMastery,
   KnownTechnique,
@@ -433,6 +434,37 @@ export const patches = {
     onDisable() {
       modConfig.setValue((it) => {
         it.dualCultivationAutoComplete.enabled = false;
+      });
+    },
+  }),
+  dualCultivationInfiniteEnergy: definePatch({
+    name: 'dualCultivationInfiniteEnergy',
+    unsubscribers: [],
+    isEnabled() {
+      return modConfig.value.dualCultivationInfiniteEnergy.enabled;
+    },
+    onEnable() {
+      modConfig.setValue((it) => {
+        it.dualCultivationInfiniteEnergy.enabled = true;
+      });
+
+      this.unsubscribers.push(
+        ...[
+          window.modAPI.hooks.onReduxActionPayload((action, payload) => {
+            if (action === 'dualCultivation/executeTechnique') {
+              return {
+                ...(payload as IntimateTechnique),
+                energyCost: 0,
+              } satisfies IntimateTechnique;
+            }
+            return payload;
+          }),
+        ],
+      );
+    },
+    onDisable() {
+      modConfig.setValue((it) => {
+        it.dualCultivationInfiniteEnergy.enabled = false;
       });
     },
   }),

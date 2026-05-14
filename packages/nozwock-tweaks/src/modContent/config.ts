@@ -39,6 +39,9 @@ export const defaultModConfig = {
   dualCultivationAutoComplete: {
     enabled: false,
   },
+  dualCultivationInfiniteEnergy: {
+    enabled: false,
+  },
 };
 
 export type ModConfig = typeof defaultModConfig;

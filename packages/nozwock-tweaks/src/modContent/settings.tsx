@@ -307,6 +307,21 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
             />
           }
         ></FormControlLabel>
+        <FormControlLabel
+          label={t('Infinite Energy')}
+          control={
+            <Checkbox
+              checked={config.dualCultivationInfiniteEnergy.enabled}
+              onChange={(_, value) => {
+                patchManager.setEnabled(
+                  patches.dualCultivationInfiniteEnergy,
+                  value,
+                );
+                setConfig(modConfig.value);
+              }}
+            />
+          }
+        ></FormControlLabel>
       </FormGroup>
     </Box>
   );
