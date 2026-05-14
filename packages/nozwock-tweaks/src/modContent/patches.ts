@@ -235,7 +235,7 @@ export const patches = {
       this.unsubscribers.push(
         ...[
           window.modAPI.hooks.onReduxAction((action, prevState, state) => {
-            if (action == 'crafting/initCrafting') {
+            if (action === 'crafting/initCrafting') {
               return produce(state, (state) => {
                 if (
                   !state.crafting.progressState ||
@@ -286,8 +286,8 @@ export const patches = {
         ...[
           window.modAPI.hooks.onReduxAction((action, prevState, state) => {
             if (
-              action == 'crafting/initCrafting' ||
-              action == 'crafting/executeTechnique'
+              action === 'crafting/initCrafting' ||
+              action === 'crafting/executeTechnique'
             ) {
               return produce(state, (state) => {
                 if (!state.crafting.progressState) return;
@@ -376,7 +376,7 @@ export const patches = {
         ...[
           window.modAPI.hooks.onReduxAction((action, prevState, state) => {
             if (
-              action == 'crafting/executeTechnique' &&
+              action === 'crafting/executeTechnique' &&
               state.crafting.progressState
             ) {
               return produce(state, (state) => {
