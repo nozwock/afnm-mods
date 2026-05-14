@@ -10,6 +10,9 @@ export enum CraftingConditionModifier {
 }
 
 export const defaultModConfig = {
+  mapTravelDistanceMultiplier: {
+    multiplier: 1,
+  },
   herbFieldGrowthDaysMultiplier: {
     multiplier: 1,
   },

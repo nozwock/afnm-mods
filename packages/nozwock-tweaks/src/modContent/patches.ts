@@ -1,6 +1,8 @@
 import {
+  ConditionalLink,
   CraftingCondition,
   Crop,
+  ExplorationLink,
   IntimateTechnique,
   Item,
   KnownCraftingTechniqueMastery,
@@ -18,6 +20,22 @@ import cloneDeep from 'lodash.clonedeep';
 import { CraftingConditionModifier, modConfig } from './config';
 
 const initialGameData = {
+  locationLinks: Object.entries(window.modAPI.gameData.locations).reduce(
+    (acc, [key, location]) => {
+      acc[key] = location.unlocks.reduce(
+        (acc, it) => {
+          acc[it.location.name] = cloneDeep(it);
+          return acc;
+        },
+        {} as Record<string, ConditionalLink | ExplorationLink | undefined>,
+      );
+      return acc;
+    },
+    {} as Record<
+      string,
+      Record<string, ConditionalLink | ExplorationLink | undefined> | undefined
+    >,
+  ),
   crops: Object.entries(window.modAPI.gameData.crops).reduce(
     (acc, [realm, crops]) => {
       acc[realm as Realm] = crops.reduce(
@@ -44,6 +62,32 @@ const initialGameData = {
 
 export const patchManager = new PatchManager();
 export const patches = {
+  mapTravelDistanceMultiplier: definePatch({
+    name: 'mapTravelDistanceMultiplier',
+    isEnabled() {
+      return modConfig.value.mapTravelDistanceMultiplier.multiplier !== 1;
+    },
+    onEnable() {
+      this._applyMultiplier(
+        modConfig.value.mapTravelDistanceMultiplier.multiplier,
+      );
+    },
+    _applyMultiplier(multiplier: number) {
+      Object.entries(window.modAPI.gameData.locations).forEach(
+        ([key, locations]) => {
+          locations.unlocks.forEach((it) => {
+            const initialLocationLink =
+              initialGameData.locationLinks[key]?.[it.location.name];
+            if (initialLocationLink) {
+              it.distance = Math.floor(
+                multiplier * initialLocationLink.distance,
+              );
+            }
+          });
+        },
+      );
+    },
+  }),
   herbFieldGrowthDaysMultiplier: definePatch({
     name: 'herbFieldGrowthDaysMultiplier',
     isEnabled() {

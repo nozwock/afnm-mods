@@ -13,7 +13,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { itemKinds, itemKindToName, ModOptionsFC } from 'afnm-types';
+import { itemKinds, itemKindToName, ModOptionsFC, RootState } from 'afnm-types';
 import { removeSettingsDialogPadding } from 'common/hacks';
 import { NumericMultiplierField } from 'common/ui/components';
 import { getItemDisplayNames } from 'common/utils';
@@ -60,6 +60,23 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
     removeSettingsDialogPadding(thisRef);
   }, []);
 
+  useEffect(() => {
+    const initialTravelDistanceMultiplier =
+      modConfig.value.mapTravelDistanceMultiplier.multiplier;
+
+    return function refreshMapOnUnmount() {
+      let state: RootState | null = null;
+      if (
+        initialTravelDistanceMultiplier !==
+          modConfig.value.mapTravelDistanceMultiplier.multiplier &&
+        (state = window.modAPI.getGameStateSnapshot()) &&
+        window.modAPI.utils.determineCurrentScreen(state) === 'map'
+      ) {
+        window.modAPI.actions.triggerUIReset();
+      }
+    };
+  }, []);
+
   return (
     <Box
       ref={thisRef}
@@ -103,6 +120,21 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
           }
         ></FormControlLabel>
       </FormGroup>
+
+      <NumericMultiplierField
+        label={t('Map Travel Distance Multiplier')}
+        value={config.mapTravelDistanceMultiplier.multiplier}
+        onChange={(value) => {
+          setModConfig((it) => ({
+            ...it,
+            mapTravelDistanceMultiplier: {
+              ...it.mapTravelDistanceMultiplier,
+              multiplier: value,
+            },
+          }));
+          patches.mapTravelDistanceMultiplier._applyMultiplier(value);
+        }}
+      ></NumericMultiplierField>
 
       <NumericMultiplierField
         label={t('Herb Field Growth Days Multiplier')}
