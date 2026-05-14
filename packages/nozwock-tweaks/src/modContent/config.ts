@@ -42,6 +42,9 @@ export const defaultModConfig = {
   dualCultivationInfiniteEnergy: {
     enabled: false,
   },
+  stoneCuttingInfiniteQiSense: {
+    enabled: false,
+  },
 };
 
 export type ModConfig = typeof defaultModConfig;

@@ -468,4 +468,32 @@ export const patches = {
       });
     },
   }),
+  stoneCuttingInfiniteQiSense: definePatch({
+    name: 'stoneCuttingInfiniteQiSense',
+    unsubscribers: [],
+    isEnabled() {
+      return modConfig.value.stoneCuttingInfiniteQiSense.enabled;
+    },
+    onEnable() {
+      modConfig.setValue((it) => {
+        it.stoneCuttingInfiniteQiSense.enabled = true;
+      });
+
+      this.unsubscribers.push(
+        ...[
+          window.modAPI.hooks.onReduxActionPayload((action, payload) => {
+            if (action === 'stoneCutting/spendStonePower') {
+              return 0;
+            }
+            return payload;
+          }),
+        ],
+      );
+    },
+    onDisable() {
+      modConfig.setValue((it) => {
+        it.stoneCuttingInfiniteQiSense.enabled = false;
+      });
+    },
+  }),
 };

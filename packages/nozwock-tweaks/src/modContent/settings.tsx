@@ -323,6 +323,25 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
           }
         ></FormControlLabel>
       </FormGroup>
+
+      <Typography fontSize="200%">{t('Stone Cutting')}</Typography>
+      <FormGroup>
+        <FormControlLabel
+          label={t('Infinite Qi Sense (Ability Points)')}
+          control={
+            <Checkbox
+              checked={config.stoneCuttingInfiniteQiSense.enabled}
+              onChange={(_, value) => {
+                patchManager.setEnabled(
+                  patches.stoneCuttingInfiniteQiSense,
+                  value,
+                );
+                setConfig(modConfig.value);
+              }}
+            />
+          }
+        ></FormControlLabel>
+      </FormGroup>
     </Box>
   );
 };

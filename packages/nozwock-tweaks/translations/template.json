@@ -16,6 +16,7 @@
       "[string] General": "",
       "[string] Herb Field Growth Days Multiplier": "",
       "[string] Infinite Energy": "",
+      "[string] Infinite Qi Sense (Ability Points)": "",
       "[string] Invert Negative": "",
       "[string] Item Kinds": "",
       "[string] Item Names": "",
@@ -27,7 +28,8 @@
       "[string] Prevent Max Stability Degradation": "",
       "[string] Room Blueprint Build Time Multiplier": "",
       "[string] Select item kinds": "",
-      "[string] Select or type item names": ""
+      "[string] Select or type item names": "",
+      "[string] Stone Cutting": ""
     }
   }
 }
