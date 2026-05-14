@@ -36,6 +36,9 @@ export const defaultModConfig = {
   craftingNoMaxStabilityDegradation: {
     enabled: false,
   },
+  dualCultivationAutoComplete: {
+    enabled: false,
+  },
 };
 
 export type ModConfig = typeof defaultModConfig;

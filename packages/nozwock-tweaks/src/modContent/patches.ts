@@ -395,4 +395,45 @@ export const patches = {
       });
     },
   }),
+  dualCultivationAutoComplete: definePatch({
+    name: 'dualCultivationAutoComplete',
+    unsubscribers: [],
+    isEnabled() {
+      return modConfig.value.dualCultivationAutoComplete.enabled;
+    },
+    onEnable() {
+      modConfig.setValue((it) => {
+        it.dualCultivationAutoComplete.enabled = true;
+      });
+
+      this.unsubscribers.push(
+        ...[
+          window.modAPI.hooks.onReduxAction((action, prevState, state) => {
+            if (action === 'dualCultivation/initDualCultivation') {
+              return produce(state, (state) => {
+                if (
+                  !state.dualCultivation.progressState ||
+                  !state.dualCultivation.partner
+                ) {
+                  console.warn('Cannot auto-complete dualCultivation');
+                  return;
+                }
+
+                state.dualCultivation.progressState.satisfaction =
+                  state.dualCultivation.partner.stats.satisfaction;
+                state.dualCultivation.progressState.completionState = 'success';
+              });
+            }
+
+            return state;
+          }),
+        ],
+      );
+    },
+    onDisable() {
+      modConfig.setValue((it) => {
+        it.dualCultivationAutoComplete.enabled = false;
+      });
+    },
+  }),
 };

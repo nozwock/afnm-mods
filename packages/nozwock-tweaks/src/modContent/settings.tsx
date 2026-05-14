@@ -289,6 +289,25 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
           )}
         </Select>
       </Stack>
+
+      <Typography fontSize="200%">{t('Dual Cultivation')}</Typography>
+      <FormGroup>
+        <FormControlLabel
+          label={t('Auto Complete Dual Cultivation')}
+          control={
+            <Checkbox
+              checked={config.dualCultivationAutoComplete.enabled}
+              onChange={(_, value) => {
+                patchManager.setEnabled(
+                  patches.dualCultivationAutoComplete,
+                  value,
+                );
+                setConfig(modConfig.value);
+              }}
+            />
+          }
+        ></FormControlLabel>
+      </FormGroup>
     </Box>
   );
 };
