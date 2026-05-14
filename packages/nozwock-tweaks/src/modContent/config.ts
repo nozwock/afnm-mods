@@ -33,6 +33,9 @@ export const defaultModConfig = {
   craftingConditionModifier: {
     current: CraftingConditionModifier.None,
   },
+  craftingNoMaxStabilityDegradation: {
+    enabled: false,
+  },
 };
 
 export type ModConfig = typeof defaultModConfig;

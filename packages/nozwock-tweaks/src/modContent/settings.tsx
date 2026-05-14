@@ -230,18 +230,35 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
       </Card>
 
       <Typography fontSize="200%">{t('Crafting')}</Typography>
-      <FormControlLabel
-        label={t('Auto Complete Crafting')}
-        control={
-          <Checkbox
-            checked={config.autoCompleteCrafting.enabled}
-            onChange={(_, value) => {
-              patchManager.setEnabled(patches.autoCompleteCrafting, value);
-              setConfig(modConfig.value);
-            }}
-          />
-        }
-      ></FormControlLabel>
+      <FormGroup>
+        <FormControlLabel
+          label={t('Auto Complete Crafting')}
+          control={
+            <Checkbox
+              checked={config.autoCompleteCrafting.enabled}
+              onChange={(_, value) => {
+                patchManager.setEnabled(patches.autoCompleteCrafting, value);
+                setConfig(modConfig.value);
+              }}
+            />
+          }
+        ></FormControlLabel>
+        <FormControlLabel
+          label={t('Prevent Max Stability Degradation')}
+          control={
+            <Checkbox
+              checked={config.craftingNoMaxStabilityDegradation.enabled}
+              onChange={(_, value) => {
+                patchManager.setEnabled(
+                  patches.craftingNoMaxStabilityDegradation,
+                  value,
+                );
+                setConfig(modConfig.value);
+              }}
+            />
+          }
+        ></FormControlLabel>
+      </FormGroup>
 
       <Stack direction="row" spacing={2} alignItems="center">
         <Typography>{t('Crafting Condition Modifier')}</Typography>

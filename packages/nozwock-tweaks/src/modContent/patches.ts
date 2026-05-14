@@ -361,4 +361,38 @@ export const patches = {
       }
     },
   }),
+  craftingNoMaxStabilityDegradation: definePatch({
+    name: 'craftingNoMaxStabilityDegradation',
+    unsubscribers: [],
+    isEnabled() {
+      return modConfig.value.craftingNoMaxStabilityDegradation.enabled;
+    },
+    onEnable() {
+      modConfig.setValue((it) => {
+        it.craftingNoMaxStabilityDegradation.enabled = true;
+      });
+
+      this.unsubscribers.push(
+        ...[
+          window.modAPI.hooks.onReduxAction((action, prevState, state) => {
+            if (
+              action == 'crafting/executeTechnique' &&
+              state.crafting.progressState
+            ) {
+              return produce(state, (state) => {
+                state.crafting.progressState!.stabilityPenalty = 0;
+              });
+            }
+
+            return state;
+          }),
+        ],
+      );
+    },
+    onDisable() {
+      modConfig.setValue((it) => {
+        it.craftingNoMaxStabilityDegradation.enabled = false;
+      });
+    },
+  }),
 };
