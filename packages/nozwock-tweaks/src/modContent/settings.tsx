@@ -24,7 +24,10 @@ const t = window.modAPI.utils.t;
 
 export const ModSettings: ModOptionsFC = ({ api }) => {
   const [config, setConfig] = useState(() => modConfig.value);
-  const itemDisplayNames = useMemo(getItemDisplayNames, []);
+  const [itemNames, itemDisplayNames] = useMemo(() => {
+    const itemNameToDisplay = getItemDisplayNames();
+    return [Object.keys(itemNameToDisplay), itemNameToDisplay];
+  }, []);
   const displayCraftingConditionModifier: Record<
     CraftingConditionModifier,
     string
@@ -36,6 +39,14 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
       [CraftingConditionModifier.None]: t('None'),
     }),
     [],
+  );
+  const selectedItemConsumptionNames = useMemo(
+    () => Array.from(config.preventItemConsumption.names),
+    [config.preventItemConsumption.names],
+  );
+  const selectedItemConsumptionKinds = useMemo(
+    () => Array.from(config.preventItemConsumption.kinds),
+    [config.preventItemConsumption.kinds],
   );
 
   function setModConfig(updater: (config: ModConfig) => ModConfig) {
@@ -145,9 +156,9 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
 
         <Autocomplete
           multiple
-          options={Object.keys(itemDisplayNames)}
+          options={itemNames}
           getOptionLabel={(name) => itemDisplayNames[name] ?? name}
-          value={Array.from(config.preventItemConsumption.names)}
+          value={selectedItemConsumptionNames}
           onChange={(_, values) => {
             setModConfig((it) => ({
               ...it,
@@ -181,7 +192,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
           multiple
           options={itemKinds}
           getOptionLabel={(kind) => t(itemKindToName[kind] ?? kind)}
-          value={Array.from(config.preventItemConsumption.kinds)}
+          value={selectedItemConsumptionKinds}
           onChange={(_, values) => {
             setModConfig((it) => ({
               ...it,
