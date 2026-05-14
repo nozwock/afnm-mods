@@ -496,4 +496,34 @@ export const patches = {
       });
     },
   }),
+  stoneCuttingNoAbilityCooldown: definePatch({
+    name: 'stoneCuttingNoAbilityCooldown',
+    unsubscribers: [],
+    isEnabled() {
+      return modConfig.value.stoneCuttingNoAbilityCooldown.enabled;
+    },
+    onEnable() {
+      modConfig.setValue((it) => {
+        it.stoneCuttingNoAbilityCooldown.enabled = true;
+      });
+
+      this.unsubscribers.push(
+        ...[
+          window.modAPI.hooks.onReduxAction((action, prevState, state) => {
+            if (action === 'stoneCutting/unveilStone') {
+              return produce(state, (state) => {
+                state.stoneCutting.canUseAbility = true;
+              });
+            }
+            return state;
+          }),
+        ],
+      );
+    },
+    onDisable() {
+      modConfig.setValue((it) => {
+        it.stoneCuttingNoAbilityCooldown.enabled = false;
+      });
+    },
+  }),
 };

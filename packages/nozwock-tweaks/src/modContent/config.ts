@@ -45,6 +45,9 @@ export const defaultModConfig = {
   stoneCuttingInfiniteQiSense: {
     enabled: false,
   },
+  stoneCuttingNoAbilityCooldown: {
+    enabled: false,
+  },
 };
 
 export type ModConfig = typeof defaultModConfig;

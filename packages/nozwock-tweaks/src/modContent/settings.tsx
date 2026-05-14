@@ -327,6 +327,21 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
       <Typography fontSize="200%">{t('Stone Cutting')}</Typography>
       <FormGroup>
         <FormControlLabel
+          label={t('No Ability Cooldown')}
+          control={
+            <Checkbox
+              checked={config.stoneCuttingNoAbilityCooldown.enabled}
+              onChange={(_, value) => {
+                patchManager.setEnabled(
+                  patches.stoneCuttingNoAbilityCooldown,
+                  value,
+                );
+                setConfig(modConfig.value);
+              }}
+            />
+          }
+        ></FormControlLabel>
+        <FormControlLabel
           label={t('Infinite Qi Sense (Ability Points)')}
           control={
             <Checkbox
