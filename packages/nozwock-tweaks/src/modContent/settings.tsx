@@ -163,6 +163,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
 
         <Autocomplete
           multiple
+          limitTags={2}
           options={itemNames}
           getOptionLabel={(name) => itemDisplayNames[name] ?? name}
           value={selectedItemConsumptionNames}
@@ -197,6 +198,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
 
         <Autocomplete
           multiple
+          limitTags={2}
           options={itemKinds}
           getOptionLabel={(kind) => t(itemKindToName[kind] ?? kind)}
           value={selectedItemConsumptionKinds}
