@@ -526,4 +526,36 @@ export const patches = {
       });
     },
   }),
+  stoneCuttingUnveilAllOnStart: definePatch({
+    name: 'stoneCuttingUnveilAllOnStart',
+    unsubscribers: [],
+    isEnabled() {
+      return modConfig.value.stoneCuttingUnveilAllOnStart.enabled;
+    },
+    onEnable() {
+      modConfig.setValue((it) => {
+        it.stoneCuttingUnveilAllOnStart.enabled = true;
+      });
+
+      this.unsubscribers.push(
+        ...[
+          window.modAPI.hooks.onReduxAction((action, prevState, state) => {
+            if (action === 'stoneCutting/updateStoneCutting') {
+              return produce(state, (state) => {
+                state.stoneCutting.uncutStones.forEach((it) => {
+                  it.isUnveiled = true;
+                });
+              });
+            }
+            return state;
+          }),
+        ],
+      );
+    },
+    onDisable() {
+      modConfig.setValue((it) => {
+        it.stoneCuttingUnveilAllOnStart.enabled = false;
+      });
+    },
+  }),
 };

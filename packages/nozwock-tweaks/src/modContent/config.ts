@@ -48,6 +48,9 @@ export const defaultModConfig = {
   stoneCuttingNoAbilityCooldown: {
     enabled: false,
   },
+  stoneCuttingUnveilAllOnStart: {
+    enabled: false,
+  },
 };
 
 export type ModConfig = typeof defaultModConfig;

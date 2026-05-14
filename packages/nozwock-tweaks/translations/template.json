@@ -30,7 +30,8 @@
       "[string] Room Blueprint Build Time Multiplier": "",
       "[string] Select item kinds": "",
       "[string] Select or type item names": "",
-      "[string] Stone Cutting": ""
+      "[string] Stone Cutting": "",
+      "[string] Unveil All Stones On Minigame Start": ""
     }
   }
 }

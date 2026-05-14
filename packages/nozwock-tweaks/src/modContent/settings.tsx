@@ -327,6 +327,21 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
       <Typography fontSize="200%">{t('Stone Cutting')}</Typography>
       <FormGroup>
         <FormControlLabel
+          label={t('Unveil All Stones On Minigame Start')}
+          control={
+            <Checkbox
+              checked={config.stoneCuttingUnveilAllOnStart.enabled}
+              onChange={(_, value) => {
+                patchManager.setEnabled(
+                  patches.stoneCuttingUnveilAllOnStart,
+                  value,
+                );
+                setConfig(modConfig.value);
+              }}
+            />
+          }
+        ></FormControlLabel>
+        <FormControlLabel
           label={t('No Ability Cooldown')}
           control={
             <Checkbox
