@@ -119,6 +119,21 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
           }
         ></FormControlLabel>
         <FormControlLabel
+          label={t('Max Quality Tier on Reforging Equipment')}
+          control={
+            <Checkbox
+              checked={config.equipmentReforgeMaxQualityTier.enabled}
+              onChange={(_, value) => {
+                patchManager.setEnabled(
+                  patches.equipmentReforgeMaxQualityTier,
+                  value,
+                );
+                setConfig(modConfig.value);
+              }}
+            />
+          }
+        ></FormControlLabel>
+        <FormControlLabel
           label={t('Max Out Technique Masteries on Attempt')}
           control={
             <Checkbox

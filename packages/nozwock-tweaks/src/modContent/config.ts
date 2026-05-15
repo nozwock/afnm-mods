@@ -68,6 +68,9 @@ export const defaultModConfig = {
   equipmentUpgradePreservesQualityTier: {
     enabled: true,
   },
+  equipmentReforgeMaxQualityTier: {
+    enabled: false,
+  },
 };
 
 export type ModConfig = typeof defaultModConfig;

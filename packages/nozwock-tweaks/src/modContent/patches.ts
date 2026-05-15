@@ -777,4 +777,42 @@ export const patches = {
       });
     },
   }),
+  // TODO: Upgrade enchantment quality on reforging equipment
+  equipmentReforgeMaxQualityTier: definePatch({
+    name: 'equipmentReforgeMaxQualityTier',
+    unsubscribers: [],
+    isEnabled() {
+      return modConfig.value.equipmentReforgeMaxQualityTier.enabled;
+    },
+    onEnable() {
+      modConfig.setValue((it) => {
+        it.equipmentReforgeMaxQualityTier.enabled = true;
+      });
+
+      this.unsubscribers.push(
+        ...[
+          window.modAPI.hooks.onDeriveEquipmentReforgeRequirement(
+            (_baseItem, costItems, resultItem, _flags) => {
+              // XXX Optionally increase material cost
+              return {
+                costItems,
+                resultItem: {
+                  ...resultItem,
+                  resultQualityTier:
+                    resultItem.resultQualityTier +
+                    (resultItem.resultHiddenPotential ?? 0),
+                  resultHiddenPotential: 0,
+                },
+              };
+            },
+          ),
+        ],
+      );
+    },
+    onDisable() {
+      modConfig.setValue((it) => {
+        it.equipmentReforgeMaxQualityTier.enabled = false;
+      });
+    },
+  }),
 };
