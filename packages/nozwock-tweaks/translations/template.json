@@ -35,6 +35,7 @@
       "[string] Preserve Quality Tier on Upgrading Equipment": "",
       "[string] Prevent Item Consumption": "",
       "[string] Prevent Max Stability Degradation": "",
+      "[string] Reset All to Defaults": "",
       "[string] Restore All Used Qi Droplets in Combat": "",
       "[string] Room Blueprint Build Time Multiplier": "",
       "[string] Select item kinds": "",

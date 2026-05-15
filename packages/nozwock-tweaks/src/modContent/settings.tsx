@@ -77,6 +77,8 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
     };
   }, []);
 
+  const GameButton = api.components.GameButton;
+
   return (
     <Box
       ref={thisRef}
@@ -86,6 +88,19 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
       marginX={3}
       marginY={5}
     >
+      <GameButton
+        size="small"
+        onClick={() => {
+          modConfig.reset();
+          setConfig(modConfig.value);
+          Object.values(patches).forEach((patch) => {
+            patchManager.setEnabled(patch);
+          });
+        }}
+      >
+        {t('Reset All to Defaults')}
+      </GameButton>
+
       <Typography fontSize="200%">{t('General')}</Typography>
       <FormGroup>
         <FormControlLabel
