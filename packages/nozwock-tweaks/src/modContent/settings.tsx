@@ -266,6 +266,21 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
       <Typography fontSize="200%">{t('NPC Characters')}</Typography>
       <FormGroup>
         <FormControlLabel
+          label={t('Infinite Party Follow Duration')}
+          control={
+            <Checkbox
+              checked={config.npcInfinitePartyFollowDuration.enabled}
+              onChange={(_, value) => {
+                patchManager.setEnabled(
+                  patches.npcInfinitePartyFollowDuration,
+                  value,
+                );
+                setConfig(modConfig.value);
+              }}
+            />
+          }
+        ></FormControlLabel>
+        <FormControlLabel
           label={t('No Aid Breakthrough Cooldown')}
           control={
             <Checkbox

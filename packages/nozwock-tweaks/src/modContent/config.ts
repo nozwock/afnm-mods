@@ -59,6 +59,9 @@ export const defaultModConfig = {
     aidBreakthrough: false,
     partyFollow: false,
   },
+  npcInfinitePartyFollowDuration: {
+    enabled: false,
+  },
 };
 
 export type ModConfig = typeof defaultModConfig;

@@ -1,4 +1,10 @@
-import { InventoryItemState, InventoryState, Realm, realms } from 'afnm-types';
+import {
+  InventoryItemState,
+  InventoryState,
+  Realm,
+  realms,
+  RootState,
+} from 'afnm-types';
 
 const t = window.modAPI.utils.t;
 
@@ -64,6 +70,31 @@ export function getItemDisplayNames(): Record<string, string> {
     },
     {} as Record<string, string>,
   );
+}
+
+export function getPartyFollowDuration(
+  charName: string,
+  state: RootState,
+): number | undefined {
+  // Non-companion character
+  const duration =
+    window.modAPI.gameData.characters[charName].followInteraction?.duration;
+  if (duration !== undefined) return duration;
+
+  // Companion character
+  const charData = state.characters.characterData[charName];
+  if (!charData) return undefined;
+
+  const relDef =
+    charData.relationshipPath === undefined
+      ? window.modAPI.gameData.characters[charName]?.relationship?.[
+          charData.relationshipIndex
+        ]
+      : window.modAPI.gameData.characters[charName]?.relationshipPaths?.[
+          charData.relationshipPath
+        ][charData.relationshipIndex];
+
+  return relDef?.followCharacter?.duration;
 }
 
 export function getFullyRemovedItems(

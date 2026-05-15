@@ -14,7 +14,11 @@ import {
   RootState,
 } from 'afnm-types';
 import { definePatch, PatchManager } from 'common/patch';
-import { isRealmReached, stripFirstPrefix } from 'common/utils';
+import {
+  getPartyFollowDuration,
+  isRealmReached,
+  stripFirstPrefix,
+} from 'common/utils';
 import { produce } from 'immer';
 import cloneDeep from 'lodash.clonedeep';
 import { CraftingConditionModifier, modConfig } from './config';
@@ -633,6 +637,61 @@ export const patches = {
           }),
         ],
       );
+    },
+  }),
+  npcInfinitePartyFollowDuration: definePatch({
+    name: 'npcInfinitePartyFollowDuration',
+    unsubscribers: [],
+    isEnabled() {
+      return modConfig.value.npcInfinitePartyFollowDuration.enabled;
+    },
+    onEnable() {
+      modConfig.setValue((it) => {
+        it.npcInfinitePartyFollowDuration.enabled = true;
+      });
+
+      this.unsubscribers.push(
+        ...[
+          window.modAPI.hooks.onGameLoad(this._maxFollowDuration),
+          window.modAPI.hooks.onReduxAction((action, prevState, state) => {
+            if (action === 'characters/updateCharacters') {
+              return this._maxFollowDuration(state);
+            }
+            return state;
+          }),
+        ],
+      );
+    },
+    onDisable() {
+      modConfig.setValue((it) => {
+        it.npcInfinitePartyFollowDuration.enabled = false;
+      });
+    },
+    _maxFollowDuration(state: RootState): RootState {
+      return produce(state, (state) => {
+        // If the NPC leave party event has already started on entering next month with followingRemainingMonths of 1,
+        // we can't really do anything.
+        //
+        // XXX This could be mitigated by updating game state to have max follow duration on enabling the patch (from
+        // settings). That way there will never be followingRemainingMonths with value of 1 since on load value is
+        // already covered via the onGameLoad hook.
+        if (
+          state.characters.followingCharacter !== undefined &&
+          state.characters.followingRemainingMonths !== undefined
+        ) {
+          state.characters.followingRemainingMonths =
+            getPartyFollowDuration(
+              state.characters.followingCharacter,
+              state,
+            ) ?? state.characters.followingRemainingMonths;
+        }
+        if (state.characters.additionalFollowingCharacters !== undefined) {
+          for (const it of state.characters.additionalFollowingCharacters) {
+            it.remainingMonths =
+              getPartyFollowDuration(it.character, state) ?? it.remainingMonths;
+          }
+        }
+      });
     },
   }),
 };
