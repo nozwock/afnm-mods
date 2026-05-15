@@ -89,6 +89,21 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
       <Typography fontSize="200%">{t('General')}</Typography>
       <FormGroup>
         <FormControlLabel
+          label={t('Restore All Used Qi Droplets in Combat')}
+          control={
+            <Checkbox
+              checked={config.combatRestoreAllUsedQiDroplets.enabled}
+              onChange={(_, value) => {
+                patchManager.setEnabled(
+                  patches.combatRestoreAllUsedQiDroplets,
+                  value,
+                );
+                setConfig(modConfig.value);
+              }}
+            />
+          }
+        ></FormControlLabel>
+        <FormControlLabel
           label={t('Max Out Technique Masteries on Attempt')}
           control={
             <Checkbox

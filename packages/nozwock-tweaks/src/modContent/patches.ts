@@ -694,4 +694,44 @@ export const patches = {
       });
     },
   }),
+  combatRestoreAllUsedQiDroplets: definePatch({
+    // Once we're able to retrieve max Qi Droplets, we'll be able to start/end combat always with max Qi Droplets
+    name: 'combatRestoreAllUsedQiDroplets',
+    unsubscribers: [],
+    isEnabled() {
+      return modConfig.value.combatRestoreAllUsedQiDroplets.enabled;
+    },
+    onEnable() {
+      modConfig.setValue((it) => {
+        it.combatRestoreAllUsedQiDroplets.enabled = true;
+      });
+
+      let beforeCombatQiDroplets: number | undefined;
+      this.unsubscribers.push(
+        ...[
+          // This won't show in the combat success UI's "Qi Droplets Regenerated +X"
+          window.modAPI.hooks.onReduxAction((action, _, state) => {
+            if (action === 'combat/initCombat') {
+              beforeCombatQiDroplets = state.player.player.qiDroplets;
+            } else if (
+              action === 'combat/cleanupCombat' &&
+              beforeCombatQiDroplets !== undefined
+            ) {
+              return produce(state, (state) => {
+                state.player.player.qiDroplets = beforeCombatQiDroplets;
+                beforeCombatQiDroplets = undefined;
+              });
+            }
+
+            return state;
+          }),
+        ],
+      );
+    },
+    onDisable() {
+      modConfig.setValue((it) => {
+        it.combatRestoreAllUsedQiDroplets.enabled = false;
+      });
+    },
+  }),
 };

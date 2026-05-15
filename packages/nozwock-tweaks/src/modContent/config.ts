@@ -62,6 +62,9 @@ export const defaultModConfig = {
   npcInfinitePartyFollowDuration: {
     enabled: false,
   },
+  combatRestoreAllUsedQiDroplets: {
+    enabled: false,
+  },
 };
 
 export type ModConfig = typeof defaultModConfig;
