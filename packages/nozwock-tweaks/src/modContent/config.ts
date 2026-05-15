@@ -10,6 +10,7 @@ export enum CraftingConditionModifier {
 }
 
 export const defaultModConfig = {
+  configVersion: 1,
   mapTravelDistanceMultiplier: {
     multiplier: 1,
   },
