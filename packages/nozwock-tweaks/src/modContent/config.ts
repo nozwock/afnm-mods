@@ -56,8 +56,8 @@ export const defaultModConfig = {
   },
   npcNoActionCooldown: {
     dualCultivation: false,
-    aidBreakthrough: false,
-    partyFollow: false,
+    aidBreakthrough: true,
+    partyFollow: true,
   },
   npcInfinitePartyFollowDuration: {
     enabled: false,
