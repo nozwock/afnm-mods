@@ -68,9 +68,7 @@ export const patchManager = new PatchManager();
 export const patches = {
   mapTravelDistanceMultiplier: definePatch({
     name: 'mapTravelDistanceMultiplier',
-    isEnabled() {
-      return modConfig.value.mapTravelDistanceMultiplier.multiplier !== 1;
-    },
+    repeatable: true,
     onEnable() {
       this._applyMultiplier(
         modConfig.value.mapTravelDistanceMultiplier.multiplier,
@@ -94,10 +92,8 @@ export const patches = {
   }),
   herbFieldGrowthDaysMultiplier: definePatch({
     name: 'herbFieldGrowthDaysMultiplier',
-    isEnabled() {
-      return modConfig.value.herbFieldGrowthDaysMultiplier.multiplier !== 1;
-    },
-    onEnable: function (): void {
+    repeatable: true,
+    onEnable() {
       this._applyMultiplier(
         modConfig.value.herbFieldGrowthDaysMultiplier.multiplier,
       );
@@ -116,10 +112,8 @@ export const patches = {
   }),
   roomBlueprintBuildTimeMultiplier: definePatch({
     name: 'roomBlueprintBuildTimeMultiplier',
-    isEnabled() {
-      return modConfig.value.roomBlueprintBuildTimeMultiplier.multiplier !== 1;
-    },
-    onEnable: function (): void {
+    repeatable: true,
+    onEnable() {
       this._applyMultiplier(
         modConfig.value.roomBlueprintBuildTimeMultiplier.multiplier,
       );

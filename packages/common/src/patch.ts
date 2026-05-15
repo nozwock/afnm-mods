@@ -1,5 +1,9 @@
 export interface Patch {
   name: string;
+  /**
+   * `onEnable` can be repeatedly called without a single successful `disable`.
+   */
+  repeatable?: boolean;
   unsubscribers?: (() => void)[];
   isEnabled?(): boolean;
   onEnable(): void;
@@ -68,10 +72,10 @@ export class PatchManager {
     this.addIfNotPresent(patch);
 
     const state = this.patches.get(patch)!;
-    if (state.isInitialized) return;
+    if (state.isInitialized && !patch.repeatable) return;
     state.isInitialized = true;
 
-    console.log(`Enabling ${patch.name}`);
+    console.log(`${patch.repeatable ? 'Running' : 'Enabling'} ${patch.name}`);
     patch.onEnable();
   }
 
