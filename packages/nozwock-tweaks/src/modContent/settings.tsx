@@ -42,12 +42,12 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
     [],
   );
   const selectedItemConsumptionNames = useMemo(
-    () => Array.from(config.preventItemConsumption.names),
-    [config.preventItemConsumption.names],
+    () => Array.from(config.itemPreventConsumption.names),
+    [config.itemPreventConsumption.names],
   );
   const selectedItemConsumptionKinds = useMemo(
-    () => Array.from(config.preventItemConsumption.kinds),
-    [config.preventItemConsumption.kinds],
+    () => Array.from(config.itemPreventConsumption.kinds),
+    [config.itemPreventConsumption.kinds],
   );
 
   function setModConfig(updater: (config: ModConfig) => ModConfig) {
@@ -243,9 +243,9 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
         <FormControlLabel
           control={
             <Switch
-              checked={config.preventItemConsumption.enabled}
+              checked={config.itemPreventConsumption.enabled}
               onChange={(_, value) => {
-                patchManager.setEnabled(patches.preventItemConsumption, value);
+                patchManager.setEnabled(patches.itemPreventConsumption, value);
                 setConfig(modConfig.value);
               }}
             />
@@ -262,8 +262,8 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
           onChange={(_, values) => {
             setModConfig((it) => ({
               ...it,
-              preventItemConsumption: {
-                ...it.preventItemConsumption,
+              itemPreventConsumption: {
+                ...it.itemPreventConsumption,
                 names: new Set(values),
               },
             }));
@@ -297,8 +297,8 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
           onChange={(_, values) => {
             setModConfig((it) => ({
               ...it,
-              preventItemConsumption: {
-                ...it.preventItemConsumption,
+              itemPreventConsumption: {
+                ...it.itemPreventConsumption,
                 kinds: new Set(values),
               },
             }));
@@ -402,9 +402,9 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
           label={t('Auto Complete Crafting')}
           control={
             <Checkbox
-              checked={config.autoCompleteCrafting.enabled}
+              checked={config.craftingAutoComplete.enabled}
               onChange={(_, value) => {
-                patchManager.setEnabled(patches.autoCompleteCrafting, value);
+                patchManager.setEnabled(patches.craftingAutoComplete, value);
                 setConfig(modConfig.value);
               }}
             />

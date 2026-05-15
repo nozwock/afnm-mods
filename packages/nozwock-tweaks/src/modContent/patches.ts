@@ -127,15 +127,15 @@ export const patches = {
       });
     },
   }),
-  preventItemConsumption: definePatch({
-    name: 'preventItemConsumption',
+  itemPreventConsumption: definePatch({
+    name: 'itemPreventConsumption',
     unsubscribers: [],
     isEnabled() {
-      return modConfig.value.preventItemConsumption.enabled;
+      return modConfig.value.itemPreventConsumption.enabled;
     },
     onEnable() {
       modConfig.setValue((it) => {
-        it.preventItemConsumption.enabled = true;
+        it.itemPreventConsumption.enabled = true;
       });
 
       this.unsubscribers.push(
@@ -149,10 +149,10 @@ export const patches = {
               const payloadItem = payload as { name: string; stacks: number };
               const items = window.modAPI.gameData.items;
               if (
-                modConfig.value.preventItemConsumption.names.has(
+                modConfig.value.itemPreventConsumption.names.has(
                   payloadItem.name,
                 ) ||
-                modConfig.value.preventItemConsumption.kinds.has(
+                modConfig.value.itemPreventConsumption.kinds.has(
                   items[payloadItem.name].kind,
                 )
               ) {
@@ -167,7 +167,7 @@ export const patches = {
     },
     onDisable() {
       modConfig.setValue((it) => {
-        it.preventItemConsumption.enabled = false;
+        it.itemPreventConsumption.enabled = false;
       });
     },
   }),
@@ -264,15 +264,15 @@ export const patches = {
       });
     },
   }),
-  autoCompleteCrafting: definePatch({
-    name: 'autoCompleteCrafting',
+  craftingAutoComplete: definePatch({
+    name: 'craftingAutoComplete',
     unsubscribers: [],
     isEnabled() {
-      return modConfig.value.autoCompleteCrafting.enabled;
+      return modConfig.value.craftingAutoComplete.enabled;
     },
     onEnable() {
       modConfig.setValue((it) => {
-        it.autoCompleteCrafting.enabled = true;
+        it.craftingAutoComplete.enabled = true;
       });
 
       this.unsubscribers.push(
@@ -311,7 +311,7 @@ export const patches = {
     },
     onDisable() {
       modConfig.setValue((it) => {
-        it.autoCompleteCrafting.enabled = false;
+        it.craftingAutoComplete.enabled = false;
       });
     },
   }),

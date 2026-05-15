@@ -19,7 +19,7 @@ export const defaultModConfig = {
   roomBlueprintBuildTimeMultiplier: {
     multiplier: 0,
   },
-  preventItemConsumption: {
+  itemPreventConsumption: {
     enabled: true,
     names: new Set(['Jade Visage Pill']),
     kinds: new Set<ItemKind>(['blueprint', 'transport_seal']),
@@ -30,7 +30,7 @@ export const defaultModConfig = {
   maxRarityTechniqueMastery: {
     enabled: false,
   },
-  autoCompleteCrafting: {
+  craftingAutoComplete: {
     enabled: false,
   },
   craftingConditionModifier: {
