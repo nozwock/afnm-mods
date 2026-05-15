@@ -54,6 +54,11 @@ export const defaultModConfig = {
   stoneCuttingUnveilAllOnStart: {
     enabled: false,
   },
+  npcNoActionCooldown: {
+    dualCultivation: false,
+    aidBreakthrough: false,
+    partyFollow: false,
+  },
 };
 
 export type ModConfig = typeof defaultModConfig;

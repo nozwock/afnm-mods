@@ -602,4 +602,37 @@ export const patches = {
       });
     },
   }),
+  npcNoActionCooldown: definePatch({
+    name: 'npcNoActionCooldown',
+    unsubscribers: [],
+    isEnabled() {
+      return Object.values(modConfig.value.npcNoActionCooldown).includes(true);
+    },
+    onEnable() {
+      // There's "characters/setDualCultivationCooldown" ({ character: string, cooldown: number }) but since we're
+      // already having to hook on "characters/updateCharacters" for resetting follow cooldown, might as well...
+      this.unsubscribers.push(
+        ...[
+          window.modAPI.hooks.onReduxAction((action, prevState, state) => {
+            if (action === 'characters/updateCharacters') {
+              return produce(state, (state) => {
+                for (const character of Object.values(
+                  state.characters.characterData,
+                )) {
+                  if (modConfig.value.npcNoActionCooldown.aidBreakthrough)
+                    character.aidBreakthroughCooldown = 0;
+                  if (modConfig.value.npcNoActionCooldown.dualCultivation)
+                    character.dualCultivationCooldown = 0;
+                  if (modConfig.value.npcNoActionCooldown.partyFollow)
+                    character.followCooldown = 0;
+                }
+              });
+            }
+
+            return state;
+          }),
+        ],
+      );
+    },
+  }),
 };

@@ -263,6 +263,64 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
         />
       </Card>
 
+      <Typography fontSize="200%">{t('NPC Characters')}</Typography>
+      <FormGroup>
+        <FormControlLabel
+          label={t('No Aid Breakthrough Cooldown')}
+          control={
+            <Checkbox
+              checked={config.npcNoActionCooldown.aidBreakthrough}
+              onChange={(_, value) => {
+                setModConfig((it) => ({
+                  ...it,
+                  npcNoActionCooldown: {
+                    ...it.npcNoActionCooldown,
+                    aidBreakthrough: value,
+                  },
+                }));
+                patchManager.setEnabled(patches.npcNoActionCooldown);
+              }}
+            />
+          }
+        ></FormControlLabel>
+        <FormControlLabel
+          label={t('No Dual Cultivation Cooldown')}
+          control={
+            <Checkbox
+              checked={config.npcNoActionCooldown.dualCultivation}
+              onChange={(_, value) => {
+                setModConfig((it) => ({
+                  ...it,
+                  npcNoActionCooldown: {
+                    ...it.npcNoActionCooldown,
+                    dualCultivation: value,
+                  },
+                }));
+                patchManager.setEnabled(patches.npcNoActionCooldown);
+              }}
+            />
+          }
+        ></FormControlLabel>
+        <FormControlLabel
+          label={t('No Join Party Cooldown')}
+          control={
+            <Checkbox
+              checked={config.npcNoActionCooldown.partyFollow}
+              onChange={(_, value) => {
+                setModConfig((it) => ({
+                  ...it,
+                  npcNoActionCooldown: {
+                    ...it.npcNoActionCooldown,
+                    partyFollow: value,
+                  },
+                }));
+                patchManager.setEnabled(patches.npcNoActionCooldown);
+              }}
+            />
+          }
+        ></FormControlLabel>
+      </FormGroup>
+
       <Typography fontSize="200%">{t('Crafting')}</Typography>
       <FormGroup>
         <FormControlLabel
