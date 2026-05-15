@@ -104,6 +104,21 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
           }
         ></FormControlLabel>
         <FormControlLabel
+          label={t('Preserve Quality Tier on Upgrading Equipment')}
+          control={
+            <Checkbox
+              checked={config.equipmentUpgradePreservesQualityTier.enabled}
+              onChange={(_, value) => {
+                patchManager.setEnabled(
+                  patches.equipmentUpgradePreservesQualityTier,
+                  value,
+                );
+                setConfig(modConfig.value);
+              }}
+            />
+          }
+        ></FormControlLabel>
+        <FormControlLabel
           label={t('Max Out Technique Masteries on Attempt')}
           control={
             <Checkbox

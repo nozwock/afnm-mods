@@ -65,6 +65,9 @@ export const defaultModConfig = {
   combatRestoreAllUsedQiDroplets: {
     enabled: false,
   },
+  equipmentUpgradePreservesQualityTier: {
+    enabled: true,
+  },
 };
 
 export type ModConfig = typeof defaultModConfig;

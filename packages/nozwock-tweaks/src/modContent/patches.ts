@@ -734,4 +734,47 @@ export const patches = {
       });
     },
   }),
+  equipmentUpgradePreservesQualityTier: definePatch({
+    name: 'equipmentUpgradePreservesQualityTier',
+    unsubscribers: [],
+    isEnabled() {
+      return modConfig.value.equipmentUpgradePreservesQualityTier.enabled;
+    },
+    onEnable() {
+      modConfig.setValue((it) => {
+        it.equipmentUpgradePreservesQualityTier.enabled = true;
+      });
+
+      this.unsubscribers.push(
+        ...[
+          window.modAPI.hooks.onDeriveEquipmentUpgradeRequirement(
+            (baseItem, costItems, resultItem, _flags) => {
+              const decreasedQuality =
+                (baseItem.qualityTier ?? 0) - resultItem.resultQualityTier;
+              let qualityTier = resultItem.resultQualityTier;
+              let hiddenPotential = resultItem.resultHiddenPotential ?? 0;
+              if (decreasedQuality > 0) {
+                qualityTier += decreasedQuality;
+                hiddenPotential -= decreasedQuality;
+              }
+
+              return {
+                costItems,
+                resultItem: {
+                  ...resultItem,
+                  resultQualityTier: qualityTier,
+                  resultHiddenPotential: hiddenPotential,
+                },
+              };
+            },
+          ),
+        ],
+      );
+    },
+    onDisable() {
+      modConfig.setValue((it) => {
+        it.equipmentUpgradePreservesQualityTier.enabled = false;
+      });
+    },
+  }),
 };
