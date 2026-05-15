@@ -303,10 +303,6 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
           }}
           value={config.craftingConditionModifier.current}
           onChange={(e) => {
-            patchManager.setEnabled(
-              patches.craftingConditionModifier,
-              e.target.value !== CraftingConditionModifier.None,
-            );
             setModConfig((it) => ({
               ...it,
               craftingConditionModifier: {
@@ -314,6 +310,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
                 current: e.target.value,
               },
             }));
+            patchManager.setEnabled(patches.craftingConditionModifier);
           }}
         >
           {Object.entries(displayCraftingConditionModifier).map(

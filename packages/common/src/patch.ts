@@ -48,7 +48,15 @@ export class PatchManager {
     }
   }
 
-  public setEnabled(patch: Patch, enabled: boolean): void {
+  /**
+   * Use `Patch.isEnabled` if `enabled` is not passed, effectively acting like `tryEnable` but also for disabling.
+   */
+  public setEnabled(patch: Patch): void;
+  public setEnabled(patch: Patch, enabled: boolean): void;
+  public setEnabled(patch: Patch, enabled?: boolean): void {
+    if (enabled === undefined) {
+      enabled = patch.isEnabled ? patch.isEnabled() : true;
+    }
     if (enabled) {
       this.enable(patch);
     } else {
