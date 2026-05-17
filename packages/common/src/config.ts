@@ -6,10 +6,16 @@ export class GlobalConfig<Config extends object> {
   private configKey: string;
   private defaultConfig: Readonly<Config>;
   private _cachedConfig?: Readonly<Config> = undefined;
+  private migrate?: (config: Config) => Config;
 
-  constructor(key: string, defaultValue: Config) {
+  constructor(
+    key: string,
+    defaultValue: Config,
+    migrate?: typeof this.migrate,
+  ) {
     this.configKey = key;
     this.defaultConfig = structuredClone(defaultValue);
+    this.migrate = migrate;
   }
 
   public get value(): Readonly<Config> {
@@ -38,6 +44,11 @@ export class GlobalConfig<Config extends object> {
           }) as Config,
         )
       : { ...this.defaultConfig };
+
+    if (this.migrate) {
+      this._cachedConfig = this.migrate(this._cachedConfig);
+    }
+
     return this._cachedConfig;
   }
 

@@ -153,4 +153,19 @@ export const defaultModConfig: ModConfig = {
   },
 };
 
-export const modConfig = new GlobalConfig(`${MOD_ID}.config`, defaultModConfig);
+export const modConfig = new GlobalConfig(
+  `${MOD_ID}.config`,
+  defaultModConfig,
+  (config) => {
+    if (config.configVersion === 1) {
+      config.configVersion = 2;
+      config.combatRecoverQiDroplets.current =
+        (config as unknown as ModConfigV1).combatRestoreAllUsedQiDroplets
+          ?.enabled === true
+          ? QiDropletRecover.AllUsedDroplet
+          : config.combatRecoverQiDroplets.current;
+    }
+
+    return config;
+  },
+);
