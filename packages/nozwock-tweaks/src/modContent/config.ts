@@ -15,8 +15,81 @@ export enum QiDropletRecover {
   MaxDroplet,
 }
 
-export const defaultModConfig = {
-  configVersion: 1,
+interface ModConfigV1 {
+  configVersion: number;
+  mapTravelDistanceMultiplier: {
+    multiplier: number;
+  };
+  herbFieldGrowthDaysMultiplier: {
+    multiplier: number;
+  };
+  roomBlueprintBuildTimeMultiplier: {
+    multiplier: number;
+  };
+  itemPreventConsumption: {
+    enabled: boolean;
+    names: Set<string>;
+    kinds: Set<ItemKind>;
+  };
+  maxRarityAddedEnchantments: {
+    enabled: boolean;
+  };
+  maxRarityTechniqueMastery: {
+    enabled: boolean;
+  };
+  craftingAutoComplete: {
+    enabled: boolean;
+  };
+  craftingConditionModifier: {
+    current: CraftingConditionModifier;
+  };
+  craftingNoMaxStabilityDegradation: {
+    enabled: boolean;
+  };
+  dualCultivationAutoComplete: {
+    enabled: boolean;
+  };
+  dualCultivationInfiniteEnergy: {
+    enabled: boolean;
+  };
+  stoneCuttingInfiniteQiSense: {
+    enabled: boolean;
+  };
+  stoneCuttingNoAbilityCooldown: {
+    enabled: boolean;
+  };
+  stoneCuttingUnveilAllOnStart: {
+    enabled: boolean;
+  };
+  npcNoActionCooldown: {
+    dualCultivation: boolean;
+    aidBreakthrough: boolean;
+    partyFollow: boolean;
+  };
+  npcInfinitePartyFollowDuration: {
+    enabled: boolean;
+  };
+  combatRestoreAllUsedQiDroplets: {
+    enabled: boolean;
+  };
+  equipmentUpgradePreservesQualityTier: {
+    enabled: boolean;
+  };
+  equipmentReforgeMaxQualityTier: {
+    enabled: boolean;
+  };
+}
+
+type ModConfigV2 = Omit<ModConfigV1, 'combatRestoreAllUsedQiDroplets'> & {
+  combatRecoverQiDroplets: {
+    current: QiDropletRecover;
+  };
+};
+
+export type ModConfig = ModConfigV2;
+
+export const defaultModConfig: ModConfig = {
+  configVersion: 2,
   mapTravelDistanceMultiplier: {
     multiplier: 1,
   },
@@ -80,5 +153,4 @@ export const defaultModConfig = {
   },
 };
 
-export type ModConfig = typeof defaultModConfig;
 export const modConfig = new GlobalConfig(`${MOD_ID}.config`, defaultModConfig);
