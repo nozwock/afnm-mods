@@ -18,7 +18,12 @@ import { removeSettingsDialogPadding } from 'common/hacks';
 import { NumericMultiplierField } from 'common/ui/components';
 import { getItemDisplayNames } from 'common/utils';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { CraftingConditionModifier, ModConfig, modConfig } from './config';
+import {
+  CraftingConditionModifier,
+  ModConfig,
+  modConfig,
+  QiDropletRecover,
+} from './config';
 import { patches, patchManager } from './patches';
 
 const t = window.modAPI.utils.t;
@@ -38,6 +43,14 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
       [CraftingConditionModifier.AtleastNeutral]: t('At least Neutral'),
       [CraftingConditionModifier.InvertNegative]: t('Invert Negative'),
       [CraftingConditionModifier.None]: t('None'),
+    }),
+    [],
+  );
+  const qiDropletRecoverMode: Record<QiDropletRecover, string> = useMemo(
+    () => ({
+      [QiDropletRecover.AllUsedDroplet]: t('Recover Used Qi Droplets'),
+      [QiDropletRecover.MaxDroplet]: t('Recover Max Qi Droplets'),
+      [QiDropletRecover.None]: t('None'),
     }),
     [],
   );
@@ -102,22 +115,31 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
       </GameButton>
 
       <Typography fontSize="200%">{t('General')}</Typography>
+      <Stack direction="row" spacing={2} alignItems="center">
+        <Typography>{t('Qi Droplet Recover Mode')}</Typography>
+        <Select
+          size="small"
+          sx={{
+            minWidth: '120px',
+          }}
+          value={config.combatRecoverQiDroplets.current}
+          onChange={(e) => {
+            setModConfig((it) => ({
+              ...it,
+              combatRecoverQiDroplets: {
+                ...it.combatRecoverQiDroplets,
+                current: e.target.value,
+              },
+            }));
+            patchManager.setEnabled(patches.combatRecoverQiDroplets);
+          }}
+        >
+          {Object.entries(qiDropletRecoverMode).map(([key, value]) => (
+            <MenuItem value={Number(key)}>{value}</MenuItem>
+          ))}
+        </Select>
+      </Stack>
       <FormGroup>
-        <FormControlLabel
-          label={t('Restore All Used Qi Droplets in Combat')}
-          control={
-            <Checkbox
-              checked={config.combatRestoreAllUsedQiDroplets.enabled}
-              onChange={(_, value) => {
-                patchManager.setEnabled(
-                  patches.combatRestoreAllUsedQiDroplets,
-                  value,
-                );
-                setConfig(modConfig.value);
-              }}
-            />
-          }
-        ></FormControlLabel>
         <FormControlLabel
           label={t('Preserve Quality Tier on Upgrading Equipment')}
           control={

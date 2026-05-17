@@ -9,6 +9,12 @@ export enum CraftingConditionModifier {
   AtleastNeutral,
 }
 
+export enum QiDropletRecover {
+  None,
+  AllUsedDroplet,
+  MaxDroplet,
+}
+
 export const defaultModConfig = {
   configVersion: 1,
   mapTravelDistanceMultiplier: {
@@ -63,8 +69,8 @@ export const defaultModConfig = {
   npcInfinitePartyFollowDuration: {
     enabled: false,
   },
-  combatRestoreAllUsedQiDroplets: {
-    enabled: false,
+  combatRecoverQiDroplets: {
+    current: QiDropletRecover.None,
   },
   equipmentUpgradePreservesQualityTier: {
     enabled: true,

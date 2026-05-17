@@ -21,7 +21,11 @@ import {
 } from 'common/utils';
 import { produce } from 'immer';
 import cloneDeep from 'lodash.clonedeep';
-import { CraftingConditionModifier, modConfig } from './config';
+import {
+  CraftingConditionModifier,
+  modConfig,
+  QiDropletRecover,
+} from './config';
 
 const initialGameData = {
   locationLinks: Object.entries(window.modAPI.gameData.locations).reduce(
@@ -688,18 +692,16 @@ export const patches = {
       });
     },
   }),
-  combatRestoreAllUsedQiDroplets: definePatch({
-    // Once we're able to retrieve max Qi Droplets, we'll be able to start/end combat always with max Qi Droplets
-    name: 'combatRestoreAllUsedQiDroplets',
+  combatRecoverQiDroplets: definePatch({
+    name: 'combatRecoverQiDroplets',
     unsubscribers: [],
     isEnabled() {
-      return modConfig.value.combatRestoreAllUsedQiDroplets.enabled;
+      return (
+        modConfig.value.combatRecoverQiDroplets.current !==
+        QiDropletRecover.None
+      );
     },
     onEnable() {
-      modConfig.setValue((it) => {
-        it.combatRestoreAllUsedQiDroplets.enabled = true;
-      });
-
       let beforeCombatQiDroplets: number | undefined;
       this.unsubscribers.push(
         ...[
@@ -707,25 +709,51 @@ export const patches = {
           window.modAPI.hooks.onReduxAction((action, _, state) => {
             if (action === 'combat/initCombat') {
               beforeCombatQiDroplets = state.player.player.qiDroplets;
-            } else if (
-              action === 'combat/cleanupCombat' &&
-              beforeCombatQiDroplets !== undefined
-            ) {
-              return produce(state, (state) => {
-                state.player.player.qiDroplets = beforeCombatQiDroplets;
-                beforeCombatQiDroplets = undefined;
-              });
+              if (
+                modConfig.value.combatRecoverQiDroplets.current ===
+                QiDropletRecover.MaxDroplet
+              ) {
+                return produce(state, (state) => {
+                  state.player.player.qiDroplets =
+                    window.modAPI.utils.getMaxQiDroplets(
+                      state.player.player,
+                      state.breakthrough,
+                    );
+                });
+              }
+            } else if (action === 'combat/cleanupCombat') {
+              const mode = modConfig.value.combatRecoverQiDroplets.current;
+              switch (mode) {
+                case QiDropletRecover.MaxDroplet:
+                  return produce(state, (state) => {
+                    state.player.player.qiDroplets =
+                      window.modAPI.utils.getMaxQiDroplets(
+                        state.player.player,
+                        state.breakthrough,
+                      );
+                  });
+                case QiDropletRecover.AllUsedDroplet:
+                  if (beforeCombatQiDroplets !== undefined) {
+                    return produce(state, (state) => {
+                      state.player.player.qiDroplets = beforeCombatQiDroplets;
+                      beforeCombatQiDroplets = undefined;
+                    });
+                  }
+                case QiDropletRecover.None:
+                  console.warn(
+                    `Patch ${this.name} is enabled while QiDropletRecover.None is set`,
+                  );
+                  break;
+                default:
+                  mode satisfies never;
+                  break;
+              }
             }
 
             return state;
           }),
         ],
       );
-    },
-    onDisable() {
-      modConfig.setValue((it) => {
-        it.combatRestoreAllUsedQiDroplets.enabled = false;
-      });
     },
   }),
   equipmentUpgradePreservesQualityTier: definePatch({
