@@ -157,13 +157,25 @@ export const modConfig = new GlobalConfig(
   `${MOD_ID}.config`,
   defaultModConfig,
   (config) => {
-    if (config.configVersion === 1) {
+    function isV1(config: ModConfig | ModConfigV1): config is ModConfigV1 {
+      return config.configVersion === 1;
+    }
+
+    function migrateV1ToV2(config: ModConfigV1 & ModConfigV2): ModConfigV2 {
       config.configVersion = 2;
-      config.combatRecoverQiDroplets.current =
-        (config as unknown as ModConfigV1).combatRestoreAllUsedQiDroplets
-          ?.enabled === true
-          ? QiDropletRecover.AllUsedDroplet
-          : config.combatRecoverQiDroplets.current;
+      config.combatRecoverQiDroplets = {
+        current:
+          config.combatRestoreAllUsedQiDroplets?.enabled === true
+            ? QiDropletRecover.AllUsedDroplet
+            : (config.combatRecoverQiDroplets?.current ??
+              QiDropletRecover.None),
+      };
+      const { combatRestoreAllUsedQiDroplets, ...rest } = config;
+      return rest;
+    }
+
+    if (isV1(config)) {
+      config = migrateV1ToV2(config);
     }
 
     return config;
