@@ -49,7 +49,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
   const qiDropletRecoverMode: Record<QiDropletRecover, string> = useMemo(
     () => ({
       [QiDropletRecover.AllUsedDroplet]: t('Recover All Spent Qi Droplets'),
-      [QiDropletRecover.MaxDroplet]: t('Keep Qi Droplets at Max'),
+      [QiDropletRecover.MaxDroplet]: t('Recover All Before & After Combat'),
       [QiDropletRecover.None]: t('Vanilla'),
     }),
     [],
