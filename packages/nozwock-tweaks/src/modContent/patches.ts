@@ -705,22 +705,34 @@ export const patches = {
       let beforeCombatQiDroplets: number | undefined;
       this.unsubscribers.push(
         ...[
+          window.modAPI.hooks.onBeforeCombat((enemies, playerState) => {
+            if (
+              modConfig.value.combatRecoverQiDroplets.current ===
+              QiDropletRecover.MaxDroplet
+            ) {
+              // Start battle with max Qi Droplets as well
+              return {
+                enemies,
+                playerState: {
+                  ...playerState,
+                  stats: {
+                    ...playerState.stats,
+                    qiDroplets:
+                      playerState.maxqiDroplets ?? playerState.stats.qiDroplets,
+                  },
+                },
+              };
+            }
+            return { enemies, playerState };
+          }),
           // This won't show in the combat success UI's "Qi Droplets Regenerated +X"
           window.modAPI.hooks.onReduxAction((action, _, state) => {
             if (action === 'combat/initCombat') {
               beforeCombatQiDroplets = state.player.player.qiDroplets;
-              if (
-                modConfig.value.combatRecoverQiDroplets.current ===
-                QiDropletRecover.MaxDroplet
-              ) {
-                return produce(state, (state) => {
-                  state.player.player.qiDroplets =
-                    window.modAPI.utils.getMaxQiDroplets(
-                      state.player.player,
-                      state.breakthrough,
-                    );
-                });
-              }
+              // NOTE: `window.modAPI.combat` is inconsistent in `combat/initCombat`, *sometimes* it's undefined
+              //
+              // Updating `state.combat.player` or `state.player.player` here seems to have no effect as state by this
+              // point is stored separately in the combat component
             } else if (action === 'combat/cleanupCombat') {
               const mode = modConfig.value.combatRecoverQiDroplets.current;
               switch (mode) {
