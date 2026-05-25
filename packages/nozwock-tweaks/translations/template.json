@@ -10,6 +10,7 @@
       "[string] At least Neutral": "",
       "[string] Auto Complete Crafting": "",
       "[string] Auto Complete Dual Cultivation": "",
+      "[string] Combat Qi Droplet Recovery": "",
       "[string] Crafting": "",
       "[string] Crafting Condition Modifier": "",
       "[string] Dual Cultivation": "",
@@ -22,6 +23,7 @@
       "[string] Item Kinds": "",
       "[string] Item Names": "",
       "[string] Items": "",
+      "[string] Keep Qi Droplets at Max": "",
       "[string] Map Travel Distance Multiplier": "",
       "[string] Max Out Added Enchantments' Rarity": "",
       "[string] Max Out Technique Masteries on Attempt": "",
@@ -35,15 +37,14 @@
       "[string] Preserve Quality Tier on Upgrading Equipment": "",
       "[string] Prevent Item Consumption": "",
       "[string] Prevent Max Stability Degradation": "",
-      "[string] Qi Droplet Recover Mode": "",
-      "[string] Recover Max Qi Droplets": "",
-      "[string] Recover Used Qi Droplets": "",
+      "[string] Recover All Spent Qi Droplets": "",
       "[string] Reset All to Defaults": "",
       "[string] Room Blueprint Build Time Multiplier": "",
       "[string] Select item kinds": "",
       "[string] Select or type item names": "",
       "[string] Stone Cutting": "",
-      "[string] Unveil All Stones On Minigame Start": ""
+      "[string] Unveil All Stones On Minigame Start": "",
+      "[string] Vanilla": ""
     }
   }
 }
