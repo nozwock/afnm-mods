@@ -36,7 +36,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
         </GameButton>
       </Stack>
 
-      <Typography>
+      <Typography fontSize="90%" sx={{ opacity: 0.7 }}>
         {t(
           `Do note that there is no way to restore stats back to what they were once the mod has made any changes to \
 stats, other than restoring a previous save.`,
