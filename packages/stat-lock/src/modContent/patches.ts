@@ -1,4 +1,4 @@
-import { PhysicalStatistic } from 'afnm-types';
+import { PhysicalStatistic, PlayerEntity } from 'afnm-types';
 import { definePatch, PatchManager } from 'common/patch';
 import { produce } from 'immer';
 import { modConfig } from './config';
@@ -10,36 +10,29 @@ export const patches = {
     onEnable() {
       window.modAPI.hooks.onNewGame((intent) => {
         return produce(intent, (intent) => {
-          const stats = modConfig.value.lockedPhysicalStats;
-          for (const [stat, it] of Object.entries(stats)) {
-            if (it.locked)
-              intent.player.physicalStats[stat as PhysicalStatistic] = it.value;
-          }
+          this._tryLockStats(intent.player);
         });
       });
       window.modAPI.hooks.onGameLoad((state) => {
         return produce(state, (state) => {
-          const stats = modConfig.value.lockedPhysicalStats;
-          for (const [stat, it] of Object.entries(stats)) {
-            if (it.locked)
-              state.player.player.physicalStats[stat as PhysicalStatistic] =
-                it.value;
-          }
+          this._tryLockStats(state.player.player);
         });
       });
       window.modAPI.hooks.onReduxAction((action, prevState, state) => {
         if (action === 'player/updatePlayer') {
           return produce(state, (state) => {
-            const stats = modConfig.value.lockedPhysicalStats;
-            for (const [stat, it] of Object.entries(stats)) {
-              if (it.locked)
-                state.player.player.physicalStats[stat as PhysicalStatistic] =
-                  it.value;
-            }
+            this._tryLockStats(state.player.player);
           });
         }
         return state;
       });
+    },
+    _tryLockStats(player: PlayerEntity) {
+      const stats = modConfig.value.lockedPhysicalStats;
+      for (const [stat, it] of Object.entries(stats)) {
+        if (it.locked)
+          player.physicalStats[stat as PhysicalStatistic] = it.value;
+      }
     },
   }),
 };

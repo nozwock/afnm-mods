@@ -1,7 +1,7 @@
 import { Box, Stack, Switch, TextField, Typography } from '@mui/material';
 import { ModOptionsFC, PhysicalStatistic, statToName } from 'afnm-types';
 import { produce } from 'immer';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ModConfig, modConfig } from './config';
 import { patches, patchManager } from './patches';
 
@@ -14,6 +14,20 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
     modConfig.value = updater(modConfig.value);
     setConfig(modConfig.value);
   }
+
+  useEffect(
+    () =>
+      function onUnmount() {
+        const state = window.modAPI.getGameStateSnapshot()!;
+        const updatedPlayer = produce(state.player.player, (player) => {
+          patches.lockPhysicalStats._tryLockStats(player);
+        });
+        if (state.player.player !== updatedPlayer) {
+          api.actions.updatePlayer(updatedPlayer);
+        }
+      },
+    [],
+  );
 
   const GameButton = api.components.GameButton;
 
