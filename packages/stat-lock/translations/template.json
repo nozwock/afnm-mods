@@ -1,1 +1,9 @@
-{}
+{
+  "ui": {
+    "src/modContent/settings": {
+      "[string] Do note that there is no way to restore stats back to what they were once the mod has made any changes to stats, other than restoring a previous save.": "",
+      "[string] Lock stats to specific values individually.": "",
+      "[string] Physical Stats": ""
+    }
+  }
+}
