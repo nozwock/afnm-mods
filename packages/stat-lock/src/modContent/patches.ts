@@ -1,3 +1,4 @@
+import { PhysicalStatistic } from 'afnm-types';
 import { definePatch, PatchManager } from 'common/patch';
 import { produce } from 'immer';
 import { modConfig } from './config';
@@ -10,22 +11,19 @@ export const patches = {
       window.modAPI.hooks.onNewGame((intent) => {
         return produce(intent, (intent) => {
           const stats = modConfig.value.lockedPhysicalStats;
-          for (const [stat, n] of Object.entries(stats) as [
-            keyof typeof stats,
-            number,
-          ][]) {
-            intent.player.physicalStats[stat] = n;
+          for (const [stat, it] of Object.entries(stats)) {
+            if (it.locked)
+              intent.player.physicalStats[stat as PhysicalStatistic] = it.value;
           }
         });
       });
       window.modAPI.hooks.onGameLoad((state) => {
         return produce(state, (state) => {
           const stats = modConfig.value.lockedPhysicalStats;
-          for (const [stat, n] of Object.entries(stats) as [
-            keyof typeof stats,
-            number,
-          ][]) {
-            state.player.player.physicalStats[stat] = n;
+          for (const [stat, it] of Object.entries(stats)) {
+            if (it.locked)
+              state.player.player.physicalStats[stat as PhysicalStatistic] =
+                it.value;
           }
         });
       });
@@ -33,11 +31,10 @@ export const patches = {
         if (action === 'player/updatePlayer') {
           return produce(state, (state) => {
             const stats = modConfig.value.lockedPhysicalStats;
-            for (const [stat, n] of Object.entries(stats) as [
-              keyof typeof stats,
-              number,
-            ][]) {
-              state.player.player.physicalStats[stat] = n;
+            for (const [stat, it] of Object.entries(stats)) {
+              if (it.locked)
+                state.player.player.physicalStats[stat as PhysicalStatistic] =
+                  it.value;
             }
           });
         }
