@@ -3,6 +3,7 @@ import { GlobalConfig } from 'common/config';
 import { baseGameState, MOD_ID } from './const';
 
 interface ModConfigV1 {
+  configVersion: number;
   lockedPhysicalStats: Record<
     PhysicalStatistic,
     {
@@ -15,6 +16,7 @@ interface ModConfigV1 {
 export type ModConfig = ModConfigV1;
 
 const defaultModConfig: ModConfig = {
+  configVersion: 1,
   lockedPhysicalStats: (
     Object.entries(baseGameState.player.player.physicalStats) as [
       PhysicalStatistic,
