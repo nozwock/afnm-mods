@@ -3,6 +3,7 @@ import { ModOptionsFC, PhysicalStatistic, statToName } from 'afnm-types';
 import { produce } from 'immer';
 import { useState } from 'react';
 import { ModConfig, modConfig } from './config';
+import { patches, patchManager } from './patches';
 
 const t = window.modAPI.utils.t;
 
@@ -14,8 +15,27 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
     setConfig(modConfig.value);
   }
 
+  const GameButton = api.components.GameButton;
+
   return (
     <Box display="flex" flexDirection="column" gap={2} marginY={5}>
+      <Stack direction="row">
+        <Typography fontSize="200%">{t('Stat Lock')}</Typography>
+        <GameButton
+          sx={{ ml: 'auto' }}
+          size="small"
+          onClick={() => {
+            modConfig.reset();
+            setConfig(modConfig.value);
+            Object.values(patches).forEach((patch) => {
+              patchManager.setEnabled(patch);
+            });
+          }}
+        >
+          {t('Reset All to Defaults')}
+        </GameButton>
+      </Stack>
+
       <Typography>
         {t(
           `Do note that there is no way to restore stats back to what they were once the mod has made any changes to \
