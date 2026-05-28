@@ -18,6 +18,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
   useEffect(
     () =>
       function onUnmount() {
+        if (!api.hasSave) return; // In main-menu
         const state = window.modAPI.getGameStateSnapshot()!;
         const updatedPlayer = produce(state.player.player, (player) => {
           patches.lockPhysicalStats._tryLockStats(player);
