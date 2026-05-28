@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import { ModOptionsFC, PhysicalStatistic, statToName } from 'afnm-types';
-import { getSaveModData, useSaveModData } from 'common/config';
+import { getSaveModData, useSaveModData } from 'common/data';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 import { defaultModConfig, ModConfig, saveConfigKey } from './config';

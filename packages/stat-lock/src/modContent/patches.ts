@@ -1,5 +1,5 @@
 import { PhysicalStatistic, PlayerEntity, RootState } from 'afnm-types';
-import { getSaveModData } from 'common/config';
+import { getSaveModData } from 'common/data';
 import { definePatch, PatchManager } from 'common/patch';
 import { produce } from 'immer';
 import { defaultModConfig, ModConfig, saveConfigKey } from './config';

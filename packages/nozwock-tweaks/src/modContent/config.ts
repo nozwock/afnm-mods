@@ -1,5 +1,5 @@
 import { ItemKind } from 'afnm-types';
-import { GlobalConfig } from 'common/config';
+import { GlobalConfig } from 'common/data';
 import { MOD_ID } from './const';
 
 export enum CraftingConditionModifier {
