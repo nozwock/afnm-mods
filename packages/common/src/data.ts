@@ -67,23 +67,7 @@ export class GlobalModData<T extends object> {
     const item = localStorage.getItem(this.key);
 
     this.cachedData = item
-      ? merge(
-          {},
-          this.defaultData,
-          JSON.parse(item, (key, value) => {
-            if (
-              typeof value === 'object' &&
-              Object.keys(value).length === 2 &&
-              value.__type__ === 'Set' &&
-              value.value !== undefined
-            ) {
-              return Array.isArray(value.value)
-                ? new Set(value.value)
-                : new Set();
-            }
-            return value;
-          }) as T,
-        )
+      ? merge({}, this.defaultData, JsonEx.parse(item) as T)
       : { ...this.defaultData };
 
     if (this.migrate) {
@@ -98,15 +82,7 @@ export class GlobalModData<T extends object> {
     // mutated after the value has been passed to the function, but this is not a thing currently.
     // https://github.com/microsoft/TypeScript/issues/14909
     this.cachedData = deepFreeze(data);
-    localStorage.setItem(
-      this.key,
-      JSON.stringify(this.cachedData, (key, value) => {
-        if (value instanceof Set) {
-          return { __type__: 'Set', value: Array.from(value) };
-        }
-        return value;
-      }),
-    );
+    localStorage.setItem(this.key, JsonEx.stringify(this.cachedData));
   }
 
   public setValue(data: Readonly<T>): void;
@@ -122,5 +98,54 @@ export class GlobalModData<T extends object> {
   public reset(): void {
     this.cachedData = undefined;
     localStorage.removeItem(this.key);
+  }
+}
+
+type JsonPrimitive = string | number | boolean | null;
+type JsonValue = JsonPrimitive | JsonValue[] | { [key: string]: JsonValue };
+interface TypedJsonValue {
+  __type__: string;
+  value: JsonValue;
+}
+
+export class JsonEx {
+  private static withType<T extends JsonValue>(
+    typeName: string,
+    value: T,
+  ): TypedJsonValue {
+    return {
+      __type__: typeName,
+      value: value,
+    };
+  }
+
+  private static isTyped(
+    typeName: string,
+    value: any,
+  ): value is TypedJsonValue {
+    return (
+      typeof value === 'object' &&
+      Object.keys(value).length === 2 &&
+      value.__type__ === typeName &&
+      value.value !== undefined
+    );
+  }
+
+  public static parse(text: string): any {
+    return JSON.parse(text, (_, value) => {
+      if (this.isTyped('Set', value)) {
+        return Array.isArray(value.value) ? new Set(value.value) : new Set();
+      }
+      return value;
+    });
+  }
+
+  public static stringify(value: any): string {
+    return JSON.stringify(value, (_, value) => {
+      if (value instanceof Set) {
+        return this.withType('Set', Array.from(value));
+      }
+      return value;
+    });
   }
 }
