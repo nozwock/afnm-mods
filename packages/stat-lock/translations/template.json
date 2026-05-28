@@ -1,11 +1,16 @@
 {
   "ui": {
     "src/modContent/settings": {
+      "[string] Continue": "",
       "[string] Do note that there is no way to restore stats back to what they were once the mod has made any changes to stats, other than restoring a previous save.": "",
+      "[string] Enable Mod for Current Save": "",
       "[string] Lock stats to specific values individually.": "",
+      "[string] Notice": "",
       "[string] Physical Stats": "",
       "[string] Reset All to Defaults": "",
-      "[string] Stat Lock": ""
+      "[string] Settings can only be changed while a save is loaded.": "",
+      "[string] Stat Lock": "",
+      "[string] The mod needs to be enabled separately for each new save if it isn't enabled in already.": ""
     }
   }
 }

@@ -1,9 +1,9 @@
 import { PhysicalStatistic } from 'afnm-types';
-import { GlobalConfig } from 'common/config';
-import { baseGameState, MOD_ID } from './const';
+import { baseGameState } from './const';
 
 interface ModConfigV1 {
   configVersion: number;
+  modEnabled: boolean;
   lockedPhysicalStats: Record<
     PhysicalStatistic,
     {
@@ -15,8 +15,10 @@ interface ModConfigV1 {
 
 export type ModConfig = ModConfigV1;
 
-const defaultModConfig: ModConfig = {
+export const saveConfigKey = 'config';
+export const defaultModConfig: ModConfig = {
   configVersion: 1,
+  modEnabled: false,
   lockedPhysicalStats: (
     Object.entries(baseGameState.player.player.physicalStats) as [
       PhysicalStatistic,
@@ -33,5 +35,3 @@ const defaultModConfig: ModConfig = {
     {} as ModConfig['lockedPhysicalStats'],
   ),
 };
-
-export const modConfig = new GlobalConfig(`${MOD_ID}.config`, defaultModConfig);
