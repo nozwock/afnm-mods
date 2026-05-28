@@ -47,33 +47,29 @@ export function getSaveModData<T>(
   return state.mod.data[modId]?.[key] as T | undefined;
 }
 
-export class GlobalConfig<Config extends object> {
-  private configKey: string;
-  private defaultConfig: Readonly<Config>;
-  private _cachedConfig?: Readonly<Config> = undefined;
-  private migrate?: (config: Config) => Config;
+export class GlobalModData<T extends object> {
+  private key: string;
+  private defaultData: Readonly<T>;
+  private cachedData?: Readonly<T> = undefined;
+  private migrate?: (config: T) => T;
 
-  constructor(
-    key: string,
-    defaultValue: Config,
-    migrate?: typeof this.migrate,
-  ) {
-    this.configKey = key;
-    this.defaultConfig = structuredClone(defaultValue);
+  constructor(key: string, defaultValue: T, migrate?: typeof this.migrate) {
+    this.key = key;
+    this.defaultData = structuredClone(defaultValue);
     this.migrate = migrate;
   }
 
-  public get value(): Readonly<Config> {
-    if (this._cachedConfig) {
-      return this._cachedConfig;
+  public get value(): Readonly<T> {
+    if (this.cachedData) {
+      return this.cachedData;
     }
 
-    const item = localStorage.getItem(this.configKey);
+    const item = localStorage.getItem(this.key);
 
-    this._cachedConfig = item
+    this.cachedData = item
       ? merge(
           {},
-          this.defaultConfig,
+          this.defaultData,
           JSON.parse(item, (key, value) => {
             if (
               typeof value === 'object' &&
@@ -86,25 +82,25 @@ export class GlobalConfig<Config extends object> {
                 : new Set();
             }
             return value;
-          }) as Config,
+          }) as T,
         )
-      : { ...this.defaultConfig };
+      : { ...this.defaultData };
 
     if (this.migrate) {
-      this._cachedConfig = this.migrate(this._cachedConfig);
+      this.cachedData = this.migrate(this.cachedData);
     }
 
-    return this._cachedConfig;
+    return this.cachedData;
   }
 
-  public set value(data: Readonly<Config>) {
+  public set value(data: Readonly<T>) {
     // Would've liked to have TS enforce the passed data as immutable (to avoid runtime clone/freeze), so it can't be
     // mutated after the value has been passed to the function, but this is not a thing currently.
     // https://github.com/microsoft/TypeScript/issues/14909
-    this._cachedConfig = deepFreeze(data);
+    this.cachedData = deepFreeze(data);
     localStorage.setItem(
-      this.configKey,
-      JSON.stringify(this._cachedConfig, (key, value) => {
+      this.key,
+      JSON.stringify(this.cachedData, (key, value) => {
         if (value instanceof Set) {
           return { __type__: 'Set', value: Array.from(value) };
         }
@@ -113,9 +109,9 @@ export class GlobalConfig<Config extends object> {
     );
   }
 
-  public setValue(config: Readonly<Config>): void;
-  public setValue(mutator: (config: Draft<Config>) => void): void;
-  public setValue(value: Readonly<Config> | ((config: Draft<Config>) => void)) {
+  public setValue(data: Readonly<T>): void;
+  public setValue(mutator: (data: Draft<T>) => void): void;
+  public setValue(value: Readonly<T> | ((data: Draft<T>) => void)) {
     if (typeof value === 'function') {
       this.value = produce(this.value, value);
     } else {
@@ -124,7 +120,7 @@ export class GlobalConfig<Config extends object> {
   }
 
   public reset(): void {
-    this._cachedConfig = undefined;
-    localStorage.removeItem(this.configKey);
+    this.cachedData = undefined;
+    localStorage.removeItem(this.key);
   }
 }
