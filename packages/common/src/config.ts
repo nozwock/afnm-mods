@@ -1,6 +1,51 @@
+import { ModReduxAPI, RootState } from 'afnm-types';
 import { Draft, produce } from 'immer';
 import merge from 'lodash.merge';
+import { useMemo } from 'react';
 import { deepFreeze } from './utils';
+
+export function useSaveModData<T>(
+  api: ModReduxAPI,
+  modId: string,
+  key: string,
+): T | undefined;
+export function useSaveModData<T>(
+  api: ModReduxAPI,
+  modId: string,
+  key: string,
+  getDefaultValue: () => Readonly<T>,
+): T;
+export function useSaveModData<T>(
+  api: ModReduxAPI,
+  modId: string,
+  key: string,
+  getDefaultValue?: () => Readonly<T>,
+): T | undefined {
+  const defaultValue = useMemo(
+    () => (getDefaultValue !== undefined ? getDefaultValue() : undefined),
+    [],
+  );
+
+  const saveModData = api.hasSave
+    ? api.useSelector(
+        (state) => getSaveModData<T>(modId, key, state) ?? defaultValue,
+      )
+    : defaultValue;
+
+  return saveModData;
+}
+
+/**
+ * Use `ModReduxAPI.actions.setModData` for setting data instead.
+ */
+export function getSaveModData<T>(
+  modId: string,
+  key: string,
+  state: Readonly<RootState> | undefined = undefined,
+): T | undefined {
+  state ??= window.modAPI.getGameStateSnapshot()!;
+  return state.mod.data[modId]?.[key] as T | undefined;
+}
 
 export class GlobalConfig<Config extends object> {
   private configKey: string;
