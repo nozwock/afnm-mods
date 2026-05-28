@@ -51,9 +51,13 @@ export class GlobalModData<T extends object> {
   private key: string;
   private defaultData: Readonly<T>;
   private cachedData?: Readonly<T> = undefined;
-  private migrate?: (config: T) => T;
+  private migrate?: (data: T) => T;
 
-  constructor(key: string, defaultValue: T, migrate?: typeof this.migrate) {
+  public constructor(
+    key: string,
+    defaultValue: T,
+    migrate?: typeof this.migrate,
+  ) {
     this.key = key;
     this.defaultData = structuredClone(defaultValue);
     this.migrate = migrate;
