@@ -8,12 +8,6 @@ export const patches = {
   lockPhysicalStats: definePatch({
     name: 'lockPhysicalStats',
     onEnable() {
-      window.modAPI.hooks.onNewGame((intent) => {
-        // `intent` here is mutable. No object path of the returned object should be frozen.
-        // This might get changed in the future.
-        this._tryLockStats(intent.player);
-        return intent;
-      });
       window.modAPI.hooks.onGameLoad((state) => {
         return produce(state, (state) => {
           this._tryLockStats(state.player.player, state);
