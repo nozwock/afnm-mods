@@ -175,13 +175,20 @@ export class CharacterModData<T extends object> {
     value: Readonly<T> | ((data: Draft<T>) => void),
     saveState?: RootState,
   ) {
-    saveState ??= window.modAPI.getGameStateSnapshot()!;
-    if (!saveState.newGame.characterCreated) return;
-
     const data =
       typeof value === 'function'
         ? produce(this.tryGetValue(saveState) ?? this.defaultValue, value)
         : value;
+
+    saveState ??= window.modAPI.getGameStateSnapshot()!;
+    if (!saveState.newGame.characterCreated) {
+      console.error(
+        "Tried saving data when character hasn't being created yet.",
+        data,
+      );
+      return;
+    }
+
     this.store[getCharacterId(saveState)] = data;
 
     localStorage.setItem(this.localStorageKey, JsonEx.stringify(this.store));
