@@ -2,7 +2,7 @@
   "ui": {
     "src/modContent/settings": {
       "[string] Continue": "",
-      "[string] Do note that there is no way to restore stats back to what they were once the mod has made any changes to stats, other than restoring a previous save.": "",
+      "[string] Do note that there is no way to restore stats back to what they were once the mod has made any changes to stats, other than restoring a previous save with the mod disabled.": "",
       "[string] Enable Mod for Current Character": "",
       "[string] Lock stats to specific values individually.": "",
       "[string] Notice": "",
