@@ -106,6 +106,102 @@ export class GlobalModData<T extends object> {
   }
 }
 
+type CharacterId = `${string}_${string}_${number}`;
+
+function getCharacterId(state: RootState): CharacterId {
+  return `${state.newGame.forename}_${state.newGame.surname}_${state.newGame.createdAt}`;
+}
+
+export class CharacterModData<T extends object> {
+  private modId: string;
+  private key: string;
+  private store: Record<CharacterId, T> = {};
+  private migrate?: (data: T) => T;
+
+  public defaultValue: Readonly<T>;
+
+  public constructor(
+    modId: string,
+    key: string,
+    defaultValue: T,
+    migrate?: typeof this.migrate,
+  ) {
+    this.modId = modId;
+    this.key = key;
+    this.defaultValue = structuredClone(defaultValue);
+    this.migrate = migrate;
+
+    this.loadStore();
+  }
+
+  private get localStorageKey() {
+    return `${this.modId}.${this.key}`;
+  }
+
+  private loadStore() {
+    // XXX At some point once we have removeModData, store a copy of char-specific data in savefile as well to serve as
+    // a backup which we'll restore the data from if it's missing from localStorage.
+    const text = localStorage.getItem(this.localStorageKey);
+    if (text) {
+      const store = JsonEx.parse(text) as Record<CharacterId, T>;
+      for (const [k, v] of Object.entries(store)) {
+        let validData = merge({}, this.defaultValue, v);
+        if (this.migrate) {
+          validData = this.migrate(validData);
+        }
+        store[k as CharacterId] = validData;
+      }
+      this.store = store;
+    }
+  }
+
+  public tryGetValue(saveState?: RootState): Readonly<T> | undefined {
+    saveState ??= window.modAPI.getGameStateSnapshot()!;
+    return saveState.newGame.characterCreated
+      ? (this.store[getCharacterId(saveState)] ?? this.defaultValue)
+      : undefined;
+  }
+
+  public getValue(saveState?: RootState): Readonly<T> {
+    return this.tryGetValue(saveState) ?? this.defaultValue;
+  }
+
+  public setValue(data: Readonly<T>, saveState?: RootState): void;
+  public setValue(
+    mutator: (data: Draft<T>) => void,
+    saveState?: RootState,
+  ): void;
+  public setValue(
+    value: Readonly<T> | ((data: Draft<T>) => void),
+    saveState?: RootState,
+  ) {
+    saveState ??= window.modAPI.getGameStateSnapshot()!;
+    if (!saveState.newGame.characterCreated) return;
+
+    const data =
+      typeof value === 'function'
+        ? produce(this.tryGetValue(saveState) ?? this.defaultValue, value)
+        : value;
+    this.store[getCharacterId(saveState)] = data;
+
+    localStorage.setItem(this.localStorageKey, JsonEx.stringify(this.store));
+  }
+
+  public reset(saveState?: RootState): void {
+    saveState ??= window.modAPI.getGameStateSnapshot()!;
+    const charId = getCharacterId(saveState);
+    if (this.store[charId] === undefined) return;
+
+    delete this.store[charId];
+    localStorage.setItem(this.localStorageKey, JsonEx.stringify(this.store));
+  }
+
+  public resetAll(): void {
+    this.store = {};
+    localStorage.removeItem(this.localStorageKey);
+  }
+}
+
 type JsonPrimitive = string | number | boolean | null;
 type JsonValue = JsonPrimitive | JsonValue[] | { [key: string]: JsonValue };
 interface TypedJsonValue {
