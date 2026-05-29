@@ -2,7 +2,6 @@ import { ModReduxAPI, RootState } from 'afnm-types';
 import { Draft, produce } from 'immer';
 import merge from 'lodash.merge';
 import { useMemo } from 'react';
-import { deepFreeze } from './utils';
 
 export function useSaveModData<T>(
   api: ModReduxAPI,
@@ -85,7 +84,9 @@ export class GlobalModData<T extends object> {
     // Would've liked to have TS enforce the passed data as immutable (to avoid runtime clone/freeze), so it can't be
     // mutated after the value has been passed to the function, but this is not a thing currently.
     // https://github.com/microsoft/TypeScript/issues/14909
-    this.cachedData = deepFreeze(data);
+    //
+    // Edit: Not going to bother deep-freezing the data. Just expect the user to not modify passed `data` after call.
+    this.cachedData = data;
     localStorage.setItem(this.key, JsonEx.stringify(this.cachedData));
   }
 
