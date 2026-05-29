@@ -11,6 +11,9 @@
       "[string] Settings can only be changed while a save is loaded.": "",
       "[string] Stat Lock": "",
       "[string] The mod needs to be enabled separately for each new character.": ""
+    },
+    "src/modContent/ui": {
+      "[string] Stat Lock": ""
     }
   }
 }
