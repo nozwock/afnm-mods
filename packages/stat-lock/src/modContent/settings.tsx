@@ -8,11 +8,9 @@ import {
   Typography,
 } from '@mui/material';
 import { ModOptionsFC, PhysicalStatistic, statToName } from 'afnm-types';
-import { getSaveModData, useSaveModData } from 'common/data';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
-import { defaultModConfig, ModConfig, saveConfigKey } from './config';
-import { MOD_ID } from './const';
+import { ModConfig, saveModConfig } from './config';
 import { patches, patchManager } from './patches';
 
 const t = window.modAPI.utils.t;
@@ -22,21 +20,15 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
   const GameDialog = api.components.GameDialog;
 
   const [showAlert, setShowAlert] = useState(false);
-  const saveConfig = useSaveModData<ModConfig>(
-    api,
-    MOD_ID,
-    saveConfigKey,
-    () => defaultModConfig,
-  );
+  const [config, setConfig] = useState(() => saveModConfig.getValue());
 
   function setSaveModConfig(updater: (config: ModConfig) => ModConfig) {
     if (!api.hasSave) {
       setShowAlert(true);
       return;
     }
-
-    const config = getSaveModData<ModConfig>(MOD_ID, saveConfigKey);
-    if (config) api.actions.setModData(MOD_ID, saveConfigKey, updater(config));
+    saveModConfig.setValue((config) => updater(config));
+    setConfig(saveModConfig.getValue());
   }
 
   useEffect(
@@ -88,7 +80,8 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
           size="small"
           onClick={() => {
             if (!api.hasSave) return;
-            api.actions.setModData(MOD_ID, saveConfigKey, defaultModConfig);
+            saveModConfig.reset();
+            setConfig(saveModConfig.getValue());
             Object.values(patches).forEach((patch) => {
               patchManager.setEnabled(patch);
             });
@@ -107,12 +100,10 @@ stats, other than restoring a previous save.`,
 
       <Stack>
         <FormControlLabel
-          // XXX Maybe have enablement per character instead of per save. This way the mod won't be disabled if the user
-          // loads a previous save (quickloads, etc) after having enabled the mod in a more recent save.
-          label={t('Enable Mod for Current Save')}
+          label={t('Enable Mod for Current Character')}
           control={
             <Checkbox
-              checked={saveConfig?.modEnabled ?? false}
+              checked={config?.modEnabled ?? false}
               onChange={(_, checked) => {
                 setSaveModConfig((config) => ({
                   ...config,
@@ -123,9 +114,7 @@ stats, other than restoring a previous save.`,
           }
         />
         <Typography fontSize="90%" sx={{ opacity: 0.7 }}>
-          {t(
-            "The mod needs to be enabled separately for each new save if it isn't enabled in already.",
-          )}
+          {t('The mod needs to be enabled separately for each new character.')}
         </Typography>
       </Stack>
 
@@ -137,7 +126,7 @@ stats, other than restoring a previous save.`,
       </Stack>
 
       <Stack direction="column" spacing={1}>
-        {Object.entries(saveConfig.lockedPhysicalStats).map(([stat, it]) => (
+        {Object.entries(config.lockedPhysicalStats).map(([stat, it]) => (
           <Stack direction="row" alignItems="center">
             <Typography>{t(statToName[stat as PhysicalStatistic])}</Typography>
 

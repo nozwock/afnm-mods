@@ -1,5 +1,6 @@
 import { PhysicalStatistic } from 'afnm-types';
-import { baseGameState } from './const';
+import { CharacterModData } from 'common/data';
+import { baseGameState, MOD_ID } from './const';
 
 interface ModConfigV1 {
   configVersion: number;
@@ -15,7 +16,6 @@ interface ModConfigV1 {
 
 export type ModConfig = ModConfigV1;
 
-export const saveConfigKey = 'config';
 export const defaultModConfig: ModConfig = {
   configVersion: 1,
   modEnabled: false,
@@ -35,3 +35,9 @@ export const defaultModConfig: ModConfig = {
     {} as ModConfig['lockedPhysicalStats'],
   ),
 };
+
+export const saveModConfig = new CharacterModData(
+  MOD_ID,
+  'charConfig',
+  defaultModConfig,
+);

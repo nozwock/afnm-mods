@@ -1,9 +1,7 @@
 import { PhysicalStatistic, PlayerEntity, RootState } from 'afnm-types';
-import { getSaveModData } from 'common/data';
 import { definePatch, PatchManager } from 'common/patch';
 import { produce } from 'immer';
-import { defaultModConfig, ModConfig, saveConfigKey } from './config';
-import { MOD_ID } from './const';
+import { saveModConfig } from './config';
 
 export const patchManager = new PatchManager();
 export const patches = {
@@ -30,14 +28,9 @@ export const patches = {
         return state;
       });
     },
-    _tryLockStats(
-      player: PlayerEntity,
-      state: Readonly<RootState> | undefined = undefined,
-    ): void {
-      const config =
-        getSaveModData<ModConfig>(MOD_ID, saveConfigKey, state) ??
-        defaultModConfig;
-      if (!config.modEnabled) return;
+    _tryLockStats(player: PlayerEntity, state?: Readonly<RootState>): void {
+      const config = saveModConfig.tryGetValue(state);
+      if (!config || !config.modEnabled) return;
       for (const [stat, it] of Object.entries(config.lockedPhysicalStats)) {
         if (it.locked)
           player.physicalStats[stat as PhysicalStatistic] = it.value;
