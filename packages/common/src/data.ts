@@ -1,4 +1,4 @@
-import { ModReduxAPI, RootState } from 'afnm-types';
+import { ModReduxAPI, RootState, Save } from 'afnm-types';
 import { Draft, produce } from 'immer';
 import merge from 'lodash.merge';
 import { useMemo } from 'react';
@@ -108,8 +108,11 @@ export class GlobalModData<T extends object> {
 
 type CharacterId = `${string}_${string}_${number}`;
 
-function getCharacterId(state: RootState): CharacterId {
-  return `${state.newGame.forename}_${state.newGame.surname}_${state.newGame.createdAt}`;
+function getCharacterId(value: RootState | Save): CharacterId {
+  if ('dbName' in value) {
+    return `${value.forename}_${value.surname}_${value.createdAt}`;
+  }
+  return `${value.newGame.forename}_${value.newGame.surname}_${value.newGame.createdAt}`;
 }
 
 export class CharacterModData<T extends object> {
@@ -125,6 +128,7 @@ export class CharacterModData<T extends object> {
     key: string,
     defaultValue: T,
     migrate?: typeof this.migrate,
+    installCleanup: boolean = true,
   ) {
     this.modId = modId;
     this.key = key;
@@ -132,6 +136,13 @@ export class CharacterModData<T extends object> {
     this.migrate = migrate;
 
     this.loadStore();
+
+    // Not going to provide a way to unsubscribe the hook since there's no point to it. The game does not have any sort
+    // of hot-reloading for mods.
+    if (installCleanup)
+      window.modAPI.hooks.onDeleteCharacter((save) => {
+        this.reset(save);
+      });
   }
 
   private get localStorageKey() {
@@ -194,9 +205,11 @@ export class CharacterModData<T extends object> {
     localStorage.setItem(this.localStorageKey, JsonEx.stringify(this.store));
   }
 
-  public reset(saveState?: RootState): void {
-    saveState ??= window.modAPI.getGameStateSnapshot()!;
-    const charId = getCharacterId(saveState);
+  public reset(saveInfo: Save): void;
+  public reset(saveState?: RootState): void;
+  public reset(value?: RootState | Save): void {
+    value ??= window.modAPI.getGameStateSnapshot()!;
+    const charId = getCharacterId(value);
     if (this.store[charId] === undefined) return;
 
     delete this.store[charId];
