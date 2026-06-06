@@ -77,9 +77,9 @@ export function getPartyFollowDuration(
   state: RootState,
 ): number | undefined {
   // Non-companion character
-  const duration =
+  let duration =
     window.modAPI.gameData.characters[charName].followInteraction?.duration;
-  if (duration !== undefined) return duration;
+  if (duration !== undefined) return duration == 'permanent' ? 1 : duration;
 
   // Companion character
   const charData = state.characters.characterData[charName];
@@ -94,7 +94,8 @@ export function getPartyFollowDuration(
           charData.relationshipPath
         ][charData.relationshipIndex];
 
-  return relDef?.followCharacter?.duration;
+  duration = relDef?.followCharacter?.duration;
+  return duration == 'permanent' ? 1 : duration;
 }
 
 export function getFullyRemovedItems(
