@@ -784,7 +784,8 @@ export const patches = {
           window.modAPI.hooks.onDeriveEquipmentUpgradeRequirement(
             (baseItem, costItems, resultItem, _flags) => {
               const decreasedQuality =
-                (baseItem.qualityTier ?? 0) - resultItem.resultQualityTier;
+                (baseItem.harmonyAugment?.quality ?? 0) -
+                resultItem.resultQualityTier;
               let qualityTier = resultItem.resultQualityTier;
               let hiddenPotential = resultItem.resultHiddenPotential ?? 0;
               if (decreasedQuality > 0) {
