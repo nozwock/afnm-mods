@@ -245,6 +245,7 @@ export class JsonEx {
     value: any,
   ): value is TypedJsonValue {
     return (
+      value !== null && // typeof null is object T_T
       typeof value === 'object' &&
       Object.keys(value).length === 2 &&
       value.__type__ === typeName &&
