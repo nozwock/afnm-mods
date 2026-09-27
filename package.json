@@ -33,7 +33,7 @@
     "react": "^19.2.4"
   },
   "scripts": {
-    "build": "node scripts/build-mods.js",
-    "dev": "node scripts/build-mods.js --copyMod"
+    "build": "bun scripts/build-mods.js",
+    "dev": "bun scripts/build-mods.js --copyMod"
   }
 }
