@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "module": "preserve",
+    "module": "esnext",
     "moduleResolution": "bundler",
 
     "strict": true,
