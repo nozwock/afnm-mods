@@ -19,16 +19,20 @@ registerKeybindings();
 
 injectUIs();
 
-window.addEventListener('keyup', (e) => {
+window.addEventListener('keydown', async (e) => {
+  if (e.repeat) return;
+
   // XXX Would need to check for .showQuicksaveButtons here if .useKeybindings is to be used in the future
   if (
     // Probably not going to use .useKeybindings for a long time, since it's kinda messy with the whole priority system
     // disabling lower priority non-conflicting keybinds, at least as of 0.6.54
     matchRegisteredKeybind(actionQuickSave, e)
   ) {
+    e.preventDefault();
     // TODO: Prevent from being called in main menu as these only work when in game-world
-    makeQuickSave();
+    await makeQuickSave();
   } else if (matchRegisteredKeybind(actionQuickLoad, e)) {
-    loadLastQuickSave();
+    e.preventDefault();
+    await loadLastQuickSave();
   }
 });
