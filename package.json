@@ -5,6 +5,7 @@
   "devDependencies": {
     "@types/lodash.clonedeep": "^4.5.9",
     "@types/lodash.merge": "^4.6.9",
+    "@types/node": "^26.6.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "afnm-types": "0.7.7-2",
@@ -12,6 +13,7 @@
     "file-loader": "^6.2.0",
     "prettier": "^3.7.4",
     "ts-loader": "^9.5.4",
+    "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
     "typescript": "^6.0.2",
     "webpack": "^5.103.0",

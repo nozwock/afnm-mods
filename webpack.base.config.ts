@@ -1,10 +1,12 @@
+import { createRequire } from 'node:module';
+import path from 'node:path';
+import webpack from 'webpack';
+
+const require = createRequire(import.meta.url);
 const packageDir = process.cwd();
+const pkg = require(`${packageDir}/package.json`);
 
-const path = require('path');
-const webpack = require('webpack');
-const package = require(`${packageDir}/package.json`);
-
-module.exports = {
+const config: webpack.Configuration = {
   mode: 'development',
   devtool: 'source-map',
   entry: './src/mod.ts',
@@ -58,7 +60,7 @@ module.exports = {
   },
   output: {
     filename: 'mod.js',
-    path: path.resolve(packageDir, `dist/${package.name}`),
+    path: path.resolve(packageDir, `dist/${pkg.name}`),
     library: {
       name: 'AFNMMod',
       type: 'umd',
@@ -70,11 +72,13 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       MOD_METADATA: JSON.stringify({
-        name: package.name,
-        version: package.version,
-        author: package.author,
-        description: package.description,
+        name: pkg.name,
+        version: pkg.version,
+        author: pkg.author,
+        description: pkg.description,
       }),
     }),
   ],
 };
+
+export default config;

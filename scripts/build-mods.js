@@ -85,7 +85,7 @@ async function build(packageDirs) {
 
     await spawnAsync(
       'webpack',
-      ['--config', '../../webpack.base.config.js', '--mode', 'production'],
+      ['--config', '../../webpack.base.config.ts', '--mode', 'production'],
       {
         stdio: 'inherit',
         cwd: packageDir,
