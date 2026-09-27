@@ -27,6 +27,7 @@ module.exports = {
         use: {
           loader: 'ts-loader',
           options: {
+            onlyCompileBundledFiles: true,
             compilerOptions: {
               sourceMap: true,
               inlineSourceMap: false,
