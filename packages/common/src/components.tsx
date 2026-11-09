@@ -38,7 +38,10 @@ export const NumericField: React.FC<NumericFieldProps> = ({
   labelProps,
   fieldProps,
 }) => (
-  <Stack direction="row" alignItems="center" justifyContent="space-between">
+  <Stack
+    direction="row"
+    sx={{ alignItems: 'center', justifyContent: 'space-between' }}
+  >
     {label ? <Typography {...labelProps}>{label}</Typography> : null}
     <TextField
       size="small"

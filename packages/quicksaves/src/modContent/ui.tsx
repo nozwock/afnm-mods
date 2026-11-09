@@ -25,7 +25,7 @@ export function injectUIs() {
       '',
       <QuickSaveLoadButtons
         api={api}
-        stackProps={{ left: '138px', bottom: '0px', spacing: '5px' }}
+        stackProps={{ sx: { left: '138px', bottom: '0px' }, spacing: '5px' }}
       />,
       'after',
     );
@@ -37,7 +37,7 @@ export function injectUIs() {
       '',
       <QuickSaveLoadButtons
         api={api}
-        stackProps={{ left: '50px', bottom: '3px', spacing: '5px' }}
+        stackProps={{ sx: { left: '50px', bottom: '3px' }, spacing: '5px' }}
       />,
       'after',
     );
@@ -49,7 +49,7 @@ export function injectUIs() {
       '',
       <QuickSaveLoadButtons
         api={api}
-        stackProps={{ left: '3px', bottom: '140px', spacing: '5px' }}
+        stackProps={{ sx: { left: '3px', bottom: '140px' }, spacing: '5px' }}
       />,
       'after',
     );
@@ -61,7 +61,7 @@ export function injectUIs() {
       '',
       <QuickSaveLoadButtons
         api={api}
-        stackProps={{ left: '62px', bottom: '0px', spacing: '0px' }}
+        stackProps={{ sx: { left: '62px', bottom: '0px' }, spacing: '0px' }}
       />,
       'after',
     );
@@ -117,17 +117,20 @@ const QuickSaveLoadButtons: React.FC<{
   api: ModReduxAPI;
   stackProps?: StackProps;
 }> = ({ api, stackProps }) => {
+  const { sx, ...restStackProps } = stackProps ?? {};
   return (
     <Stack
       id="quicksaveButtons"
       direction="row"
-      zIndex={100}
-      position="absolute"
-      sx={{
-        ...stackProps?.sx,
-        pointerEvents: 'all',
-      }}
-      {...stackProps}
+      sx={[
+        {
+          zIndex: 100,
+          position: 'absolute',
+          pointerEvents: 'all',
+        },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+      {...restStackProps}
     >
       <QuickSaveButton {...api} />
       <QuickLoadButton {...api} />
@@ -143,7 +146,7 @@ const QuickSaveButton: React.FC<ModReduxAPI> = (api) => {
     <GameTooltip
       provider={() => (
         <GameTooltipBox>
-          <Typography fontSize="120%">
+          <Typography sx={{ fontSize: '120%' }}>
             {t('Create quicksave')}{' '}
             <span style={{ opacity: 0.7 }}>
               (
@@ -172,7 +175,7 @@ const QuickLoadButton: React.FC<ModReduxAPI> = (api) => {
     <GameTooltip
       provider={() => (
         <GameTooltipBox>
-          <Typography fontSize="120%">
+          <Typography sx={{ fontSize: '120%' }}>
             {t('Load last quicksave')}{' '}
             <span style={{ opacity: 0.7 }}>
               (

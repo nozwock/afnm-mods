@@ -57,11 +57,13 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
 
   return (
     <Box
-      display="flex"
-      flexDirection="column"
-      gap="16px"
-      marginTop="40px"
-      marginBottom="40px"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '16px',
+        marginTop: '40px',
+        marginBottom: '40px',
+      }}
     >
       <Box>
         <FormGroup>
@@ -103,7 +105,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
                 />
               }
             ></FormControlLabel>
-            <Typography fontSize="90%" sx={{ opacity: 0.7 }}>
+            <Typography sx={{ fontSize: '90%', opacity: 0.7 }}>
               {t(
                 `If enabled, quicksaves exceeding the Max Quicksaves limit are ignored when loading the most recent \
 quicksave or determining the next quicksave slot.`,
@@ -113,12 +115,12 @@ quicksave or determining the next quicksave slot.`,
         </FormGroup>
       </Box>
       <Box>
-        <Typography fontSize="120%">
+        <Typography sx={{ fontSize: '120%' }}>
           {t('Max Quicksaves: {slots}', {
             slots: settings.maxQuicksaves,
           })}
         </Typography>
-        <Typography fontSize="90%" sx={{ opacity: 0.7 }}>
+        <Typography sx={{ fontSize: '90%', opacity: 0.7 }}>
           {t(
             'Quickload uses only the most recent quicksave. The others serve as backups.',
           )}

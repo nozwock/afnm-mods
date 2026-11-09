@@ -47,7 +47,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
   );
 
   return (
-    <Box display="flex" flexDirection="column" gap={2} marginY={5}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, marginY: 5 }}>
       {showAlert && (
         <GameDialog
           id="nozwock-stat-lock-settings-alert"
@@ -57,14 +57,23 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
           showBackdrop
           onClose={() => setShowAlert(false)}
         >
-          <Stack height="100%" m={5}>
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              <Typography fontSize="120%">
+          <Stack sx={{ height: '100%', m: 5 }}>
+            <Stack
+              sx={{
+                height: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Typography sx={{ fontSize: '120%' }}>
                 {t('Settings can only be changed while a save is loaded.')}
               </Typography>
             </Stack>
 
-            <Stack direction="row" mt="auto" justifyContent="center">
+            <Stack
+              direction="row"
+              sx={{ mt: 'auto', justifyContent: 'center' }}
+            >
               <GameButton onClick={() => setShowAlert(false)}>
                 {t('Continue')}
               </GameButton>
@@ -74,7 +83,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
       )}
 
       <Stack direction="row">
-        <Typography fontSize="200%">{t('Stat Lock')}</Typography>
+        <Typography sx={{ fontSize: '200%' }}>{t('Stat Lock')}</Typography>
         <GameButton
           sx={{ ml: 'auto' }}
           size="small"
@@ -91,7 +100,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
         </GameButton>
       </Stack>
 
-      <Typography fontSize="90%" sx={{ opacity: 0.7 }}>
+      <Typography sx={{ fontSize: '90%', opacity: 0.7 }}>
         {t(
           `Do note that there is no way to restore stats back to what they were once the mod has made any changes to \
 stats, other than restoring a previous save with the mod disabled.`,
@@ -113,28 +122,27 @@ stats, other than restoring a previous save with the mod disabled.`,
             />
           }
         />
-        <Typography fontSize="90%" sx={{ opacity: 0.7 }}>
+        <Typography sx={{ fontSize: '90%', opacity: 0.7 }}>
           {t('The mod needs to be enabled separately for each new character.')}
         </Typography>
       </Stack>
 
       <Stack>
-        <Typography fontSize="200%">{t('Physical Stats')}</Typography>
-        <Typography fontSize="90%" sx={{ opacity: 0.7 }}>
+        <Typography sx={{ fontSize: '200%' }}>{t('Physical Stats')}</Typography>
+        <Typography sx={{ fontSize: '90%', opacity: 0.7 }}>
           {t('Lock stats to specific values individually.')}
         </Typography>
       </Stack>
 
       <Stack direction="column" spacing={1}>
         {Object.entries(config.lockedPhysicalStats).map(([stat, it]) => (
-          <Stack direction="row" alignItems="center">
+          <Stack key={stat} direction="row" sx={{ alignItems: 'center' }}>
             <Typography>{t(statToName[stat as PhysicalStatistic])}</Typography>
 
             <Stack
               direction="row"
               spacing={1}
-              sx={{ ml: 'auto' }}
-              alignItems="center"
+              sx={{ ml: 'auto', alignItems: 'center' }}
             >
               <Switch
                 checked={it.locked}

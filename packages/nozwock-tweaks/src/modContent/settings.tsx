@@ -95,11 +95,13 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
   return (
     <Box
       ref={thisRef}
-      display="flex"
-      flexDirection="column"
-      gap={2}
-      marginX={3}
-      marginY={5}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
+        marginX: 3,
+        marginY: 5,
+      }}
     >
       <GameButton
         size="small"
@@ -114,8 +116,8 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
         {t('Reset All to Defaults')}
       </GameButton>
 
-      <Typography fontSize="200%">{t('General')}</Typography>
-      <Stack direction="row" spacing={2} alignItems="center">
+      <Typography sx={{ fontSize: '200%' }}>{t('General')}</Typography>
+      <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
         <Typography>{t('Combat Qi Droplet Recovery')}</Typography>
         <Select
           size="small"
@@ -248,7 +250,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
         }}
       ></NumericMultiplierField>
 
-      <Typography fontSize="200%">{t('Items')}</Typography>
+      <Typography sx={{ fontSize: '200%' }}>{t('Items')}</Typography>
       <Card
         elevation={2}
         variant="outlined"
@@ -345,7 +347,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
         />
       </Card>
 
-      <Typography fontSize="200%">{t('NPC Characters')}</Typography>
+      <Typography sx={{ fontSize: '200%' }}>{t('NPC Characters')}</Typography>
       <FormGroup>
         <FormControlLabel
           label={t('Infinite Party Follow Duration')}
@@ -418,7 +420,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
         ></FormControlLabel>
       </FormGroup>
 
-      <Typography fontSize="200%">{t('Crafting')}</Typography>
+      <Typography sx={{ fontSize: '200%' }}>{t('Crafting')}</Typography>
       <FormGroup>
         <FormControlLabel
           label={t('Auto Complete Crafting')}
@@ -449,7 +451,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
         ></FormControlLabel>
       </FormGroup>
 
-      <Stack direction="row" spacing={2} alignItems="center">
+      <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
         <Typography>{t('Crafting Condition Modifier')}</Typography>
         <Select
           size="small"
@@ -470,13 +472,15 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
         >
           {Object.entries(displayCraftingConditionModifier).map(
             ([key, value]) => (
-              <MenuItem value={Number(key)}>{value}</MenuItem>
+              <MenuItem key={key} value={Number(key)}>
+                {value}
+              </MenuItem>
             ),
           )}
         </Select>
       </Stack>
 
-      <Typography fontSize="200%">{t('Dual Cultivation')}</Typography>
+      <Typography sx={{ fontSize: '200%' }}>{t('Dual Cultivation')}</Typography>
       <FormGroup>
         <FormControlLabel
           label={t('Auto Complete Dual Cultivation')}
@@ -510,7 +514,7 @@ export const ModSettings: ModOptionsFC = ({ api }) => {
         ></FormControlLabel>
       </FormGroup>
 
-      <Typography fontSize="200%">{t('Stone Cutting')}</Typography>
+      <Typography sx={{ fontSize: '200%' }}>{t('Stone Cutting')}</Typography>
       <FormGroup>
         <FormControlLabel
           label={t('Unveil All Stones On Minigame Start')}
