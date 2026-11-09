@@ -8,7 +8,7 @@
     "@types/node": "^26.6.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "afnm-types": "0.7.14",
+    "afnm-types": "0.7.20",
     "dotenv": "^17.4.2",
     "file-loader": "^6.2.0",
     "prettier": "^3.7.4",

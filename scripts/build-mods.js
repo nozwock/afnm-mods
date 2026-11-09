@@ -78,10 +78,13 @@ async function build(packageDirs) {
       force: true,
     });
 
-    await spawnAsync('afnm-extract-translations', [], {
-      stdio: 'inherit',
-      cwd: packageDir,
-    });
+    // FIXME: Command removed temporarily due to 0.7.15-0.7.20 adding a phase that requires executing the bundled script
+    // but since `window` is not defined in out-of-game context, it fails.
+    //
+    // await spawnAsync('afnm-extract-translations', [], {
+    //   stdio: 'inherit',
+    //   cwd: packageDir,
+    // });
 
     await spawnAsync(
       'webpack',
